@@ -1,0 +1,89 @@
+<template>
+  <v-navigation-drawer v-model="barraNavegacion" absolute permanent app dark>
+          <v-list>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img src="@/assets/images/nouser.png"></v-img>
+              </v-list-item-avatar>
+            </v-list-item>
+
+            <v-list-group link>
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title class="title">admin</v-list-item-title>
+                  <v-list-item-subtitle>admin@admin.com</v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item link>
+                <v-list-item-title>Perfil de usuario</v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon> mdi-account </v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+              <v-list-item link>
+                <v-list-item-title>Cerrar sesion</v-list-item-title>
+                <v-list-item-icon>
+                  <v-icon> mdi-logout </v-icon>
+                </v-list-item-icon>
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+          <v-divider></v-divider>
+          <v-list nav dense flat>
+            <v-list-item-group>
+              <v-list-item :to="{name: 'Home'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-home</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Inicio</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item :to="{name: 'Productos'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-home</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Productos</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item :to="{name: 'Usuarios'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-home</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Usuarios</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item :to="{name: 'About'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-home</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Acerca de</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-navigation-drawer>
+</template>
+
+<script>
+
+  import { mapState } from "vuex";
+
+  export default {
+
+    data: () => ({
+      barraNavegacion: true
+    }),
+  };
+</script>

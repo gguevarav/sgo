@@ -36,7 +36,8 @@ class ProductosController extends BaseController
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
         $Datos = array("CodigoProducto"=>$request->input("CodigoProducto"),
                        "NombreProducto"=>$request->input("NombreProducto"),
-                       "idUnidadMedida"=>$request->input("idUnidadMedida"));
+                       "idUnidadMedida"=>$request->input("idUnidadMedida"),
+                       "EstadoProducto"=>$request->input("EstadoProducto"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
@@ -44,7 +45,8 @@ class ProductosController extends BaseController
             $validacion = Validator::make($Datos,[
                                           "CodigoProducto" => 'required|string|max:255',
                                           "NombreProducto" => 'required|string|max:255',
-                                          "idUnidadMedida" => 'required|integer']);
+                                          "idUnidadMedida" => 'required|integer',
+                                          "EstadoProducto" => 'required|integer']);
 
             // Revisamos la validación
             if($validacion->fails()){
@@ -61,6 +63,7 @@ class ProductosController extends BaseController
                 $Producto->CodigoProducto = $Datos["CodigoProducto"];
                 $Producto->NombreProducto = $Datos["NombreProducto"];
                 $Producto->idUnidadMedida = $Datos["idUnidadMedida"];
+                $Producto->EstadoProducto = $Datos["EstadoProducto"];
 
                 // Ejecutamos la acción de guardar el usuario
                 $Producto->save();
@@ -107,7 +110,8 @@ class ProductosController extends BaseController
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
         $Datos = array("CodigoProducto"=>$request->input("CodigoProducto"),
                        "NombreProducto"=>$request->input("NombreProducto"),
-                       "idUnidadMedida"=>$request->input("idUnidadMedida"));
+                       "idUnidadMedida"=>$request->input("idUnidadMedida"),
+                       "EstadoProducto"=>$request->input("EstadoProducto"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
@@ -115,7 +119,8 @@ class ProductosController extends BaseController
             $validacion = Validator::make($Datos,[
                                           "CodigoProducto" => 'required|string|max:255',
                                           "NombreProducto" => 'required|string|max:255',
-                                          "idUnidadMedida" => 'required|integer']);
+                                          "idUnidadMedida" => 'required|integer',
+                                          "EstadoProducto" => 'required|integer']);
 
             // Si falla la validación
             if ($validacion->fails()){

@@ -40,7 +40,8 @@ class UsuariosController extends BaseController
                        "idPuesto"=>$request->input("idPuesto"),
                        "CorreoUsuario"=>$request->input("CorreoUsuario"),
                        "ContraseniaUsuario"=>$request->input("ContraseniaUsuario"),
-                       "idRol"=>$request->input("idRol"));
+                       "idRol"=>$request->input("idRol"),
+                       "EstadoUsuario"=>$request->input("EstadoUsuario"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
@@ -51,7 +52,8 @@ class UsuariosController extends BaseController
                                           "idPuesto" => 'required|integer',
                                           "CorreoUsuario" => 'required|string|email|max:255|unique:Usuario',
                                           "ContraseniaUsuario" => 'required|string|max:255',
-                                          "idRol" => 'required|integer']);
+                                          "idRol" => 'required|integer',
+                                          "EstadoUsuario" => 'required|integer']);
 
             // Revisamos la validación
             if($validacion->fails()){
@@ -79,6 +81,7 @@ class UsuariosController extends BaseController
                 $Usuario->idClienteUsuario = str_replace("$", "-", $idCliente);
                 $Usuario->LlaveSecretaUsuario = str_replace("$", "-", $LlaveSecreta);
                 $Usuario->idRol = $Datos["idRol"];
+                $Usuario->EstadoUsuario = $Datos["EstadoUsuario"];
 
                 // Ejecutamos la acción de guardar
                 $Usuario->save();
@@ -130,7 +133,8 @@ class UsuariosController extends BaseController
                        "idPuesto"=>$request->input("idPuesto"),
                        //"CorreoUsuario"=>$request->input("CorreoUsuario"),
                        "ContraseniaUsuario"=>$request->input("ContraseniaUsuario"),
-                       "idRol"=>$request->input("idRol"));
+                       "idRol"=>$request->input("idRol"),
+                       "EstadoUsuario"=>$request->input("EstadoUsuario"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
@@ -141,7 +145,8 @@ class UsuariosController extends BaseController
                                           "idPuesto" => 'required|integer',
                                           //"CorreoUsuario" => 'required|string|email|max:255|unique:Usuario',
                                           "ContraseniaUsuario" => 'required|string|max:255',
-                                          "idRol" => 'required|integer']);
+                                          "idRol" => 'required|integer',
+                                          "EstadoUsuario" => 'required|integer']);
 
             // Revisamos la validación
             if($validacion->fails()){

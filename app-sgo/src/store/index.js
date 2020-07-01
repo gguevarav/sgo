@@ -5,8 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    barraNavegacion: true
   },
   mutations: {
+    cambiarEstadoBarra(state){
+      state.barraNavegacion = false
+    }
   },
   actions: {
   },

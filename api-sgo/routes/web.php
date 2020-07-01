@@ -13,9 +13,16 @@
 |
 */
 
+/*
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+*/
+
+// Página principal
+$router->get('/', 'PrincipalController@index');
 
 // CRUD Unidades de Medida
 $router->get('/unidadesmedida', 'UnidadesMedidaController@index');

@@ -17,6 +17,7 @@ CREATE TABLE Producto(
 	CodigoProducto			VARCHAR(25)			NOT NULL,
 	NombreProducto			VARCHAR(25)			NOT NULL,
 	idUnidadMedida			TINYINT				NOT NULL,
+	EstadoProducto			BOOLEAN				NOT NULL,
 	created_at				TIMESTAMP			NULL,
 	updated_at				TIMESTAMP			NULL,
 	INDEX (idUnidadMedida),
@@ -29,6 +30,7 @@ CREATE TABLE Producto(
 CREATE TABLE Puesto(
 	idPuesto				TINYINT 			NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
 	NombrePuesto			VARCHAR(50)			NOT NULL,
+	EstadoPuesto			BOOLEAN				NOT NULL,
 	created_at				TIMESTAMP			NULL,
 	updated_at				TIMESTAMP			NULL
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
@@ -50,6 +52,7 @@ CREATE TABLE Usuario(
 	idClienteUsuario		TEXT				NOT NULL,
 	LlaveSecretaUsuario		TEXT				NOT NULL,
 	idRol					TINYINT 			NOT NULL,
+	EstadoUsuario			BOOLEAN				NOT NULL,
 	created_at				TIMESTAMP			NULL,
 	updated_at				TIMESTAMP			NULL,
 	INDEX (idPuesto),

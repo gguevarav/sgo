@@ -34,13 +34,15 @@ class PuestosController extends BaseController
         // Creamos un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
-        $Datos = array("NombrePuesto"=>$request->input("NombrePuesto"));
+        $Datos = array("NombrePuesto"=>$request->input("NombrePuesto"),
+                       "EstadoPuesto"=>$request->input("EstadoPuesto"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,[
-                                          "NombrePuesto" => 'required|string|max:255']);
+                                          "NombrePuesto" => 'required|string|max:255',
+                                          "EstadoPuesto" => 'required|integer']);
 
             // Revisamos la validación
             if($validacion->fails()){
@@ -55,6 +57,7 @@ class PuestosController extends BaseController
 
                 // Ingresamos los datos
                 $Puesto->NombrePuesto = $Datos["NombrePuesto"];
+                $Puesto->EstadoPuesto = $Datos["EstadoPuesto"];
 
                 // Ejecutamos la acción de guardar
                 $Puesto->save();
@@ -99,13 +102,15 @@ class PuestosController extends BaseController
         // Creamos un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
-        $Datos = array("NombrePuesto"=>$request->input("NombrePuesto"));
+        $Datos = array("NombrePuesto"=>$request->input("NombrePuesto"),
+                       "EstadoPuesto"=>$request->input("EstadoPuesto"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,[
-                                          "NombrePuesto" => 'required|string|max:255']);
+                                                  "NombrePuesto" => 'required|string|max:255',
+                                                  "EstadoPuesto" => 'required|integer']);
 
             // Revisamos la validación
             if($validacion->fails()){
