@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="barraNavegacion" absolute permanent app dark>
+  <v-navigation-drawer v-model="barraNavegacion" app floating :permanent="barraNavegacion" :mini-variant.sync="mini" dark>
           <v-list>
             <v-list-item>
               <v-list-item-avatar>
@@ -62,6 +62,16 @@
                 </v-list-item-content>
               </v-list-item>
 
+              <v-list-item :to="{name: 'Actividades'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-home</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Actividades</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
               <v-list-item :to="{name: 'About'}">
                 <v-list-item-icon>
                   <v-icon>mdi-home</v-icon>
@@ -82,6 +92,11 @@
 
   export default {
 
+    computed: {
+      mini() {
+          return (this.$vuetify.breakpoint.smAndDown) || this.toggleMini
+      }
+    },
     data: () => ({
       barraNavegacion: true
     }),

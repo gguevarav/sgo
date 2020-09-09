@@ -26,7 +26,6 @@
             >Nuevo usuario</v-btn>
             <v-btn
               text
-              small
               @click="initialize">
               <v-icon>
                 mdi-reload
@@ -41,29 +40,41 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.NombreUsuario" label="Nombre"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.ApellidoUsuario" label="Apellido"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select  
-                        :items="datosPuestos"
-                        item-text='NombrePuesto'
-                        item-value='idPuesto'
-                        v-model="editedItem.idPuesto"
-                        label="Puesto"
-                        required>
-                    </v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.CorreoUsuario" :disabled="editarCorreo" label="Correo"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="6">
                     <v-text-field v-model="editedItem.ContraseniaUsuario" label="Contraseña"></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="12" md="12">
+                    <v-btn-toggle
+                        v-model="toggle_exclusive"
+                        group
+                        multiple>
+                            <v-select  
+                              :items="datosPuestos"
+                              item-text='NombrePuesto'
+                              item-value='idPuesto'
+                              v-model="editedItem.idPuesto"
+                              label="Puesto"
+                              required>
+                            </v-select>
+                            <v-btn
+                              text
+                              @click="dialogPuestos = !dialogPuestos">
+                                <v-icon>
+                                mdi-plus
+                                </v-icon>
+                            </v-btn>
+                      </v-btn-toggle>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
                     <v-select  
                         :items="datosRoles"
                         item-text='NombreRol'
@@ -73,12 +84,13 @@
                         required>
                     </v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                   <v-col cols="12" sm="6" md="6">
                     <v-select  
                         :items="datosEstadoUsuario"
                         item-text='NombreEstadoUsuario'
                         item-value='idEstadoUsuario'
                         v-model="editedItem.EstadoUsuario"
+                        :disabled="estadoHabilitado"
                         label="Estado"
                         required>
                     </v-select>
@@ -90,7 +102,39 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardarInformacion">Guardar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dialogPuestos" max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">Nuevo puesto</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-form>
+                <v-container>
+                  <v-row
+                    align="center"
+                    justify="center">
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="nuevoPuesto.NombrePuesto"
+                        label="Nombre"
+                        required>
+                      </v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="cerrarDialogPuesto">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardarPuesto">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -121,51 +165,66 @@
 
     export default {
         data: () => ({
-        dialog: false,
-        headers: [
-            {
-                text: 'idUsuario',
-                align: 'start',
-                sortable: false,
-                value: 'idUsuario',
-            },
-            { text: 'Nombre', value: 'NombreUsuario' },
-            { text: 'Apellido', value: 'ApellidoUsuario' },
-            { text: 'Puesto', value: 'idPuesto' },
-            { text: 'Correo', value: 'CorreoUsuario' },
-            { text: 'Rol', value: 'idRol' },
-            { text: 'Estado', value: 'EstadoUsuario' },
-            { text: 'Actions', value: 'actions', sortable: false },
-            ],
-        datosTabla: [],
-        select: [],
-        datosPuestos: [],
-        datosRoles: [],
-        datosEstadoUsuario: [{
-          idEstadoUsuario: 1,
-          NombreEstadoUsuario: 'Activo'
-        },
-        {
-          idEstadoUsuario: 0,
-          NombreEstadoUsuario: 'Inactivo'
-        }],
-        editedIndex: -1,
-        idUsuarioEditar: 0,
-        editarCorreo: false,
-        editedItem: {
-            NombreUsuario: '',
-            ApellidoUsuario: '',
-            idPuesto: '',
-            ContraseniaUsuario: '',
-            idRol: '',
-        },
-        defaultItem: {
-            NombreUsuario: '',
-            ApellidoUsuario: '',
-            idPuesto: '',
-            ContraseniaUsuario: '',
-            idRol: '',
-        },
+          toggle_exclusive: undefined,
+          dialog: false,
+          dialogPuestos: false,
+          headers: [
+              {
+                  text: 'idUsuario',
+                  align: 'start',
+                  sortable: false,
+                  value: 'idUsuario',
+              },
+              { text: 'Nombre', value: 'NombreUsuario' },
+              { text: 'Apellido', value: 'ApellidoUsuario' },
+              { text: 'Puesto', value: 'idPuesto' },
+              { text: 'Correo', value: 'CorreoUsuario' },
+              { text: 'Rol', value: 'idRol' },
+              { text: 'Estado', value: 'EstadoUsuario' },
+              { text: 'Actions', value: 'actions', sortable: false },
+              ],
+          datosTabla: [],
+          select: [],
+          datosPuestos: [],
+          datosRoles: [],
+          datosEstadoUsuario: [{
+            idEstadoUsuario: 1,
+            NombreEstadoUsuario: 'Activo'
+          },
+          {
+            idEstadoUsuario: 0,
+            NombreEstadoUsuario: 'Inactivo'
+          }],
+          editedIndex: -1,
+          idUsuarioEditar: 0,
+          editarCorreo: false,
+          estadoHabilitado: true,
+          editedItem: {
+              NombreUsuario: '',
+              ApellidoUsuario: '',
+              CorreoUsuario: '',
+              idPuesto: '',
+              ContraseniaUsuario: '',
+              idRol: '',
+              EstadoUsuario: 1,
+          },
+          defaultItem: {
+              NombreUsuario: '',
+              ApellidoUsuario: '',
+              CorreoUsuario: '',
+              idPuesto: '',
+              ContraseniaUsuario: '',
+              idRol: '',
+              EstadoUsuario: 1,
+          },
+          nuevoPuesto: {
+              NombrePuesto: '',
+              EstadoPuesto: 1,
+          },
+          defaultnuevoPuesto: {
+              NombrePuesto: '',
+              EstadoPuesto: 1,
+          },
         }),
 
         computed: {
@@ -224,8 +283,10 @@
             this.editedItem = Object.assign({}, item)
             if (this.editedIndex > -1){
               this.editarCorreo = true
+              this.estadoHabilitado = false
             }else{
               this.editarCorreo = false
+              this.estadoHabilitado = true
             }
             this.dialog = true
           },
@@ -241,7 +302,7 @@
                 })
           },
 
-          save () {
+          guardarInformacion () {
             // Si el valor del índice de edición es mayor al que se está editando entonces 
             if (this.editedIndex > -1) {
               axios
@@ -258,7 +319,7 @@
                 .post("http://localhost/sgo/api-sgo/public/usuarios",
                        this.editedItem)
                 .then(function (response) {
-                    //console.log(response);
+                    console.log(response);
                     //this.initialize()
                 })
                 .catch(function (error) {
@@ -267,6 +328,29 @@
             }
             this.initialize()
             this.close()
+          },
+
+          guardarPuesto (){
+            axios
+                .post("http://localhost/sgo/api-sgo/public/puestos",
+                       this.nuevoPuesto)
+                .then(function (response) {
+                    //console.log(response);
+                    //this.initialize()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            this.initialize()
+            this.cerrarDialogPuesto()
+          },
+
+          cerrarDialogPuesto (){
+            this.dialogPuestos = false
+            this.dialog = false
+              this.$nextTick(() => {
+                this.nuevoPuesto = Object.assign({}, this.defaultnuevoPuesto)
+              })
           },
 
           close () {

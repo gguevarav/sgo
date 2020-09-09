@@ -59,3 +59,31 @@ $router->post('/usuarios', 'UsuariosController@store');
 $router->delete('/usuarios/{id}', 'UsuariosController@destroy');
 $router->put('/usuarios/{id}', 'UsuariosController@update');
 $router->get('/usuarios/{id}', 'UsuariosController@show');
+
+// CRUD Areas
+$router->get('/areas', 'AreasController@index');
+$router->post('/areas', 'AreasController@store');
+$router->delete('/areas/{id}', 'AreasController@destroy');
+$router->put('/areas/{id}', 'AreasController@update');
+$router->get('/areas/{id}', 'AreasController@show');
+
+// CRUD NombreActividad
+$router->get('/nombreactividades', 'NombreActividadesController@index');
+$router->post('/nombreactividades', 'NombreActividadesController@store');
+$router->delete('/nombreactividades/{id}', 'NombreActividadesController@destroy');
+$router->put('/nombreactividades/{id}', 'NombreActividadesController@update');
+$router->get('/nombreactividades/{id}', 'NombreActividadesController@show');
+
+// CRUD ListadoActividad
+$router->get('/listadoactividades', 'ListadoActividadesController@index');
+$router->post('/listadoactividades', 'ListadoActividadesController@store');
+$router->delete('/listadoactividades/{id}', 'ListadoActividadesController@destroy');
+$router->put('/listadoactividades/{id}', 'ListadoActividadesController@update');
+$router->get('/listadoactividades/{id}', 'ListadoActividadesController@show');
+
+// CRUD ListadoMaterial
+$router->get('/listadomateriales', 'ListadoMaterialesController@index');
+$router->post('/listadomateriales', 'ListadoMaterialesController@store');
+$router->delete('/listadomateriales/{id}', 'ListadoMaterialesController@destroy');
+$router->put('/listadomateriales/{id}', 'ListadoMaterialesController@update');
+$router->get('/listadomateriales/{id}', 'ListadoMaterialesController@show');

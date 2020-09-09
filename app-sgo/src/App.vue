@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-app>
-      
         <!-- Barra principal aplicación -->
         <AppBar></AppBar>
         <!-- Barra de navegación -->
@@ -12,7 +11,6 @@
             <router-view></router-view>
           </v-container>
         </v-content>
-
     </v-app>
   </div>
 </template>

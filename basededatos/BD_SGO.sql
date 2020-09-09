@@ -66,3 +66,53 @@ CREATE TABLE Usuario(
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE Area(
+	idArea					TINYINT				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	NombreArea				VARCHAR(25)			NOT NULL,
+	created_at				TIMESTAMP			NULL,
+	updated_at				TIMESTAMP			NULL
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE NombreActividad(
+	idNombreActividad		TINYINT				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	NombreActividad			VARCHAR(25)			NOT NULL,
+	created_at				TIMESTAMP			NULL,
+	updated_at				TIMESTAMP			NULL
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE ListadoActividad(
+	idListadoActividad		INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	idArea					TINYINT				NOT NULL,
+	idNombreActividad		TINYINT				NOT NULL,
+	FechaCreacionActividad	DATE				NOT NULL,
+	FechaConclusionActividad	DATE			NOT NULL,
+	EstadoActividad			BOOLEAN				NOT NULL,
+	idUsuario				TINYINT				NOT NULL,
+	created_at				TIMESTAMP			NULL,
+	updated_at				TIMESTAMP			NULL,
+	INDEX (idUsuario),
+    FOREIGN KEY (idUsuario)
+            REFERENCES Usuario(idUsuario)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE ListadoMaterial(
+	idListadoMaterial		INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	idListadoActividad		INTEGER				NOT NULL,
+	idProducto				INTEGER				NOT NULL,
+	CantidadProducto		FLOAT				NOT NULL,
+	created_at				TIMESTAMP			NULL,
+	updated_at				TIMESTAMP			NULL,
+	INDEX (idListadoActividad),
+    FOREIGN KEY (idListadoActividad)
+            REFERENCES ListadoActividad(idListadoActividad)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION,
+	INDEX (idProducto),
+    FOREIGN KEY (idProducto)
+            REFERENCES Producto(idProducto)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;

@@ -39,42 +39,106 @@
             </v-card-title>
 
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.CodigoProducto" label="Código"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.NombreProducto" label="Nombre producto"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select  
-                        :items="datosUnidadMedida"
-                        item-text='NombreUnidadMedida'
-                        item-value='idUnidadMedida'
-                        v-model="editedItem.idUnidadMedida"
-                        label="UnidadMedida"
+              <v-form>
+                <v-container>
+                  <v-row
+                    align="center"
+                    justify="center">
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="editedItem.CodigoProducto"
+                        :disabled="editarCodigo"
+                        label="Código"
                         required>
-                    </v-select>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-select  
-                        :items="datosEstadoProducto"
-                        item-text='NombreEstadoProducto'
-                        item-value='idEstadoProducto'
-                        v-model="editedItem.EstadoProducto"
-                        label="Estado"
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="editedItem.NombreProducto"
+                        label="Nombre producto"
                         required>
-                    </v-select>
-                  </v-col>
-                </v-row>
-              </v-container>
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-btn-toggle
+                        v-model="toggle_exclusive"
+                        group
+                        multiple>
+                        <v-select  
+                          :items="datosUnidadMedida"
+                          item-text='NombreUnidadMedida'
+                          item-value='idUnidadMedida'
+                          v-model="editedItem.idUnidadMedida"
+                          label="UnidadMedida"
+                          required>
+                        </v-select>
+                        <v-btn
+                          text
+                          @click="dialogUnidadMedida = !dialogUnidadMedida">
+                            <v-icon>
+                            mdi-plus
+                            </v-icon>
+                        </v-btn>
+                      </v-btn-toggle>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select  
+                          :items="datosEstadoProducto"
+                          item-text='NombreEstadoProducto'
+                          item-value='idEstadoProducto'
+                          v-model="editedItem.EstadoProducto"
+                          label="Estado"
+                          required>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardarProducto">Guardar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="dialogUnidadMedida" max-width="500px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">Nueva unidad de medida</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-form>
+                <v-container>
+                  <v-row
+                    align="center"
+                    justify="center">
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="nuevoUM.NombreUnidadMedida"
+                        label="Nombre"
+                        required>
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-text-field
+                        v-model="nuevoUM.AbreviacionUnidadMedida"
+                        label="Abreviatura"
+                        required>
+                      </v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="cerrarDialogUM">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="guardarUnidadMedida">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -105,46 +169,56 @@
 
     export default {
         data: () => ({
-        dialog: false,
-        headers: [
-          {
-            text: 'idProducto',
-            align: 'start',
-            sortable: false,
-            value: 'idProducto',
+          toggle_exclusive: undefined,
+          dialog: false,
+          dialogUnidadMedida: false,
+          headers: [
+            {
+              text: 'idProducto',
+              align: 'start',
+              sortable: false,
+              value: 'idProducto',
+            },
+            { text: 'Código', value: 'CodigoProducto' },
+            { text: 'Nombre del producto', value: 'NombreProducto' },
+            { text: 'Unidad de medida', value: 'idUnidadMedida' },
+            { text: 'Estado', value: 'EstadoProducto' },
+            { text: 'Actions', value: 'actions', sortable: false },
+          ],
+          datosTabla: [],
+          select: [],
+          datosUnidadMedida: [],
+          datosEstadoProducto: [{
+            idEstadoProducto: 1,
+            NombreEstadoProducto: 'Activo'
           },
-          { text: 'Código', value: 'CodigoProducto' },
-          { text: 'Nombre del producto', value: 'NombreProducto' },
-          { text: 'Unidad de medida', value: 'idUnidadMedida' },
-          { text: 'Estado', value: 'EstadoProducto' },
-          { text: 'Actions', value: 'actions', sortable: false },
-        ],
-        datosTabla: [],
-        select: [],
-        datosUnidadMedida: [],
-        datosEstadoProducto: [{
-          idEstadoProducto: 1,
-          NombreEstadoProducto: 'Activo'
-        },
-        {
-          idEstadoProducto: 0,
-          NombreEstadoProducto: 'Inactivo'
-        }],
-        editedIndex: -1,
-        idProductoEditar: 0,
-        editarCodigo: false,
-        editedItem: {
-            CodigoProducto: '',
-            NombreProducto: '',
-            idUnidadMedida: '',
-            EstadoProducto: '',
-        },
-        defaultItem: {
-            CodigoProducto: '',
-            NombreProducto: '',
-            idUnidadMedida: '',
-            EstadoProducto: '',
-        },
+          {
+            idEstadoProducto: 0,
+            NombreEstadoProducto: 'Inactivo'
+          }],
+          editedIndex: -1,
+          idProductoEditar: 0,
+          editarCodigo: false,
+          editedItem: {
+              CodigoProducto: '',
+              NombreProducto: '',
+              idUnidadMedida: '',
+              EstadoProducto: '',
+          },
+          defaultItem: {
+              CodigoProducto: '',
+              NombreProducto: '',
+              idUnidadMedida: '',
+              EstadoProducto: '',
+          },
+          nuevoUM: {
+              NombreUnidadMedida: '',
+              AbreviacionUnidadMedida: '',
+          },
+          defaultNuevoUM: {
+              NombreUnidadMedida: '',
+              AbreviacionUnidadMedida: '',
+          },
         }),
 
         computed: {
@@ -210,7 +284,7 @@
                 })
           },
 
-          save () {
+          guardarProducto () {
             // Si el valor del índice de edición es mayor al que se está editando entonces 
             if (this.editedIndex > -1) {
               axios
@@ -236,6 +310,29 @@
             }
             this.initialize()
             this.close()
+          },
+
+          guardarUnidadMedida (){
+            axios
+                .post("http://localhost/sgo/api-sgo/public/unidadesmedida",
+                       this.nuevoUM)
+                .then(function (response) {
+                    //console.log(response);
+                    //this.initialize()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            this.initialize()
+            this.cerrarDialogUM()
+          },
+
+          cerrarDialogUM (){
+            this.dialogUnidadMedida = false
+            this.dialog = false
+              this.$nextTick(() => {
+                this.nuevoUM = Object.assign({}, this.defaultNuevoUM)
+              })
           },
 
           close () {
