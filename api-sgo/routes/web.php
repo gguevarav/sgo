@@ -24,6 +24,9 @@ $router->get('/', function () use ($router) {
 // Página principal
 $router->get('/', 'PrincipalController@index');
 
+// Inicio de sesión
+$router->get('/iniciosesion', 'InicioSesionController@iniciosesion');
+
 // CRUD Unidades de Medida
 $router->get('/unidadesmedida', 'UnidadesMedidaController@index');
 $router->post('/unidadesmedida', 'UnidadesMedidaController@store');
