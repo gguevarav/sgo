@@ -77,7 +77,7 @@ class UsuariosController extends BaseController
                 $Usuario->ApellidoUsuario = $Datos["ApellidoUsuario"];
                 $Usuario->idPuesto = $Datos["idPuesto"];
                 $Usuario->CorreoUsuario = $Datos["CorreoUsuario"];
-                $Usuario->ContraseniaUsuario = $Datos["ContraseniaUsuario"];
+                $Usuario->ContraseniaUsuario = md5($Datos["ContraseniaUsuario"]);
                 $Usuario->idClienteUsuario = str_replace("$", "-", $idCliente);
                 $Usuario->LlaveSecretaUsuario = str_replace("$", "-", $LlaveSecreta);
                 $Usuario->idRol = $Datos["idRol"];

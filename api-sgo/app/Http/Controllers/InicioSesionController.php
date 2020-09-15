@@ -28,8 +28,8 @@ class InicioSesionController extends BaseController
                     "detalle" => "Inicio de sesion incorrecto"
                 );
             }
-            // Devolvemos la respuesta en un Json
-            return response()->json($json);
-            }
+        }
+        // Devolvemos la respuesta en un Json
+        return response()->json($json);
     }
 }

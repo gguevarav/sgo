@@ -12,6 +12,13 @@ CREATE TABLE UnidadMedida(
 	updated_at				TIMESTAMP			NULL
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
 
+CREATE TABLE Estado(
+	idEstado				TINYINT				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	NombreEstado			VARCHAR(10)			NOT NULL,
+	created_at				TIMESTAMP			NULL,
+	updated_at				TIMESTAMP			NULL
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
 CREATE TABLE Producto(
 	idProducto				INTEGER				NOT NULL				PRIMARY KEY				AUTO_INCREMENT,
 	CodigoProducto			VARCHAR(25)			NOT NULL,
@@ -48,7 +55,7 @@ CREATE TABLE Usuario(
 	ApellidoUsuario			VARCHAR(35)			NOT NULL,
 	idPuesto				TINYINT 			NOT NULL,
 	CorreoUsuario			VARCHAR(100)		NOT NULL,
-	ContraseniaUsuario		VARCHAR(20)			NOT NULL,
+	ContraseniaUsuario		VARCHAR(32)			NOT NULL,
 	idClienteUsuario		TEXT				NOT NULL,
 	LlaveSecretaUsuario		TEXT				NOT NULL,
 	idRol					TINYINT 			NOT NULL,

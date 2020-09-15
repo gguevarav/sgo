@@ -5,14 +5,20 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Producto;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\MessageBag;
 
 class ProductosController extends BaseController
-{
-	public function index(){
-		// Primero obtendremos el array de los datos
-		$Datos = Producto::all();
+{  
+    public function index(){
+        // Creamos el join para obtener el array de los datos
+        $Datos = DB::table('Producto')
+                        ->join('UnidadMedida', 'Producto.idUnidadMedida', '=', 'UnidadMedida.idUnidadMedida')
+                        ->join('Estado', 'Producto.EstadoProducto', '=', 'Estado.idEstado')
+                        ->select('Producto.*', 'UnidadMedida.NombreUnidadMedida', 'Estado.NombreEstado')
+                        ->get();
 
-		// Verificamos que el array no esté vacio
+        // Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {
             $json = array(
                 'status' => 200,
@@ -27,8 +33,8 @@ class ProductosController extends BaseController
             );
         }
         // Mostramos la información como un json
-		return response()->json($json);
-	}
+        return response()->json($json);
+    }
 
     public function store(Request $request){
         // Inicializamos una variable para almacenar un json nulo
@@ -41,19 +47,31 @@ class ProductosController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
+
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "CodigoProducto" => 'required|string|max:255|unique:Producto',
+                "NombreProducto" => 'required|string|max:255',
+                "idUnidadMedida" => 'required|integer',
+                "EstadoProducto" => 'required|integer'];
+
+            $Mensajes = [
+                "CodigoProducto.required" => 'Es necesario agregar un código de producto',
+                "CodigoProducto.unique" => 'El código ya existe',
+                "NombreProducto.required" => 'Es necesario agregar un nombre al producto',
+                "idUnidadMedida.required" => 'Es necesario agregar una unidad de medida',
+                "EstadoProducto.required" => 'Es necesario agregar un estado de producto'];
             // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "CodigoProducto" => 'required|string|max:255',
-                                          "NombreProducto" => 'required|string|max:255',
-                                          "idUnidadMedida" => 'required|integer',
-                                          "EstadoProducto" => 'required|integer']);
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
                     "status" => 404,
-                    "detalle" => "Los registros tienen errores"
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // instanciamos un nuevo objeto para registro
