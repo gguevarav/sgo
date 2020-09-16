@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Producto;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\MessageBag;
 
 class ProductosController extends BaseController
 {  
