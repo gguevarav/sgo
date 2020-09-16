@@ -158,22 +158,36 @@ class UsuariosController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "NombreUsuario" => 'required|string|max:255',
+                "ApellidoUsuario" => 'required|string|max:255',
+                "idPuesto" => 'required|integer',
+                //"CorreoUsuario" => 'required|string|email|max:255|unique:Usuario',
+                "ContraseniaUsuario" => 'required|string|max:255',
+                "idRol" => 'required|integer',
+                "EstadoUsuario" => 'required|integer'];
+
+            $Mensajes = [
+                "NombreUsuario.required" => 'Es necesario agregar un nombre',
+                "ApellidoUsuario.required" => 'Es necesario agregar un apellido',
+                "idPuesto.required" => 'Es necesario agregar un puesto para el usuario',
+                "CorreoUsuario.required" => 'Es necesario agregar un correo',
+                //"CorreoUsuario.unique" => 'El correo ya está registrado',
+                "ContraseniaUsuario.required" => 'Es necesario agregar una contraseña',
+                "idRol.required" => 'Es necesario agregar un rol de usuario',
+                "EstadoUsuario.required" => 'Es necesario agregar un estado del usuario'];
             // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "NombreUsuario" => 'required|string|max:255',
-                                          "ApellidoUsuario" => 'required|string|max:255',
-                                          "idPuesto" => 'required|integer',
-                                          //"CorreoUsuario" => 'required|string|email|max:255|unique:Usuario',
-                                          "ContraseniaUsuario" => 'required|string|max:255',
-                                          "idRol" => 'required|integer',
-                                          "EstadoUsuario" => 'required|integer']);
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
                     "status" => 404,
-                    "detalle" => "Los registros tienen errores"
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // instanciamos un nuevo objeto para registro

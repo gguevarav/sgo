@@ -39,17 +39,25 @@ class UnidadesMedidaController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "NombreUnidadMedida" => 'required|string|max:255',
+                "AbreviacionUnidadMedida" => 'required|string|max:5'];
+
+            $Mensajes = [
+                "NombreUnidadMedida.required" => 'Es necesario agregar un nombre de unidad de medida',
+                "AbreviacionUnidadMedida.required" => 'Es necesario agregar una abreviación del nombre'];
             // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "NombreUnidadMedida" => 'required|string|max:255',
-                                          "AbreviacionUnidadMedida" => 'required|string|max:5']);
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
                     "status" => 404,
-                    "detalle" => "Los registros tienen errores"
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // instanciamos un nuevo objeto para registro
@@ -107,17 +115,25 @@ class UnidadesMedidaController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "NombreUnidadMedida" => 'required|string|max:255',
+                "AbreviacionUnidadMedida" => 'required|string|max:5'];
+
+            $Mensajes = [
+                "NombreUnidadMedida.required" => 'Es necesario agregar un nombre de unidad de medida',
+                "AbreviacionUnidadMedida.required" => 'Es necesario agregar una abreviación del nombre'];
             // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "NombreUnidadMedida" => 'required|string|max:255',
-                                          "AbreviacionUnidadMedida" => 'required|string|max:5']);
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
                     "status" => 404,
-                    "detalle" => "Los registros tienen errores"
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // Obtendremos el UnidadMedida de la base de datos

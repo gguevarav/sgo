@@ -39,17 +39,25 @@ class PuestosController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "NombrePuesto" => 'required|string|max:255',
+                "EstadoPuesto" => 'required|integer'];
+
+            $Mensajes = [
+                "NombrePuesto.required" => 'Es necesario agregar un nombre del puesto',
+                "EstadoPuesto.required" => 'Es necesario agregar un estado del puesto'];
             // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "NombrePuesto" => 'required|string|max:255',
-                                          "EstadoPuesto" => 'required|integer']);
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
                     "status" => 404,
-                    "detalle" => "Los registros tienen errores"
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // instanciamos un nuevo objeto para registro

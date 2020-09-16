@@ -46,7 +46,6 @@ class ProductosController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
-
             // Separamos la validación
             // Reglas
             $Reglas = [
@@ -132,18 +131,30 @@ class ProductosController extends BaseController
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
-            // Validamos los Datos antes de insertarlos en la base de Datos
-            $validacion = Validator::make($Datos,[
-                                          "CodigoProducto" => 'required|string|max:255',
-                                          "NombreProducto" => 'required|string|max:255',
-                                          "idUnidadMedida" => 'required|integer',
-                                          "EstadoProducto" => 'required|integer']);
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "CodigoProducto" => 'required|string|max:255|unique:Producto',
+                "NombreProducto" => 'required|string|max:255',
+                "idUnidadMedida" => 'required|integer',
+                "EstadoProducto" => 'required|integer'];
 
-            // Si falla la validación
-            if ($validacion->fails()){
+            $Mensajes = [
+                "CodigoProducto.required" => 'Es necesario agregar un código de producto',
+                "CodigoProducto.unique" => 'El código ya existe',
+                "NombreProducto.required" => 'Es necesario agregar un nombre al producto',
+                "idUnidadMedida.required" => 'Es necesario agregar una unidad de medida',
+                "EstadoProducto.required" => 'Es necesario agregar un estado de producto'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
-                    "status" => "404", 
-                    "detalle" => "Registro con errores"
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
                 );
             }else{
                 // Obtendremos el producto de la base de datos
