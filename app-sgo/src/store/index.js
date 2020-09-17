@@ -8,12 +8,10 @@ export default new Vuex.Store({
     barraNavegacion: true
   },
   mutations: {
-    cambiarEstadoBarra(state){
-      state.barraNavegacion = false
+    cambiarEstadoBarra(state) {
+      state.barraNavegacion = !state.barraNavegacion
     }
   },
-  actions: {
-  },
-  modules: {
-  }
+  actions: {},
+  modules: {}
 })

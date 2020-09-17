@@ -24,10 +24,7 @@
             //barraNavegacion: true
         }),
         methods:{
-            ...mapMutations['cambiarEstadoBarra'],
-            cambiarEstado (){
-                cambiarEstadoBarra = !cambiarEstadoBarra
-            }
+            ...mapMutations['cambiarEstadoBarra']
         }
     }
 </script>

@@ -44,7 +44,7 @@
 
               <v-list-item :to="{name: 'Productos'}">
                 <v-list-item-icon>
-                  <v-icon>mdi-home</v-icon>
+                  <v-icon>mdi-factory</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -54,7 +54,7 @@
 
               <v-list-item :to="{name: 'Usuarios'}">
                 <v-list-item-icon>
-                  <v-icon>mdi-home</v-icon>
+                  <v-icon>mdi-account-multiple</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -64,7 +64,7 @@
 
               <v-list-item :to="{name: 'Actividades'}">
                 <v-list-item-icon>
-                  <v-icon>mdi-home</v-icon>
+                  <v-icon>mdi-view-dashboard</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
@@ -74,7 +74,7 @@
 
               <v-list-item :to="{name: 'About'}">
                 <v-list-item-icon>
-                  <v-icon>mdi-home</v-icon>
+                  <v-icon>mdi-help</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>

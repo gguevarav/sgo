@@ -35,38 +35,36 @@
           <v-toolbar-title>
             Productos
           </v-toolbar-title>
-          <v-divider
-            class="mx-4"
-            inset
-            vertical>
-          </v-divider>
           <v-spacer></v-spacer>
-
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+                v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    text
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on">
+                      <v-icon>
+                        mdi-plus
+                      </v-icon>
+                </v-btn>
+                <v-btn
+                  text
+                  class="mb-2"
+                  @click="initialize">
+                    <v-icon>
+                      mdi-reload
+                    </v-icon>
+                </v-btn>
+              </template>
+          </v-dialog>
+          <!-- Termina dialog de botones de agregar y recargar -->
+          
           <!-- Dialog de registro de producto -->
           <v-dialog
             v-model="dialog"
             max-width="500px">
-            <template
-              v-slot:activator="{ on, attrs }">
-                <v-btn
-                  text
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on">
-                    <v-icon>
-                      mdi-plus
-                    </v-icon>
-              </v-btn>
-              <v-btn
-                text
-                class="mb-2"
-                @click="initialize">
-                  <v-icon>
-                    mdi-reload
-                  </v-icon>
-              </v-btn>
-            </template>
-            
             <v-card>
               <v-card-title>
                 <span
