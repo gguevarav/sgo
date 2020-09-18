@@ -136,3 +136,9 @@ CREATE TABLE Inventario(
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+INSERT INTO estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
+			VALUES (NULL, 'Activo', NULL, NULL);
+		
+INSERT INTO estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
+			VALUES (NULL, 'Inactivo', NULL, NULL);
