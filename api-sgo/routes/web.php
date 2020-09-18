@@ -42,6 +42,13 @@ $router->delete('/productos/{id}', 'ProductosController@destroy');
 $router->put('/productos/{id}', 'ProductosController@update');
 $router->get('/productos/{id}', 'ProductosController@show');
 
+// CRUD Inventarios
+$router->get('/inventario', 'InventarioController@index');
+$router->post('/inventario', 'InventarioController@store');
+$router->delete('/inventario/{id}', 'InventarioController@destroy');
+$router->put('/inventario/{id}', 'InventarioController@update');
+$router->get('/inventario/{id}', 'InventarioController@show');
+
 // CRUD Puestos
 $router->get('/puestos', 'PuestosController@index');
 $router->post('/puestos', 'PuestosController@store');

@@ -1,0 +1,18 @@
+Inventario: 
+1. debe mostrar un mensaje/advertencia de que X producto se encuentra en su stock minimo y debe realizarse un pedido
+            2. El estado del producto igual no debe mostrar el ID sino el estado como tal
+            3. la unidad de medida igual no debe mostrar el ID sino la unidad como tal
+4. gerente y supervisor tienen acceso pero solo el supervisor puede agregar un producto nuevo
+
+usuarios:
+            1. debe mostrar el estado no el ID
+            2. debe mostrar un mensaje al intentar crear un usuario con el mismo correo
+3. debe tener reglas basicas la contraseña en este caso sugirieron por ejemplo numeros y letras para no hacerlo tan complicado
+            4. el + que tiene en puesto debe funcionar (aunque no probe si funcionaba la verdad ahora que recuerdo)
+5. la vista del login debe funcionar
+
+Actividades:
+1. el usuario con puesto operador/auxiliar deben recibir una alerta de que hay una nueva actividad 
+2. los supervisores/gerentes pueden visualizar las actividades y solo el supervisor puede crearlas
+3. el operador/auxiliar pueden cambiar el estado de una actividad por ej. en proceso - ejecutada - pausada - denegada
+4. el gerente y supervisor tienen que tener un historial de actividades

@@ -123,3 +123,16 @@ CREATE TABLE ListadoMaterial(
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE Inventario(
+	idInventario			INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+	idProducto				INTEGER				NOT NULL,
+	CantidadExistencia		DECIMAL				NOT NULL,
+	CantidadMinima			DECIMAL				NOT NULL,
+	CantidadMaxima			DECIMAL				NOT NULL,
+	INDEX (idProducto),
+    FOREIGN KEY (idProducto)
+            REFERENCES Producto(idProducto)
+            ON DELETE CASCADE
+            ON UPDATE NO ACTION
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
