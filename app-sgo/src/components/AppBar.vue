@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
 
         <v-btn text>
-            <v-icon>click
+            <v-icon>
                 mdi-power</v-icon>
         </v-btn>
 
@@ -24,7 +24,10 @@
             //barraNavegacion: true
         }),
         methods:{
-            ...mapMutations['cambiarEstadoBarra']
+            ...mapMutations['cambiarEstadoBarra'],
+            cambiarEstado (){
+                cambiarEstadoBarra = !cambiarEstadoBarra
+            }
         }
     }
 </script>

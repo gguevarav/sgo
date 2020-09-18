@@ -169,7 +169,7 @@
     methods: {
       initialize() {
         axios
-          .get("http://localhost/sgo/api-sgo/public/productos")
+          .get("http://localhost/api-sgo/productos")
           .then(response => {
             if (response.data.total != 0) {
               this.datosTabla = response.data.detalle
@@ -179,7 +179,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/sgo/api-sgo/public/unidadesmedida")
+          .get("http://localhost/api-sgo/unidadesmedida")
           .then(response => {
             if (response.data.total != 0) {
               this.datosUnidadMedida = response.data.detalle
@@ -204,7 +204,7 @@
 
       eliminarProducto(id) {
         confirm('¿Está seguro que desea eliminar este producto?') && axios
-          .delete("http://localhost/sgo/api-sgo/public/productos/" + id)
+          .delete("http://localhost/api-sgo/productos/" + id)
           .then(function (response) {
             //console.log(response);
           })
@@ -217,7 +217,7 @@
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
           axios
-            .put("http://localhost/sgo/api-sgo/public/productos/" + this.idProductoEditar,
+            .put("http://localhost/api-sgo/productos/" + this.idProductoEditar,
               this.editedItem)
             .then(function (response) {
               //console.log(response);
@@ -227,7 +227,7 @@
             })
         } else {
           axios
-            .post("http://localhost/sgo/api-sgo/public/productos",
+            .post("http://localhost/api-sgo/productos",
               this.editedItem)
             .then(function (response) {
               //console.log(response);
@@ -243,7 +243,7 @@
 
       guardarUnidadMedida() {
         axios
-          .post("http://localhost/sgo/api-sgo/public/unidadesmedida",
+          .post("http://localhost/api-sgo/unidadesmedida",
             this.nuevoUM)
           .then(function (response) {
             //console.log(response);

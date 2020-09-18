@@ -38,14 +38,15 @@
           <v-spacer></v-spacer>
 
           <!-- Dialog de botones de agregar y recargar -->
-          <v-dialog>
+          <v-dialog v-model="dialog" max-width="500px">
             <template
                 v-slot:activator="{ on, attrs }">
                   <v-btn
                     text
                     class="mb-2"
                     v-bind="attrs"
-                    v-on="on">
+                    v-on="on"
+                    @click="!dialog">
                       <v-icon>
                         mdi-plus
                       </v-icon>
@@ -421,7 +422,7 @@
     methods: {
       initialize() {
         axios
-          .get("http://localhost/sgo/api-sgo/public/usuarios")
+          .get("http://localhost/api-sgo/usuarios")
           .then(response => {
             if (response.data.total != 0) {
               this.datosTabla = response.data.detalle
@@ -431,7 +432,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/sgo/api-sgo/public/puestos")
+          .get("http://localhost/api-sgo/puestos")
           .then(response => {
             if (response.data.total != 0) {
               this.datosPuestos = response.data.detalle
@@ -441,7 +442,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/sgo/api-sgo/public/roles")
+          .get("http://localhost/api-sgo/roles")
           .then(response => {
             if (response.data.total != 0) {
               this.datosRoles = response.data.detalle
@@ -468,7 +469,7 @@
 
       eliminarUsuario(id) {
         confirm('¿Está seguro que desea eliminar este usuario?') && axios
-          .delete("http://localhost/sgo/api-sgo/public/usuarios/" + id)
+          .delete("http://localhost/api-sgo/usuarios/" + id)
           .then(function (response) {
             //console.log(response);
           })
@@ -481,7 +482,7 @@
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
           axios
-            .put("http://localhost/sgo/api-sgo/public/usuarios/" + this.idUsuarioEditar,
+            .put("http://localhost/api-sgo/usuarios/" + this.idUsuarioEditar,
               this.editedItem)
             .then(response => {
               //console.log(response);
@@ -495,7 +496,7 @@
             })
         } else {
           axios
-            .post("http://localhost/sgo/api-sgo/public/usuarios",
+            .post("http://localhost/api-sgo/usuarios",
               this.editedItem)
             .then(response => {
               if (response.data.status == 200) {
@@ -520,7 +521,7 @@
       guardarPuesto() {
 
         axios
-          .post("http://localhost/sgo/api-sgo/public/puestos",
+          .post("http://localhost/api-sgo/puestos",
             this.nuevoPuesto)
           .then(response => {
               if (response.data.status == 200) {
