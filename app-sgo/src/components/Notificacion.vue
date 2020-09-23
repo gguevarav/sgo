@@ -23,8 +23,9 @@
 
 <script>
 export default {
+    name: 'Notificacion',
     data: () => ({
-      snackbar: false,
+      snackbar: true,
       textoSnackbar: '',
       timeout: 3000
     }),

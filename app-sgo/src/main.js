@@ -9,6 +9,12 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
+// Importamos nuestros componentes
+import notificacion from './components/Notificacion';
+
+// Creamos nuestros componentes
+Vue.component('notificacion', notificacion);
  
 Vue.use(VueAxios, axios)
 

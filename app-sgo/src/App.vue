@@ -1,31 +1,18 @@
 <template>
-  <div>
-    <v-app>
-        <!-- Barra principal aplicación -->
-        <AppBar></AppBar>
-        <!-- Barra de navegación -->
-        <NavigationBar></NavigationBar>
-        <!-- Contenido principal -->
-        <v-content>
-          <v-container>
-            <router-view></router-view>
-          </v-container>
-        </v-content>
-    </v-app>
-  </div>
+  <v-app>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-
-  import NavigationBar from './components/NavigationBar';
-  import AppBar from './components/AppBar';
 
   export default {
     name: 'Home',
 
     components: {
-      NavigationBar,
-      AppBar
+      
     },
 
     data: () => ({

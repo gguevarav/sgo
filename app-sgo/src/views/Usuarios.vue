@@ -1,24 +1,7 @@
 <template>
   <div class="text-center">
     <!-- Snackbar de notificaciones -->
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      color="success">
-
-      {{ textoSnackbar }}
-
-      <template
-        v-slot:action="{ attrs }">
-        <v-btn
-          color="blue darken-1"
-          text
-          v-bind="attrs"
-          @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    
     <!-- Termina Snackbar de notificaciones -->
 
     <!-- Tabla de usuarios -->
@@ -293,12 +276,14 @@
 
 <script>
   import axios from "axios";
+  
 
   export default {
+    name: 'Usuarios',
+    components:{
+      
+    },
     data: () => ({
-      snackbar: false,
-      textoSnackbar: '',
-      timeout: 3000,
       verContrasenia: false,
       toggle_exclusive: undefined,
       dialog: false,
@@ -422,7 +407,7 @@
     methods: {
       initialize() {
         axios
-          .get("http://localhost/api-sgo/usuarios")
+          .get("http://localhost:8000/usuarios")
           .then(response => {
             if (response.data.total != 0) {
               this.datosTabla = response.data.detalle
@@ -432,7 +417,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/api-sgo/puestos")
+          .get("http://localhost:8000/puestos")
           .then(response => {
             if (response.data.total != 0) {
               this.datosPuestos = response.data.detalle
@@ -442,7 +427,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/api-sgo/roles")
+          .get("http://localhost:8000/roles")
           .then(response => {
             if (response.data.total != 0) {
               this.datosRoles = response.data.detalle
@@ -469,7 +454,7 @@
 
       eliminarUsuario(id) {
         confirm('¿Está seguro que desea eliminar este usuario?') && axios
-          .delete("http://localhost/api-sgo/usuarios/" + id)
+          .delete("http://localhost:8000/usuarios/" + id)
           .then(function (response) {
             //console.log(response);
           })
@@ -482,7 +467,7 @@
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
           axios
-            .put("http://localhost/api-sgo/usuarios/" + this.idUsuarioEditar,
+            .put("http://localhost:8000/usuarios/" + this.idUsuarioEditar,
               this.editedItem)
             .then(response => {
               //console.log(response);
@@ -496,7 +481,7 @@
             })
         } else {
           axios
-            .post("http://localhost/api-sgo/usuarios",
+            .post("http://localhost:8000/usuarios",
               this.editedItem)
             .then(response => {
               if (response.data.status == 200) {
@@ -521,7 +506,7 @@
       guardarPuesto() {
 
         axios
-          .post("http://localhost/api-sgo/puestos",
+          .post("http://localhost:8000/puestos",
             this.nuevoPuesto)
           .then(response => {
               if (response.data.status == 200) {
