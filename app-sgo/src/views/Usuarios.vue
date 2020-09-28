@@ -276,7 +276,8 @@
 
 <script>
   import axios from "axios";
-  
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL ="http://localhost:8000"
 
   export default {
     name: 'Usuarios',
@@ -406,18 +407,21 @@
 
     methods: {
       initialize() {
+
+        //axios.get("/sanctum/csrf-cookie").then(() => {
+          axios
+            .get("/usuarios")
+            .then(response => {
+              if (response.data.total != 0) {
+                this.datosTabla = response.data.detalle
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        //});
         axios
-          .get("http://localhost:8000/usuarios")
-          .then(response => {
-            if (response.data.total != 0) {
-              this.datosTabla = response.data.detalle
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-        axios
-          .get("http://localhost:8000/puestos")
+          .get("/puestos")
           .then(response => {
             if (response.data.total != 0) {
               this.datosPuestos = response.data.detalle
@@ -427,7 +431,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost:8000/roles")
+          .get("/roles")
           .then(response => {
             if (response.data.total != 0) {
               this.datosRoles = response.data.detalle
@@ -454,7 +458,7 @@
 
       eliminarUsuario(id) {
         confirm('¿Está seguro que desea eliminar este usuario?') && axios
-          .delete("http://localhost:8000/usuarios/" + id)
+          .delete("/usuarios/" + id)
           .then(function (response) {
             //console.log(response);
           })
@@ -466,8 +470,9 @@
       guardarInformacion() {
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
-          axios
-            .put("http://localhost:8000/usuarios/" + this.idUsuarioEditar,
+          //axios.get("/sanctum/csrf-cookie").then(() => {
+            axios
+            .put("/usuarios/" + this.idUsuarioEditar,
               this.editedItem)
             .then(response => {
               //console.log(response);
@@ -479,9 +484,10 @@
             .catch(function (error) {
               console.log(error);
             })
+          //});
         } else {
           axios
-            .post("http://localhost:8000/usuarios",
+            .post("/usuarios",
               this.editedItem)
             .then(response => {
               if (response.data.status == 200) {
@@ -506,7 +512,7 @@
       guardarPuesto() {
 
         axios
-          .post("http://localhost:8000/puestos",
+          .post("/puestos",
             this.nuevoPuesto)
           .then(response => {
               if (response.data.status == 200) {

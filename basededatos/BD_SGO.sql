@@ -49,17 +49,19 @@ CREATE TABLE Rol(
 	updated_at				TIMESTAMP			NULL
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
 
-CREATE TABLE Usuario(
+CREATE TABLE users(
 	idUsuario				TINYINT 			NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
 	NombreUsuario			VARCHAR(35)			NOT NULL,
 	ApellidoUsuario			VARCHAR(35)			NOT NULL,
 	idPuesto				TINYINT 			NOT NULL,
-	CorreoUsuario			VARCHAR(100)		NOT NULL,
-	ContraseniaUsuario		VARCHAR(32)			NOT NULL,
-	idClienteUsuario		TEXT				NOT NULL,
-	LlaveSecretaUsuario		TEXT				NOT NULL,
+	email					VARCHAR(100)		NOT NULL,
+	email_verified_at		TIMESTAMP			NULL,
+	password 				VARCHAR(191)		NOT NULL,
+	remember_token			VARCHAR(100)		NULL,
 	idRol					TINYINT 			NOT NULL,
 	EstadoUsuario			BOOLEAN				NOT NULL,
+	current_team_id			BIGINT(20)			NULL,
+	profile_photo_path		TEXT				NULL,
 	created_at				TIMESTAMP			NULL,
 	updated_at				TIMESTAMP			NULL,
 	INDEX (idPuesto),
@@ -100,7 +102,7 @@ CREATE TABLE ListadoActividad(
 	updated_at				TIMESTAMP			NULL,
 	INDEX (idUsuario),
     FOREIGN KEY (idUsuario)
-            REFERENCES Usuario(idUsuario)
+            REFERENCES users(idUsuario)
             ON DELETE CASCADE
             ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
@@ -137,8 +139,8 @@ CREATE TABLE Inventario(
             ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
 
-INSERT INTO estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
+INSERT INTO Estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
 			VALUES (NULL, 'Activo', NULL, NULL);
 		
-INSERT INTO estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
+INSERT INTO Estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
 			VALUES (NULL, 'Inactivo', NULL, NULL);

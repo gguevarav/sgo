@@ -276,6 +276,8 @@
 
 <script>
   import axios from "axios";
+  axios.defaults.withCredentials = true;
+  axios.defaults.baseURL ="http://localhost:8000"
 
   export default {
     data: () => ({
@@ -383,7 +385,7 @@
     methods: {
       initialize() {
         axios
-          .get("http://localhost/api-sgo/productos")
+          .get("/productos")
           .then(response => {
             if (response.data.total != 0) {
               this.datosTabla = response.data.detalle
@@ -393,7 +395,7 @@
             console.log(error);
           })
         axios
-          .get("http://localhost/api-sgo/unidadesmedida")
+          .get("/unidadesmedida")
           .then(response => {
             if (response.data.total != 0) {
               this.datosUnidadMedida = response.data.detalle
@@ -418,7 +420,7 @@
 
       eliminarProducto(id) {
         confirm('¿Está seguro que desea eliminar este producto?') && axios
-          .delete("http://localhost/api-sgo/productos/" + id)
+          .delete("/productos/" + id)
           .then(function (response) {
             //console.log(response);
           })
@@ -431,7 +433,7 @@
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
           axios
-            .put("http://localhost/api-sgo/productos/" + this.idProductoEditar,
+            .put("/productos/" + this.idProductoEditar,
               this.editedItem)
             .then(response => {
               //console.log(response);
@@ -445,7 +447,7 @@
             })
         } else {
           axios
-            .post("http://localhost/api-sgo/productos", this.editedItem)
+            .post("/productos", this.editedItem)
             .then(response => {
               if (response.data.status == 200) {
                 //console.log("exito")
@@ -468,7 +470,7 @@
 
       guardarUnidadMedida() {
         axios
-          .post("http://localhost/api-sgo/unidadesmedida",
+          .post("/unidadesmedida",
             this.nuevoUM)
           .then(response => {
               if (response.data.status == 200) {
