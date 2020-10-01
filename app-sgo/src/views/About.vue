@@ -1,5 +1,13 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+    <v-card>
+        <v-card-title>
+            Acerca de...
+        </v-card-title>
+    </v-card>
 </template>
+
+<script>
+export default {
+
+}
+</script>

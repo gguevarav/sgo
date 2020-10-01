@@ -1,53 +1,88 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="column is-4 is-offset-4">
-        <div class="box">
-          <h1 class="title">Login</h1>
-          <div class="notification is-danger" v-if="error">
-            <p>{{error}}</p>
-          </div>
-          <form autocomplete="off" @submit.prevent="login" method="post">
-            <div class="field">
-              <div class="control">
-                <input type="email" class="input" placeholder="user@example.com" v-model="username" />
-              </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <input type="password" class="input" v-model="password" />
-              </div>
-            </div>
-            <button type="submit" class="button is-primary">Sign in</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-app>
+      <v-content>
+          <v-container class="fill-height" fluid>
+              <v-row align="center" justify="center">
+                  <v-col cols="12" md="8" sm="8">
+                      <v-card class="elevation-12">
+                          <v-window>
+                              <v-window-item :value="1">
+                                  <v-row>
+                                      <v-col cols="12" md="12">
+                                          <v-img
+                                                    src="@/assets/images/logo.png"
+                                                    aspect-ratio="5"
+                                                    contain
+                                                    >
+                                                  </v-img>
+                                          <v-card-text class="mt-1">
+                                              <h1 class="text-center display-2 green--text text--darken-3">SGO</h1>
+                                              <v-form @submit.prevent="login">
+                                                  <v-text-field
+                                                  label="Correo"
+                                                  name="Correo"
+                                                  v-model="form.email"
+                                                  prepend-icon="mdi-email"
+                                                  type="text"
+                                                  color="dark"
+                                                  :rules="[rules.required]"
+                                                  />
+                                                  <v-text-field
+                                                  id="password"
+                                                  label="Contraseña"
+                                                  name="Contrasenia"
+                                                  v-model="form.password"
+                                                  prepend-icon="mdi-lock"
+                                                  type="password"
+                                                  color="dark"
+                                                  :rules="[rules.required]"
+                                                  />
+                                              </v-form>
+                                          </v-card-text>
+                                          <div class="text-center mt-3">
+                                              <v-btn rounded color="primary" @click="login">Iniciar sesión</v-btn>
+                                          </div>
+                                      </v-col>
+                                  </v-row>
+                              </v-window-item>
+                          </v-window>
+                      </v-card>
+                  </v-col>
+              </v-row>
+          </v-container>
+      </v-content>
+  </v-app>
 </template>
 
 <script>
 export default {
-  data() {
+  name: 'login',
+  data () {
     return {
-      username: null,
-      password: null,
-      error: null
-    };
+      rules: {
+        required: value => !!value || 'Requerido.',
+      },
+      user: {},
+      form: {
+        email:"",
+        password:""
+      },
+      error: null,
+    }
   },
   methods: {
     login() {
       this.$store
-        .dispatch("retrieveToken", {
-          username: this.username,
-          password: this.password
-        })
-        .then(response => {
-          this.$router.push({ name: "dashboard" });
-        })
-        .catch(error => {
-          this.error = error.response.data;
-        });
+          .dispatch("retrieveToken", {
+            username: this.form.email,
+            password: this.form.password
+          })
+          .then(response => {
+            this.$router.push({ name: "home" });
+          })
+          .catch(error => {
+            this.error = error.response.data;
+          });
     }
   }
 };

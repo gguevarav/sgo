@@ -4,14 +4,17 @@ import Home from '../views/Home.vue'
 import NotFound from '../views/NotFound'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
-import Dashboard from '../views/Dashboard.vue'
+import Actividades from '../views/Actividades.vue'
+import Productos from '../views/Productos.vue'
+import Usuarios from '../views/Usuarios.vue'
+import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/Home',
-    name: '',
+    path: '/home',
+    name: 'home',
     component: Home
   },
   {
@@ -29,22 +32,26 @@ const router = new VueRouter({
   linkActiveClass: 'is-active',
   routes: [
     {
-      path: '/login',
-      name: 'login',
-      component: Login,
-    },
-    {
-        path: '/logout',
-        name: 'logout',
-        component: Logout,
+      path: '/home',
+      name: 'home',
+      component: Home,
         meta: {
             requiresAuth: true,
         }
     },
     {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: Dashboard,
+      path: '/login',
+      name: 'login',
+      component: Login,
+    },
+      {
+          path: '/',
+          redirect: '/home'
+      },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: Logout,
         meta: {
             requiresAuth: true,
         }
@@ -57,6 +64,38 @@ const router = new VueRouter({
     { 
         path: '*', 
         redirect: '/404', 
+    },
+      {
+          path: '/about',
+          name: 'about',
+          component: About,
+          meta: {
+              requiresAuth: true,
+          }
+      },
+    {
+      path: '/actividades',
+      name: 'actividades',
+      component: Actividades,
+        meta: {
+            requiresAuth: true,
+        }
+    },
+    {
+      path: '/productos',
+      name: 'productos',
+      component: Productos,
+        meta: {
+            requiresAuth: true,
+        }
+    },
+    {
+      path: '/usuarios',
+      name: 'usuarios',
+      component: Usuarios,
+        meta: {
+            requiresAuth: true,
+        }
     },
   ]
 })
