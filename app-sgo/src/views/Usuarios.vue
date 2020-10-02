@@ -51,8 +51,7 @@
                       <v-btn
                         text
                         class="mb-2"
-                        v-bind="attrs"
-                        v-on="on">
+                        @click="dialog = true">
                           <v-icon>
                             mdi-plus
                           </v-icon>
@@ -119,9 +118,10 @@
                             sm="6"
                             md="6">
                               <v-text-field
-                                v-model="editedItem.CorreoUsuario"
+                                v-model="editedItem.email"
                                 :disabled="editarCorreo"
                                 label="Correo"
+                                placeholder="usuario@example.com"
                                 :rules="[rules.required, rules.email]">
                               </v-text-field>
                           </v-col>
@@ -130,13 +130,15 @@
                             sm="6"
                             md="6">
                             <v-text-field
-                              v-model="editedItem.ContraseniaUsuario"
+                              v-model="editedItem.password"
                               :append-icon="verContrasenia ? 'mdi-eye' : 'mdi-eye-off'"
                               :rules="[rules.required, rules.min]"
                               :type="verContrasenia ? 'text' : 'password'"
                               name="input-10-1"
+                              autocomplete="new-password"
                               label="Contraseña"
-                              hint="At least 8 caracteres"
+                              placeholder="********"
+                              hint="Al menos 8 caracteres"
                               counter
                               @click:append="verContrasenia = !verContrasenia">
                             </v-text-field>
@@ -383,7 +385,7 @@
         ApellidoUsuario: '',
         email: '',
         idPuesto: '',
-        ContraseniaUsuario: '',
+        password: '',
         idRol: '',
         EstadoUsuario: 1,
       },
@@ -392,7 +394,7 @@
         ApellidoUsuario: '',
         email: '',
         idPuesto: '',
-        ContraseniaUsuario: '',
+        password: '',
         idRol: '',
         EstadoUsuario: 1,
       },

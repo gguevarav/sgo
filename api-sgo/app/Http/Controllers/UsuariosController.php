@@ -84,7 +84,7 @@ class UsuariosController extends BaseController
                 );
             }else{
                 // instanciamos un nuevo objeto para registro
-                $Usuario = new Usuario();
+                $Usuario = new User();
 
                 // Se crea el id Cliente
                 //$idCliente = Hash::make($Datos["NombreUsuario"].$Datos["ApellidoUsuario"].$Datos["CorreoUsuario"].$Datos["ContraseniaUsuario"]);
@@ -109,8 +109,8 @@ class UsuariosController extends BaseController
                 $json = array(
                     "status" => 200,
                     "detalle" => "Registro exitoso",
-                    "idCliente" => str_replace("$", "-", $idCliente),
-                    "LlaveSecreta" => str_replace("$", "-", $LlaveSecreta)
+                    //"idCliente" => str_replace("$", "-", $idCliente),
+                    //"LlaveSecreta" => str_replace("$", "-", $LlaveSecreta)
                 );
             }
         }else{
@@ -205,14 +205,14 @@ class UsuariosController extends BaseController
                     );
                 }else{
                     $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
                 }
-            }   
+            }
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registros incompletos"
                 );
         }
@@ -236,7 +236,7 @@ class UsuariosController extends BaseController
             );
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
         }

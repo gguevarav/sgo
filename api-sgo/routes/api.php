@@ -77,7 +77,8 @@ Route::group([
 
     // CRUD Usuarios
     Route::get('/usuarios', 'UsuariosController@index');
-    Route::post('/usuarios', 'UsuariosController@store');
+    //Route::post('/usuarios', 'UsuariosController@store');
+    Route::post('/usuarios', 'AuthController@signup');
     Route::delete('/usuarios/{id}', 'UsuariosController@destroy');
     Route::put('/usuarios/{id}', 'UsuariosController@update');
     Route::get('/usuarios/{id}', 'UsuariosController@show');

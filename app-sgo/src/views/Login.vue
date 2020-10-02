@@ -21,7 +21,7 @@
                                                   <v-text-field
                                                   label="Correo"
                                                   name="Correo"
-                                                  v-model="form.email"
+                                                  v-model="form.CorreoUsuario"
                                                   prepend-icon="mdi-email"
                                                   type="text"
                                                   color="dark"
@@ -31,7 +31,7 @@
                                                   id="password"
                                                   label="Contraseña"
                                                   name="Contrasenia"
-                                                  v-model="form.password"
+                                                  v-model="form.ContraseniaUsuario"
                                                   prepend-icon="mdi-lock"
                                                   type="password"
                                                   color="dark"
@@ -64,8 +64,8 @@ export default {
       },
       user: {},
       form: {
-        email:"",
-        password:""
+        CorreoUsuario:"",
+        ContraseniaUsuario:""
       },
       error: null,
     }
@@ -74,8 +74,8 @@ export default {
     login() {
       this.$store
           .dispatch("retrieveToken", {
-            username: this.form.email,
-            password: this.form.password
+            username: this.form.CorreoUsuario,
+            password: this.form.ContraseniaUsuario
           })
           .then(response => {
             this.$router.push({ name: "home" });

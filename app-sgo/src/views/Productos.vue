@@ -50,8 +50,7 @@
                       <v-btn
                         text
                         class="mb-2"
-                        v-bind="attrs"
-                        v-on="on">
+                        @click="dialog = true">
                           <v-icon>
                             mdi-plus
                           </v-icon>
