@@ -132,6 +132,8 @@ CREATE TABLE Inventario(
 	CantidadExistencia		DECIMAL				NOT NULL,
 	CantidadMinima			DECIMAL				NOT NULL,
 	CantidadMaxima			DECIMAL				NOT NULL,
+    created_at				TIMESTAMP			NULL,
+    updated_at				TIMESTAMP			NULL,
 	INDEX (idProducto),
     FOREIGN KEY (idProducto)
             REFERENCES Producto(idProducto)

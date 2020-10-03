@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use App\Models\Usuario;
 
 class UsuariosController extends BaseController
 {
@@ -84,7 +84,7 @@ class UsuariosController extends BaseController
                 );
             }else{
                 // instanciamos un nuevo objeto para registro
-                $Usuario = new User();
+                $Usuario = new Usuario();
 
                 // Se crea el id Cliente
                 //$idCliente = Hash::make($Datos["NombreUsuario"].$Datos["ApellidoUsuario"].$Datos["CorreoUsuario"].$Datos["ContraseniaUsuario"]);
@@ -127,7 +127,7 @@ class UsuariosController extends BaseController
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Primero obtenemos todos los registros y los almacenamos en un array
-        $Usuario = Users::where("idUsuario", $id)->get();
+        $Usuario = Usuario::where("idUsuario", $id)->get();
         // Verificamos que el array no esté vacio
         if ($Usuario != "[]" && !empty($Usuario)) {
             $json = array(
@@ -192,12 +192,12 @@ class UsuariosController extends BaseController
             }else{
                 // instanciamos un nuevo objeto para registro
                 // Obtendremos el Usuario de la base de Datos
-                $ObtenerUsuario = Users::where("idUsuario", $id)->get();
+                $ObtenerUsuario = Usuario::where("idUsuario", $id)->get();
 
                 if(!empty($ObtenerUsuario[0])){
                     // Modificamos la información, pasamos la información contenida
                     // en el array de los Datos
-                    $Usuario = Users::where("idUsuario", $id)->update($Datos);
+                    $Usuario = Usuario::where("idUsuario", $id)->update($Datos);
 
                     $json = array(
                         "status" => 200,
@@ -224,11 +224,11 @@ class UsuariosController extends BaseController
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Guardemos los Datos en la base de Datos
-        $ObtenerUsuario = Users::where("idUsuario", $id)->get();
+        $ObtenerUsuario = Usuario::where("idUsuario", $id)->get();
         // Si el Usuario no está vacío
         if(!empty($ObtenerUsuario)){
             // Eliminamos el registro
-            $UsuarioEliminar = Users::where("idUsuario", $id)->delete();
+            $UsuarioEliminar = Usuario::where("idUsuario", $id)->delete();
 
             $json = array(
                 "status" => 200,

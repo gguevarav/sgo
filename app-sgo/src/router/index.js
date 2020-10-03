@@ -7,6 +7,7 @@ import Logout from '../views/Logout.vue'
 import Actividades from '../views/Actividades.vue'
 import Productos from '../views/Productos.vue'
 import Usuarios from '../views/Usuarios.vue'
+import Inventario from '../views/Inventario.vue'
 import About from '../views/About.vue'
 
 Vue.use(VueRouter)
@@ -89,14 +90,19 @@ const router = new VueRouter({
             requiresAuth: true,
         }
     },
-    {
-      path: '/usuarios',
-      name: 'usuarios',
-      component: Usuarios,
-        meta: {
-            requiresAuth: true,
-        }
-    },
+      {
+          path: '/usuarios',
+          name: 'usuarios',
+          component: Usuarios,
+          meta: {
+              requiresAuth: true,
+          }
+      },
+      {
+          path: '/inventario',
+          name: 'inventario',
+          component: Inventario,
+      },
   ]
 })
 

@@ -8,12 +8,12 @@ use App\Models\Inventario;
 use Illuminate\Support\Facades\DB;
 
 class InventarioController extends BaseController
-{  
+{
     public function index(){
         // Creamos el join para obtener el array de los datos
         $Datos = DB::table('Inventario')
                         ->join('Producto', 'Inventario.idProducto', '=', 'Producto.idProducto')
-                        ->select('Inventario.*', 'Producto.idProducto')
+                        ->select('Inventario.*', 'Producto.CodigoProducto', 'Producto.NombreProducto')
                         ->get();
 
         // Verificamos que el array no esté vacio
@@ -49,9 +49,9 @@ class InventarioController extends BaseController
             // Reglas
             $Reglas = [
                 "idProducto" => 'required|integer',
-                "CantidadExistencia" => 'required|decimal',
-                "CantidadMinima" => 'required|decimal',
-                "CantidadMaxima" => 'required|decimal'];
+                "CantidadExistencia" => 'required|numeric',
+                "CantidadMinima" => 'required|numeric',
+                "CantidadMaxima" => 'required|numeric'];
 
             $Mensajes = [
                 "idProducto.required" => 'Es necesario agregar un código de producto',
@@ -171,14 +171,14 @@ class InventarioController extends BaseController
                     );
                 }else{
                     $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
                 }
-            }   
+            }
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registros incompletos"
                 );
         }
@@ -202,7 +202,7 @@ class InventarioController extends BaseController
             );
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
         }

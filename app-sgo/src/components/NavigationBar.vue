@@ -44,13 +44,23 @@
 
               <v-list-item :to="{name: 'productos'}">
                 <v-list-item-icon>
-                  <v-icon>mdi-factory</v-icon>
+                  <v-icon>mdi-package-variant</v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-content>
                   <v-list-item-title>Productos</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+
+              <v-list-item :to="{name: 'inventario'}">
+              <v-list-item-icon>
+                <v-icon>mdi-factory</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content>
+                <v-list-item-title>Inventario</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
               <v-list-item :to="{name: 'usuarios'}">
                 <v-list-item-icon>

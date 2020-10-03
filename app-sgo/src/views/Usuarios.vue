@@ -421,7 +421,7 @@
 
     watch: {
       dialog(val) {
-        val || this.cerrarDialogPuesto()
+        val || this.cerrarDialogPuesto() || this.cerrarDialogRegistro()
       },
     },
 
@@ -497,11 +497,17 @@
           axios
             .put("/api/usuarios/" + this.idUsuarioEditar, this.editedItem)
               .then(response => {
-              //console.log(response);
-              // Cerramos el cuadro de diálogo y mostraremos una notificación
-              this.textoSnackbar = 'Usuario editado exitosamente'
-              this.snackbar = !this.snackbar
-              this.cerrarDialogPuesto()
+                if (response.data.status == 200) {
+                  //console.log(response);
+                  // Cerramos el cuadro de diálogo y mostraremos una notificación
+                  this.textoSnackbar = 'Usuario editado exitosamente'
+                  this.snackbar = !this.snackbar
+                  this.cerrarDialogRegistro()
+                }else if(response.data.status == 404){
+                  //console.log("error")
+                  this.listadoErrores = response.data.errores
+                  this.alertaErrores = true
+                }
             })
             .catch(function (error) {
               console.log(error);
@@ -510,21 +516,21 @@
           axios
             .post("/api/usuarios", this.editedItem)
               .then(response => {
-              if (response.data.status == 200) {
-                //console.log("exito")
-                // Mostramos la confirmación
-                this.textoSnackbar = 'Usuario agregado exitosamente'
-                this.snackbar = !this.snackbar
-                this.cerrarDialogPuesto()
-              } else if (response.data.status == 404) {
-                //console.log("error")
-                this.listadoErrores = response.data.errores
-                this.alertaErrores = true
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
+                if (response.data.status == 200) {
+                  //console.log("exito")
+                  // Mostramos la confirmación
+                  this.textoSnackbar = 'Usuario agregado exitosamente'
+                  this.snackbar = !this.snackbar
+                  this.cerrarDialogRegistro()
+                } else if (response.data.status == 404) {
+                  //console.log("error")
+                  this.listadoErrores = response.data.errores
+                  this.alertaErrores = true
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
         }
         this.initialize()
       },
@@ -554,6 +560,7 @@
 
       cerrarDialogPuesto() {
         this.alertaErrores = false
+        this.alertaErroresPuesto = false
         this.dialogPuestos = false
         //this.dialog = false
         this.$nextTick(() => {
@@ -563,8 +570,11 @@
 
       cerrarDialogRegistro() {
         this.alertaErrores = false
+        this.alertaErroresPuesto = false
         this.dialogPuestos = false
         this.dialog = false
+        this.editarCorreo = false
+        this.estadoHabilitado = true
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1

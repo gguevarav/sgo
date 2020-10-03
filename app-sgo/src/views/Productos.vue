@@ -168,7 +168,7 @@
                     <v-btn
                       color="blue darken-1"
                       text
-                      @click="close">
+                      @click="cerrarDialogRegistro">
                         Cancelar
                     </v-btn>
                     <v-btn
@@ -379,7 +379,7 @@
 
     watch: {
       dialog(val) {
-        val || this.close()
+        val || this.cerrarDialogUM() || this.cerrarDialogRegistro()
       },
     },
 
@@ -439,14 +439,19 @@
         // Si el valor del índice de edición es mayor al que se está editando entonces 
         if (this.editedIndex > -1) {
           axios
-            .put("/api/productos/" + this.idProductoEditar,
-              this.editedItem)
+            .put("/api/productos/" + this.idProductoEditar, this.editedItem)
             .then(response => {
-              //console.log(response);
-              // Cerramos el cuadro de diálogo y mostraremos una notificación
-              this.textoSnackbar = 'Producto editado exitosamente'
-              this.snackbar = !this.snackbar
-              this.close()
+              if(response.data.status == 200){
+                //console.log(response);
+                // Cerramos el cuadro de diálogo y mostraremos una notificación
+                this.textoSnackbar = 'Producto editado exitosamente'
+                this.snackbar = !this.snackbar
+                this.cerrarDialogRegistro()
+              }else if(response.data.status == 404){
+                //console.log("error")
+                this.listadoErrores = response.data.errores
+                this.alertaErrores = true
+              }
             })
             .catch(function (error) {
               console.log(error);
@@ -460,7 +465,7 @@
                 // Mostramos la confirmación
                 this.textoSnackbar = 'Producto agregado exitosamente'
                 this.snackbar = !this.snackbar
-                this.close()
+                this.cerrarDialogRegistro()
               } else if (response.data.status == 404) {
                 //console.log("error")
                 this.listadoErrores = response.data.errores
@@ -498,6 +503,8 @@
       },
 
       cerrarDialogUM() {
+        this.alertaErrores = false
+        this.alertaErroresUM = false
         this.dialogUnidadMedida = false
         //this.dialog = false
         this.$nextTick(() => {
@@ -505,7 +512,11 @@
         })
       },
 
-      close() {
+      cerrarDialogRegistro() {
+        this.alertaErrores = false
+        this.alertaErroresUM = false
+        this.dialogUnidadMedida = false
+        this.editarCodigo = false
         this.dialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)

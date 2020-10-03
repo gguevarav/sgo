@@ -8,7 +8,7 @@ use App\Models\Producto;
 use Illuminate\Support\Facades\DB;
 
 class ProductosController extends BaseController
-{  
+{
     public function index(){
         // Creamos el join para obtener el array de los datos
         $Datos = DB::table('Producto')
@@ -134,13 +134,13 @@ class ProductosController extends BaseController
             // Separamos la validación
             // Reglas
             $Reglas = [
-                "CodigoProducto" => 'required|string|max:255|unique:Producto',
+                //"CodigoProducto" => 'required|string|max:255|unique:Producto',
                 "NombreProducto" => 'required|string|max:255',
                 "idUnidadMedida" => 'required|integer',
                 "EstadoProducto" => 'required|integer'];
 
             $Mensajes = [
-                "CodigoProducto.required" => 'Es necesario agregar un código de producto',
+                //"CodigoProducto.required" => 'Es necesario agregar un código de producto',
                 "CodigoProducto.unique" => 'El código ya existe',
                 "NombreProducto.required" => 'Es necesario agregar un nombre al producto',
                 "idUnidadMedida.required" => 'Es necesario agregar una unidad de medida',
@@ -171,14 +171,14 @@ class ProductosController extends BaseController
                     );
                 }else{
                     $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
                 }
-            }   
+            }
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registros incompletos"
                 );
         }
@@ -202,7 +202,7 @@ class ProductosController extends BaseController
             );
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
         }

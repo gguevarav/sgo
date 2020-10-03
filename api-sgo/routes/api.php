@@ -54,12 +54,7 @@ Route::group([
     Route::put('/productos/{id}', 'ProductosController@update');
     Route::get('/productos/{id}', 'ProductosController@show');
 
-    // CRUD Inventarios
-    Route::get('/inventario', 'InventarioController@index');
-    Route::post('/inventario', 'InventarioController@store');
-    Route::delete('/inventario/{id}', 'InventarioController@destroy');
-    Route::put('/inventario/{id}', 'InventarioController@update');
-    Route::get('/inventario/{id}', 'InventarioController@show');
+
 
     // CRUD Puestos
     Route::get('/puestos', 'PuestosController@index');
@@ -112,3 +107,11 @@ Route::group([
     Route::get('/listadomateriales/{id}', 'ListadoMaterialesController@show');
 
 });
+
+
+// CRUD Inventarios
+Route::get('/inventario', 'InventarioController@index');
+Route::post('/inventario', 'InventarioController@store');
+Route::delete('/inventario/{id}', 'InventarioController@destroy');
+Route::put('/inventario/{id}', 'InventarioController@update');
+Route::get('/inventario/{id}', 'InventarioController@show');

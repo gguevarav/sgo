@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
-    protected $table = 'user';
+    protected $table = 'users';
     protected $primaryKey = 'idUsuario';
 }
