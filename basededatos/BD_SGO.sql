@@ -130,15 +130,33 @@ CREATE TABLE Inventario(
 	idInventario			INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
 	idProducto				INTEGER				NOT NULL,
 	CantidadExistencia		DECIMAL				NOT NULL,
-	CantidadMinima			DECIMAL				NOT NULL,
-	CantidadMaxima			DECIMAL				NOT NULL,
+	RegistradoPor           TINYINT             NOT NULL,
     created_at				TIMESTAMP			NULL,
     updated_at				TIMESTAMP			NULL,
 	INDEX (idProducto),
     FOREIGN KEY (idProducto)
             REFERENCES Producto(idProducto)
             ON DELETE CASCADE
-            ON UPDATE NO ACTION
+            ON UPDATE NO ACTION,
+    INDEX (RegistradoPor),
+    FOREIGN KEY (RegistradoPor)
+        REFERENCES users(idUsuario)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION
+)ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
+
+CREATE TABLE MinimosMaximos(
+    idMinimosMaximos        INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
+    idProducto              INTEGER				NOT NULL,
+    CantidadMinima			DECIMAL				NOT NULL,
+    CantidadMaxima			DECIMAL				NOT NULL,
+    created_at				TIMESTAMP			NULL,
+    updated_at				TIMESTAMP			NULL,
+    INDEX (idProducto),
+    FOREIGN KEY (idProducto)
+        REFERENCES Producto(idProducto)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
 
 INSERT INTO Estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')

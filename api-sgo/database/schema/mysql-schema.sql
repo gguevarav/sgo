@@ -30,11 +30,14 @@ CREATE TABLE `Inventario` (
   `idInventario` int(11) NOT NULL AUTO_INCREMENT,
   `idProducto` int(11) NOT NULL,
   `CantidadExistencia` decimal(10,0) NOT NULL,
-  `CantidadMinima` decimal(10,0) NOT NULL,
-  `CantidadMaxima` decimal(10,0) NOT NULL,
+  `RegistradoPor` tinyint(4) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idInventario`),
   KEY `idProducto` (`idProducto`),
-  CONSTRAINT `Inventario_ibfk_1` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
+  KEY `RegistradoPor` (`RegistradoPor`),
+  CONSTRAINT `Inventario_ibfk_1` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `Inventario_ibfk_2` FOREIGN KEY (`RegistradoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -68,6 +71,20 @@ CREATE TABLE `ListadoMaterial` (
   KEY `idProducto` (`idProducto`),
   CONSTRAINT `ListadoMaterial_ibfk_1` FOREIGN KEY (`idListadoActividad`) REFERENCES `ListadoActividad` (`idListadoActividad`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `ListadoMaterial_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MinimosMaximos` (
+  `idMinimosMaximos` int(11) NOT NULL AUTO_INCREMENT,
+  `idProducto` int(11) NOT NULL,
+  `CantidadMinima` decimal(10,0) NOT NULL,
+  `CantidadMaxima` decimal(10,0) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idMinimosMaximos`),
+  KEY `idProducto` (`idProducto`),
+  CONSTRAINT `MinimosMaximos_ibfk_1` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -12,8 +12,7 @@ import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/home',
     name: 'home',
     component: Home
@@ -24,85 +23,87 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import( /* webpackChunkName: "about" */ '../views/About.vue')
   }
 ]
 
 const router = new VueRouter({
   mode: 'history',
   linkActiveClass: 'is-active',
-  routes: [
-    {
+  routes: [{
       path: '/home',
       name: 'home',
       component: Home,
-        meta: {
-            requiresAuth: true,
-        }
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/login',
       name: 'login',
       component: Login,
     },
-      {
-          path: '/',
-          redirect: '/home'
-      },
     {
-        path: '/logout',
-        name: 'logout',
-        component: Logout,
-        meta: {
-            requiresAuth: true,
-        }
+      path: '/',
+      redirect: '/home'
     },
-    { 
-        path: '/404', 
-        name: '404', 
-        component: NotFound,
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
+      meta: {
+        requiresAuth: true,
+      }
     },
-    { 
-        path: '*', 
-        redirect: '/404', 
+    {
+      path: '/404',
+      name: '404',
+      component: NotFound,
     },
-      {
-          path: '/about',
-          name: 'about',
-          component: About,
-          meta: {
-              requiresAuth: true,
-          }
-      },
+    {
+      path: '*',
+      redirect: '/404',
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: About,
+      meta: {
+        requiresAuth: true,
+      }
+    },
     {
       path: '/actividades',
       name: 'actividades',
       component: Actividades,
-        meta: {
-            requiresAuth: true,
-        }
+      meta: {
+        requiresAuth: true,
+      }
     },
     {
       path: '/productos',
       name: 'productos',
       component: Productos,
-        meta: {
-            requiresAuth: true,
-        }
+      meta: {
+        requiresAuth: true,
+      }
     },
-      {
-          path: '/usuarios',
-          name: 'usuarios',
-          component: Usuarios,
-          meta: {
-              requiresAuth: true,
-          }
-      },
-      {
-          path: '/inventario',
-          name: 'inventario',
-          component: Inventario,
-      },
+    {
+      path: '/usuarios',
+      name: 'usuarios',
+      component: Usuarios,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/inventario',
+      name: 'inventario',
+      component: Inventario,
+      meta: {
+        requiresAuth: true,
+      }
+    },
   ]
 })
 
