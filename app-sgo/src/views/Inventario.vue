@@ -101,7 +101,7 @@
                               :items="datosProductos"
                               :item-text="NombreCodigoProducto"
                               item-value='idProducto'
-                              v-model="editedItem.CodigoProducto"
+                              v-model="editedItem.idProducto"
                               :disabled="editarProducto"
                               label="Producto"
                               :rules="[rules.required]">
@@ -398,16 +398,18 @@
       editedIndex: -1,
       editedItem: {
         idProducto: '',
-        CodigoProducto: '',
+        //CodigoProducto: '',
         CantidadExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
+        RegistradoPor: 1,
       },
       defaultItem: {
         idProducto: '',
         CantidadExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
+        RegistradoPor: 1,
       },
       modificarMinimosMaximos: {
         idProducto: '',
@@ -555,7 +557,7 @@
                 // Mostramos la confirmación
                 this.textoSnackbar = 'Producto agregado exitosamente'
                 this.snackbar = !this.snackbar
-                this.cerrarDialogPuesto()
+                this.cerrarDialogRegistro()
               } else if (response.data.status == 404) {
                 //console.log("error")
                 this.listadoErrores = response.data.errores
@@ -581,6 +583,7 @@
       cerrarDialogModificarMinimosMaximos() {
         this.alertaErrores = false
         this.editarProducto = false
+        this.dialog = false
         this.dialogModificarMinimosMaximos = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)

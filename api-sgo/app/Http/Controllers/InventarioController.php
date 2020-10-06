@@ -48,7 +48,8 @@ class InventarioController extends BaseController
         $Datos = array("idProducto"=>$request->input("idProducto"),
                        "CantidadExistencia"=>$request->input("CantidadExistencia"),
                        "CantidadMinima"=>$request->input("CantidadMinima"),
-                       "CantidadMaxima"=>$request->input("CantidadMaxima"));
+                       "CantidadMaxima"=>$request->input("CantidadMaxima"),
+                       "RegistradoPor"=>$request->input("RegistradoPor"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
@@ -58,13 +59,15 @@ class InventarioController extends BaseController
                 "idProducto" => 'required|integer',
                 "CantidadExistencia" => 'required|numeric',
                 "CantidadMinima" => 'required|numeric',
-                "CantidadMaxima" => 'required|numeric'];
+                "CantidadMaxima" => 'required|numeric',
+                "RegistradoPor" => 'required|integer'];
 
             $Mensajes = [
                 "idProducto.required" => 'Es necesario agregar un código de producto',
                 "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia',
                 "CantidadMinima.required" => 'Es necesario agregar una cantidad minima',
-                "CantidadMaxima.required" => 'Es necesario agregar una cantidad maxima'];
+                "CantidadMaxima.required" => 'Es necesario agregar una cantidad maxima',
+                "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -94,6 +97,7 @@ class InventarioController extends BaseController
                 // Ingresamos los datos
                 $Inventario->idProducto = $Datos["idProducto"];
                 $Inventario->CantidadExistencia = $Datos["CantidadExistencia"];
+                $Inventario->RegistradoPor = $Datos["RegistradoPor"];
 
                 // Ejecutamos la acción de guardar el usuario
                 $Inventario->save();

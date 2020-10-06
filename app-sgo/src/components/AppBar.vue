@@ -16,15 +16,15 @@
 </template>
 
 <script>
-    import { mapMutations } from "vuex";
+import { mapMutations } from 'vuex'
 
-    export default {
-        name: 'AppBar',
-        data: () => ({
-            //barraNavegacion: true
-        }),
-        
-    }
+export default {
+  name: 'AppBar',
+  data: () => ({
+    // barraNavegacion: true
+  })
+
+}
 </script>
 
 <style>

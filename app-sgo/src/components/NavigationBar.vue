@@ -98,17 +98,17 @@
 
 <script>
 
-  import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
-  export default {
+export default {
 
-    computed: {
-      mini() {
-          return (this.$vuetify.breakpoint.smAndDown) || this.toggleMini
-      }
-    },
-    data: () => ({
-      barraNavegacion: true
-    }),
-  };
+  computed: {
+    mini () {
+      return (this.$vuetify.breakpoint.smAndDown) || this.toggleMini
+    }
+  },
+  data: () => ({
+    barraNavegacion: true
+  })
+}
 </script>
