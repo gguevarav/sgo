@@ -190,7 +190,7 @@
                             sm="6"
                             md="6">
                             <v-text-field
-                              v-model="modificarMinimosMaximos.CodigoProducto"
+                              v-model="editedItem.idProducto"
                               :disabled="editarProducto"
                               label="Producto"
                               :rules="[rules.required]">
@@ -201,7 +201,7 @@
                             sm="6"
                             md="6">
                             <v-text-field
-                              v-model="modificarMinimosMaximos.CantidadExistencia"
+                              v-model="editedItem.CantidadExistencia"
                               label="Cantidad en existencia"
                               :disabled="editarProducto"
                               :rules="[rules.required]">
@@ -212,7 +212,7 @@
                             sm="6"
                             md="6">
                             <v-text-field
-                              v-model="modificarMinimosMaximos.CantidadMinima"
+                              v-model="editedItem.CantidadMinima"
                               label="Cantidad mínima"
                               :rules="[rules.required]">
                             </v-text-field>
@@ -222,7 +222,7 @@
                             sm="6"
                             md="6">
                             <v-text-field
-                              v-model="modificarMinimosMaximos.CantidadMaxima"
+                              v-model="editedItem.CantidadMaxima"
                               label="Cantidad maxima"
                               :rules="[rules.required]">
                             </v-text-field>
@@ -484,7 +484,7 @@
       editarMinimosMaximosProducto(item, idInventario) {
         this.idInventarioEditar = idInventario
         this.editedIndex = this.datosTabla.indexOf(item)
-        this.modificarMinimosMaximos = Object.assign({}, item)
+        this.editedItem = Object.assign({}, item)
         if (this.editedIndex > -1) {
           this.editarProducto = true
         } else {
