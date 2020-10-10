@@ -95,7 +95,7 @@
       dialog: false,
       dialogUnidadMedida: false,
       headers: [{
-          text: 'idProducto',
+          text: 'idProduct',
           align: 'start',
           sortable: false,
           value: 'idProducto',

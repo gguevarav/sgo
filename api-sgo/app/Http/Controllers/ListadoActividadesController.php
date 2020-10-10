@@ -12,6 +12,30 @@ class ListadoActividadesController extends BaseController
 		// Primero obtendremos el array de los datos
 		$Datos = ListadoActividad::all();
 
+		/*
+		 * SELECT L.idArea,
+                   L.idNombreActividad,
+                   L.CreadoPor,
+                   L.RealizadoPor,
+                   L.FechaCreacionActividad,
+                   L.FechaConclusionActividad,
+                   L.EstadoActividad,
+                   A.NombreArea,
+                   N.idNombreActividad,
+                   U.NombreUsuario,
+                   U.ApellidoUsuario,
+                   u2.NombreUsuario,
+                   u2.ApellidoUsuario FROM ListadoActividad As L
+                INNER JOIN Area A
+                ON L.idArea = A.idArea
+                INNER JOIN NombreActividad N
+                ON L.idNombreActividad = N.idNombreActividad
+                INNER JOIN users U
+                ON L.CreadoPor = U.idUsuario
+                INNER JOIN users u2
+                ON L.RealizadoPor = u2.idUsuario;
+		 * */
+
 		// Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {
             $json = array(
@@ -135,7 +159,7 @@ class ListadoActividadesController extends BaseController
             // Si falla la validación
             if ($validacion->fails()){
                 $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registro con errores"
                 );
             }else{
@@ -153,14 +177,14 @@ class ListadoActividadesController extends BaseController
                     );
                 }else{
                     $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
                 }
-            }   
+            }
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registros incompletos"
                 );
         }
@@ -184,7 +208,7 @@ class ListadoActividadesController extends BaseController
             );
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
         }
