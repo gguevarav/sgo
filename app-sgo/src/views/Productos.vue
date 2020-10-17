@@ -29,9 +29,10 @@
 
         <!-- Tabla de productos -->
         <v-data-table
+          dense
           :headers="headers"
           :items="datosTabla"
-          :items-per-page="5"
+          :items-per-page="10"
           sort-by="NombreProducto"
           class="elevation-1">
           <template
@@ -317,7 +318,7 @@
           value: 'NombreEstado'
         },
         {
-          text: 'Actions',
+          text: 'Acciones',
           value: 'actions',
           sortable: false
         },

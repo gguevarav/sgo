@@ -235,4 +235,45 @@ class ListadoActividadesTorreEnfriamientoController extends BaseController
         // Devolvemos la respuesta en un Json
         return response()->json($json);
     }
+
+    public function listadoActividadesGeneralTorreEnfriamiento(){
+        // Primero obtendremos el array de los datos
+        $Datos = DB::Select('SELECT LATE.idListadoActividadTorreEnfriamiento,
+                                          A.NombreArea,
+                                          NA.NombreActividad,
+                                          CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
+                                          CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
+                                          E.NombreEstado,
+                                          E.idEstado,
+                                          LATE.FechaCreacionActividad,
+                                          LATE.FechaConclusionActividad ' .'
+                                   FROM ListadoActividadTorreEnfriamiento As LATE
+                                            INNER JOIN Area A
+                                                       ON LATE.idArea = A.idArea
+                                            INNER JOIN NombreActividad NA
+                                                       ON LATE.idNombreActividad = NA.idNombreActividad
+                                            INNER JOIN users US
+                                                       ON LATE.CreadoPor = US.idUsuario
+                                            INNER JOIN users US2
+                                                       ON LATE.RealizadoPor = US2.idUsuario
+                                            INNER JOIN Estado E
+                                                       ON LATE.EstadoActividad = E.idEstado;');
+
+        // Verificamos que el array no esté vacio
+        if (!empty($Datos[0])) {
+            $json = array(
+                'status' => 200,
+                'total' => count($Datos),
+                'detalle' => $Datos
+            );
+        }else{
+            $json = array(
+                'status' => 200,
+                'total' => 0,
+                'detalle' => "No hay registros"
+            );
+        }
+        // Mostramos la información como un json
+        return response()->json($json);
+    }
 }

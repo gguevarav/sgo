@@ -47,6 +47,14 @@
                               </v-window-item>
                           </v-window>
                       </v-card>
+                    <!-- Notificación -->
+                    <Notificacion
+                        :activar="activarNotificacion"
+                        :textoSnackbar="textoMostrarNotificacion"
+                        :color="colorNotificacion"
+                        @cerrarNotificacion="cerrarNotificacion">
+                    </Notificacion>
+                    <!-- Notificación -->
                   </v-col>
               </v-row>
           </v-container>
@@ -55,6 +63,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'login',
   data () {
@@ -68,6 +78,9 @@ export default {
         ContraseniaUsuario:""
       },
       error: null,
+      activarNotificacion: false,
+      textoMostrarNotificacion: '',
+      colorNotificacion: '',
     }
   },
   methods: {
@@ -79,11 +92,41 @@ export default {
           })
           .then(response => {
             this.$router.push({ name: "home" });
+            this.almacenarDatosUsuario();
           })
           .catch(error => {
             this.error = error.response.data;
+            this.activarNotificacion = true;
+            this.textoMostrarNotificacion = "Correo o contraseña inválido";
+            this.colorNotificacion  = 'red';
           });
-    }
+    },
+
+    almacenarDatosUsuario(){
+      return new Promise((resolve, reject) => {
+        // Almacenamos la info del usuario
+        axios.get('/api/auth/user',  {
+          headers: { Authorization: localStorage.getItem('access_token') }
+        })
+            .then(response => {
+              //console.log(response);
+              localStorage.setItem('idUsuario', response.data.idUsuario);
+              localStorage.setItem('NombreUsuario', response.data.NombreUsuario + ' ' + response.data.ApellidoUsuario);
+              localStorage.setItem('CorreoUsuario', response.data.email);
+              resolve(response)
+            })
+            .catch(error => {
+              console.log(error)
+              console.log("error")
+              reject(error)
+            })
+      });
+    },
+
+    cerrarNotificacion(cerrarNotificacion){
+      this.activarNotificacion = cerrarNotificacion
+      this.activarNotificacion = false;
+    },
   }
 };
 </script>

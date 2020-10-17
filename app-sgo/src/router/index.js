@@ -9,6 +9,9 @@ import Productos from '../views/Productos.vue'
 import Usuarios from '../views/Usuarios.vue'
 import Inventario from '../views/Inventario.vue'
 import About from '../views/About.vue'
+import ListadoActividadesCaldera from '../views/ListadoActividadesCaldera'
+import ListadoActividadesPretratamiento from '../views/ListadoActividadesPretratamiento'
+import ListadoActividadesTorreEnfriamiento from '../views/ListadoActividadesTorreEnfriamiento'
 
 Vue.use(VueRouter)
 
@@ -76,6 +79,30 @@ const router = new VueRouter({
       path: '/actividades',
       name: 'actividades',
       component: Actividades,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/listadoactividadescaldera',
+      name: 'listadoactividadescaldera',
+      component: ListadoActividadesCaldera,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/listadoactividadespretratamiento',
+      name: 'listadoactividadespretratamiento',
+      component: ListadoActividadesPretratamiento,
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/listadoactividadestorreenfriamiento',
+      name: 'listadoactividadestorreenfriamiento',
+      component: ListadoActividadesTorreEnfriamiento,
       meta: {
         requiresAuth: true,
       }

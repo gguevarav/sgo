@@ -47,12 +47,7 @@ Route::group([
     Route::put('/unidadesmedida/{id}', 'UnidadesMedidaController@update');
     Route::get('/unidadesmedida/{id}', 'UnidadesMedidaController@show');
 
-    // CRUD Productos
-    Route::get('/productos', 'ProductosController@index');
-    Route::post('/productos', 'ProductosController@store');
-    Route::delete('/productos/{id}', 'ProductosController@destroy');
-    Route::put('/productos/{id}', 'ProductosController@update');
-    Route::get('/productos/{id}', 'ProductosController@show');
+
 
     // CRUD Puestos
     Route::get('/puestos', 'PuestosController@index');
@@ -61,15 +56,7 @@ Route::group([
     Route::put('/puestos/{id}', 'PuestosController@update');
     Route::get('/puestos/{id}', 'PuestosController@show');
 
-    // CRUD Inventarios
 
-    Route::get('/inventario', 'InventarioController@index');
-    Route::post('/inventario', 'InventarioController@store');
-    Route::delete('/inventario/{id}', 'InventarioController@destroy');
-    Route::put('/inventario/{id}', 'InventarioController@update');
-    Route::get('/inventario/{id}', 'InventarioController@show');
-    Route::get('/productonoinventariado','InventarioController@productoNoInventariado');
-    Route::post('/agregaracantidadinventario','InventarioController@agregarCantidadInventario');
 
     // CRUD Roles
     Route::get('/roles', 'RolesController@index');
@@ -94,7 +81,7 @@ Route::group([
     Route::get('/areas/{id}', 'AreasController@show');
 
     // CRUD NombreActividad
-    Route::get('/nombreactividades', 'NombreActividadesController@index');
+
     Route::post('/nombreactividades', 'NombreActividadesController@store');
     Route::delete('/nombreactividades/{id}', 'NombreActividadesController@destroy');
     Route::put('/nombreactividades/{id}', 'NombreActividadesController@update');
@@ -111,6 +98,31 @@ Route::group([
 
 });
 
+// CRUD Inventarios
+
+Route::get('/inventario', 'InventarioController@index');
+Route::post('/inventario', 'InventarioController@store');
+Route::delete('/inventario/{id}', 'InventarioController@destroy');
+Route::put('/inventario/{id}', 'InventarioController@update');
+Route::get('/inventario/{id}', 'InventarioController@show');
+Route::get('/productonoinventariado','InventarioController@productoNoInventariado');
+Route::get('/productoinventariado','InventarioController@productoInventariado');
+Route::post('/agregaracantidadinventario','InventarioController@agregarCantidadInventario');
+Route::post('/descontarproductosinventario','InventarioController@descontarProductosInventario');
+
+// CRUD Productos
+Route::get('/productos', 'ProductosController@index');
+Route::post('/productos', 'ProductosController@store');
+Route::delete('/productos/{id}', 'ProductosController@destroy');
+Route::put('/productos/{id}', 'ProductosController@update');
+Route::get('/productos/{id}', 'ProductosController@show');
+
+
+Route::get('/nombreactividades', 'NombreActividadesController@index');
+
+Route::get('/areascaldera', 'AreaCalderasController@index');
+Route::get('/areaspretratamiento', 'AreasPretratamientoController@index');
+Route::get('/calderas', 'CalderasController@index');
 
 // CRUD Listado Actividad Caldera
 Route::get('/listadoactividadescaldera', 'ListadoActividadesCalderaController@index');
@@ -118,6 +130,8 @@ Route::post('/listadoactividadescaldera', 'ListadoActividadesCalderaController@s
 Route::delete('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@destroy');
 Route::put('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@update');
 Route::get('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@show');
+Route::post('/cerraractividad/{id}', 'ListadoActividadesCalderaController@cerrarActividad');
+Route::get('/listadoactividadesgeneralcaldera', 'ListadoActividadesCalderaController@listadoActividadesGeneralCaldera');
 
 // CRUD Listado Material Actividad Caldera
 Route::get('/listadomaterialactividadescaldera', 'ListadoMaterialActividadesCalderaController@index');
@@ -132,6 +146,8 @@ Route::post('/listadoactividadespretratamiento', 'ListadoActividadesPretratamien
 Route::delete('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@destroy');
 Route::put('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@update');
 Route::get('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@show');
+Route::post('/cerraractividadpretratamiento/{id}', 'ListadoActividadesPretratamientoController@cerrarActividadPretratamiento');
+Route::get('/listadoactividadesgeneralpretratamiento', 'ListadoActividadesPretratamientoController@listadoActividadesGeneralPretratamiento');
 
 // CRUD Listado Material Actividad Pretratamiento
 Route::get('/listadomaterialactividadespretratamiento', 'ListadoMaterialActividadesPretratamientoController@index');
@@ -146,6 +162,9 @@ Route::post('/listadoactividadestorre', 'ListadoActividadesTorreEnfriamientoCont
 Route::delete('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@destroy');
 Route::put('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@update');
 Route::get('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@show');
+Route::post('/cerraractividadtorreenfrimiento/{id}', 'ListadoActividadesTorreEnfriamientoController@cerrarActividadTorreEnfriamiento');
+Route::get('/listadoactividadesgeneraltorreenfriamiento', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesGeneralTorreEnfriamiento');
+
 
 // CRUD Listado Material Actividad Torre de Enfriamiento
 Route::get('/listadomaterialactividadestorre', 'ListadoMaterialActividadesTorreEnfriamientoController@index');

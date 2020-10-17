@@ -71,8 +71,6 @@ class InventarioController extends BaseController
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
-            //return echo "Hola";
-
             // Revisamos la validación
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
@@ -97,6 +95,65 @@ class InventarioController extends BaseController
                 // Ingresamos los datos
                 $Inventario->idProducto = $Datos["idProducto"];
                 $Inventario->CantidadExistencia = $Datos["CantidadExistencia"];
+                $Inventario->RegistradoPor = $Datos["RegistradoPor"];
+
+                // Ejecutamos la acción de guardar el usuario
+                $Inventario->save();
+
+                $json = array(
+                    "status" => 200,
+                    "detalle" => "Registro exitoso"
+                );
+            }
+        }else{
+            $json = array(
+                "status" => 404,
+                "detalle" => "Registro con errores"
+            );
+        }
+        // Devolvemos la respuesta en un Json
+        return response()->json($json);
+    }
+
+    public function descontarProductosInventario(Request $request){
+        // Inicializamos una variable para almacenar un json nulo
+        $json = null;
+        // Recogemos los Datos que almacenaremos, los ingresamos a un array
+        $Datos = array("idProducto"=>$request->input("idProducto"),
+            "CantidadExistencia"=>$request->input("CantidadExistencia"),
+            "RegistradoPor"=>$request->input("RegistradoPor"));
+
+        // Validamos que los Datos no estén vacios
+        if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = [
+                "idProducto" => 'required|integer',
+                "CantidadExistencia" => 'required|numeric',
+                "RegistradoPor" => 'required|integer'];
+
+            $Mensajes = [
+                "idProducto.required" => 'Es necesario agregar un código de producto',
+                "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia',
+                "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
+                );
+            }else{
+                // instanciamos un nuevo objeto para registro
+                $Inventario = new Inventario();
+
+                // Ingresamos los datos
+                $Inventario->idProducto = $Datos["idProducto"];
+                $Inventario->CantidadExistencia = $Datos["CantidadExistencia"] * -1;
                 $Inventario->RegistradoPor = $Datos["RegistradoPor"];
 
                 // Ejecutamos la acción de guardar el usuario
@@ -242,6 +299,34 @@ class InventarioController extends BaseController
 
         //select * from Producto left join Inventario on Producto.idProducto = Inventario.idProducto
         //where Inventario.idProducto is null
+
+        // Verificamos que el array no esté vacio
+        if (!empty($Datos[0])) {
+            $json = array(
+                'status' => 200,
+                'total' => count($Datos),
+                'detalle' => $Datos
+            );
+        }else{
+            $json = array(
+                'status' => 200,
+                'total' => 0,
+                'detalle' => "No hay registros"
+            );
+        }
+        // Mostramos la información como un json
+        return response()->json($json);
+    }
+
+    public function productoInventariado(){
+        // Devolveremos solo los productos que ya se han inventariado
+        $Datos = DB::table('Producto')
+            ->join('Inventario', 'Producto.idProducto', '=', 'Inventario.idProducto')
+            ->join('UnidadMedida', 'Producto.idUnidadMedida', '=', 'UnidadMedida.idUnidadMedida')
+            ->select('Producto.idProducto', 'Producto.CodigoProducto', 'Producto.NombreProducto',
+                             'UnidadMedida.NombreUnidadMedida', 'UnidadMedida.AbreviacionUnidadMedida')
+            ->groupBy('Producto.idProducto')
+            ->get();
 
         // Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {

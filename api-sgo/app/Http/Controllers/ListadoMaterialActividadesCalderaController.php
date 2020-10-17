@@ -77,7 +77,7 @@ class ListadoMaterialActividadesCalderaController extends BaseController
                 // Ingresamos los datos
                 $ListadoActividadMaterialCaldera->idListadoActividadCaldera = $Datos["idListadoActividadCaldera"];
                 $ListadoActividadMaterialCaldera->idProducto = $Datos["idProducto"];
-                $ListadoActividadMaterialCaldera->CantidadProducto = $Datos["CantidadProducto"];
+                $ListadoActividadMaterialCaldera->CantidadProducto = $Datos["CantidadProducto"] * -1;
 
                 // Ejecutamos la acción de guardar el usuario
                 $ListadoActividadMaterialCaldera->save();

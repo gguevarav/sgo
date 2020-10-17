@@ -31,6 +31,9 @@ export default new Vuex.Store({
     },
     almacenarInfoUsuario(state, infoUsuario){
 
+    },
+    colorEstadoActividad(state, estado){
+      state.color = estado
     }
   },
   actions: {
@@ -45,7 +48,9 @@ export default new Vuex.Store({
             //console.log(response)
             const token = response.data.access_token
             localStorage.setItem('access_token', 'Bearer ' + token)
+            //localStorage.setItem()
             context.commit('retrieveToken', token)
+            //this.obtenerInformacionUsuario(credentials);
             resolve(response)
           })
           .catch(error => {
@@ -64,11 +69,9 @@ export default new Vuex.Store({
           headers: { Authorization: context.state.token }
         })
             .then(response => {
-              console.log("Prueba")
-              //datos = response
-              localStorage.setItem('prueba', 'funciona')
-              //context.commit(response.data)
-
+              // Almacenaremos los datos del usuario en el localstorage
+              //localStorage.setItem('NombreUsuario', response.data);
+              console.log(response);
               resolve(response)
             })
             .catch(error => {
@@ -103,6 +106,19 @@ export default new Vuex.Store({
             })
         })
       }
+    },
+
+    // Color por status de actividad
+    colorEstadoActividad(context, estado){
+      var color = '';
+      if(estado.NombreEstado == 'Activo'){
+        var color = 'red';
+      }else if(estado.NombreEstado == 'En proceso'){
+        return 'yellow';
+      }else if(estado.NombreEstado == 'Cerrado') {
+        return 'green';
+      }
+      context.commit('colorEstadoActividad', color);
     }
   },
   modules: {

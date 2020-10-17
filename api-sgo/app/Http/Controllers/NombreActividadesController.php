@@ -130,14 +130,14 @@ class NombreActividadesController extends BaseController
                     );
                 }else{
                     $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
                 }
-            }   
+            }
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "Registros incompletos"
                 );
         }
@@ -161,7 +161,7 @@ class NombreActividadesController extends BaseController
             );
         }else{
             $json = array(
-                    "status" => "404", 
+                    "status" => "404",
                     "detalle" => "El registro no existe."
                 );
         }

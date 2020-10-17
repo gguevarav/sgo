@@ -1,0 +1,1 @@
+-- Disparador para envío de alertas de minimos y maximos

@@ -1,9 +1,9 @@
 <template>
     <!-- Snackbar de notificaciones -->
-        <v-snackbar
-        v-model="snackbar"
+      <v-snackbar
+        v-model="activar"
         :timeout="timeout"
-        color="success">
+        :color="color">
 
         {{ textoSnackbar }}
 
@@ -13,21 +13,33 @@
             color="blue darken-1"
             text
             v-bind="attrs"
-            @click="snackbar = false">
+            @click="cerrarNotificacion">
             Close
             </v-btn>
         </template>
-        </v-snackbar>
+      </v-snackbar>
     <!-- Termina Snackbar de notificaciones -->
 </template>
 
 <script>
 export default {
-    data: () => ({
-      snackbar: false,
-      textoSnackbar: '',
-      timeout: 3000
-    }),
+  name: 'Notificacion',
+    data: function () {
+      return {
+        //snackbar: this.activar,
+        //textMostrar: this.textoSnackbar,
+        timeout: 3000,
+      }
+    },
+  props: ['activar',
+          'textoSnackbar',
+          'color'],
+  methods: {
+    cerrarNotificacion() {
+      let cerrarNofificacion = !this.activar;
+      this.$emit("cerrarNotificacion", cerrarNofificacion);
+    }
+  }
 }
 </script>
 

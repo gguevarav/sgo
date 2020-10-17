@@ -10,18 +10,12 @@
             <v-list-group link>
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title class="title">admin</v-list-item-title>
-                  <v-list-item-subtitle>admin@admin.com</v-list-item-subtitle>
+                  <v-list-item-title class="title">{{ NombreUsuario }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ CorreoUsuario }}</v-list-item-subtitle>
                 </v-list-item-content>
               </template>
 
-              <v-list-item link>
-                <v-list-item-title>Perfil de usuario</v-list-item-title>
-                <v-list-item-icon>
-                  <v-icon> mdi-account </v-icon>
-                </v-list-item-icon>
-              </v-list-item>
-              <v-list-item link>
+              <v-list-item link :to="{name: 'logout'}">
                 <v-list-item-title>Cerrar sesion</v-list-item-title>
                 <v-list-item-icon>
                   <v-icon> mdi-logout </v-icon>
@@ -82,6 +76,36 @@
                 </v-list-item-content>
               </v-list-item>
 
+              <v-list-item :to="{name: 'listadoactividadescaldera'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-format-list-bulleted</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Caldera</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item :to="{name: 'listadoactividadespretratamiento'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-format-list-bulleted</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Pretraramiento</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item :to="{name: 'listadoactividadestorreenfriamiento'}">
+                <v-list-item-icon>
+                  <v-icon>mdi-format-list-bulleted</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>Torre de enfriamiento</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
               <v-list-item :to="{name: 'about'}">
                 <v-list-item-icon>
                   <v-icon>mdi-help</v-icon>
@@ -108,7 +132,9 @@ export default {
     }
   },
   data: () => ({
-    barraNavegacion: true
+    barraNavegacion: true,
+    NombreUsuario: localStorage.getItem('NombreUsuario'),
+    CorreoUsuario: localStorage.getItem('CorreoUsuario'),
   })
 }
 </script>

@@ -16,6 +16,36 @@ CREATE TABLE `Area` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AreaCaldera` (
+  `idAreaCaldera` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `NombreAreaCaldera` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idAreaCaldera`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AreaPretratamiento` (
+  `idAreaPretratamiento` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `NombreAreaPretratamiento` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idAreaPretratamiento`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Caldera` (
+  `idCaldera` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `NombreCaldera` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idCaldera`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Estado` (
   `idEstado` tinyint(4) NOT NULL AUTO_INCREMENT,
   `NombreEstado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
@@ -42,35 +72,137 @@ CREATE TABLE `Inventario` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ListadoActividad` (
-  `idListadoActividad` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ListadoActividadCaldera` (
+  `idListadoActividadCaldera` int(11) NOT NULL AUTO_INCREMENT,
   `idArea` tinyint(4) NOT NULL,
+  `idCaldera` tinyint(4) NOT NULL,
+  `idAreaCaldera` tinyint(4) NOT NULL,
   `idNombreActividad` tinyint(4) NOT NULL,
-  `FechaCreacionActividad` date NOT NULL,
-  `FechaConclusionActividad` date NOT NULL,
-  `EstadoActividad` tinyint(1) NOT NULL,
-  `idUsuario` tinyint(4) NOT NULL,
+  `FechaCreacionActividad` datetime NOT NULL,
+  `FechaConclusionActividad` datetime NOT NULL,
+  `EstadoActividad` tinyint(4) NOT NULL,
+  `CreadoPor` tinyint(4) NOT NULL,
+  `RealizadoPor` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`idListadoActividad`),
-  KEY `idUsuario` (`idUsuario`),
-  CONSTRAINT `ListadoActividad_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION
+  PRIMARY KEY (`idListadoActividadCaldera`),
+  KEY `idArea` (`idArea`),
+  KEY `idCaldera` (`idCaldera`),
+  KEY `idAreaCaldera` (`idAreaCaldera`),
+  KEY `idNombreActividad` (`idNombreActividad`),
+  KEY `EstadoActividad` (`EstadoActividad`),
+  KEY `CreadoPor` (`CreadoPor`),
+  KEY `RealizadoPor` (`RealizadoPor`),
+  CONSTRAINT `ListadoActividadCaldera_ibfk_1` FOREIGN KEY (`idArea`) REFERENCES `Area` (`idArea`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_2` FOREIGN KEY (`idCaldera`) REFERENCES `Caldera` (`idCaldera`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_3` FOREIGN KEY (`idAreaCaldera`) REFERENCES `AreaCaldera` (`idAreaCaldera`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_4` FOREIGN KEY (`idNombreActividad`) REFERENCES `NombreActividad` (`idNombreActividad`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_5` FOREIGN KEY (`EstadoActividad`) REFERENCES `Estado` (`idEstado`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_6` FOREIGN KEY (`CreadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadCaldera_ibfk_7` FOREIGN KEY (`RealizadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ListadoMaterial` (
-  `idListadoMaterial` int(11) NOT NULL AUTO_INCREMENT,
-  `idListadoActividad` int(11) NOT NULL,
+CREATE TABLE `ListadoActividadPretratamiento` (
+  `idListadoActividadPretratamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idArea` tinyint(4) NOT NULL,
+  `idAreaPretratamiento` tinyint(4) NOT NULL,
+  `idNombreActividad` tinyint(4) NOT NULL,
+  `FechaCreacionActividad` datetime NOT NULL,
+  `FechaConclusionActividad` datetime NOT NULL,
+  `EstadoActividad` tinyint(4) NOT NULL,
+  `CreadoPor` tinyint(4) DEFAULT NULL,
+  `RealizadoPor` tinyint(4) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idListadoActividadPretratamiento`),
+  KEY `idArea` (`idArea`),
+  KEY `idAreaPretratamiento` (`idAreaPretratamiento`),
+  KEY `idNombreActividad` (`idNombreActividad`),
+  KEY `EstadoActividad` (`EstadoActividad`),
+  KEY `CreadoPor` (`CreadoPor`),
+  KEY `RealizadoPor` (`RealizadoPor`),
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_1` FOREIGN KEY (`idArea`) REFERENCES `Area` (`idArea`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_2` FOREIGN KEY (`idAreaPretratamiento`) REFERENCES `AreaPretratamiento` (`idAreaPretratamiento`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_3` FOREIGN KEY (`idNombreActividad`) REFERENCES `NombreActividad` (`idNombreActividad`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_4` FOREIGN KEY (`EstadoActividad`) REFERENCES `Estado` (`idEstado`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_5` FOREIGN KEY (`CreadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadPretratamiento_ibfk_6` FOREIGN KEY (`RealizadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ListadoActividadTorreEnfriamiento` (
+  `idListadoActividadTorreEnfriamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idArea` tinyint(4) NOT NULL,
+  `idNombreActividad` tinyint(4) NOT NULL,
+  `FechaCreacionActividad` datetime NOT NULL,
+  `FechaConclusionActividad` datetime NOT NULL,
+  `EstadoActividad` tinyint(4) NOT NULL,
+  `CreadoPor` tinyint(4) NOT NULL,
+  `RealizadoPor` tinyint(4) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idListadoActividadTorreEnfriamiento`),
+  KEY `idArea` (`idArea`),
+  KEY `idNombreActividad` (`idNombreActividad`),
+  KEY `EstadoActividad` (`EstadoActividad`),
+  KEY `CreadoPor` (`CreadoPor`),
+  KEY `RealizadoPor` (`RealizadoPor`),
+  CONSTRAINT `ListadoActividadTorreEnfriamiento_ibfk_1` FOREIGN KEY (`idArea`) REFERENCES `Area` (`idArea`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadTorreEnfriamiento_ibfk_2` FOREIGN KEY (`idNombreActividad`) REFERENCES `NombreActividad` (`idNombreActividad`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadTorreEnfriamiento_ibfk_3` FOREIGN KEY (`EstadoActividad`) REFERENCES `Estado` (`idEstado`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadTorreEnfriamiento_ibfk_4` FOREIGN KEY (`CreadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoActividadTorreEnfriamiento_ibfk_5` FOREIGN KEY (`RealizadoPor`) REFERENCES `users` (`idUsuario`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ListadoMaterialActividadCaldera` (
+  `idListadoMaterialActividadCaldera` int(11) NOT NULL AUTO_INCREMENT,
+  `idListadoActividadCaldera` int(11) NOT NULL,
   `idProducto` int(11) NOT NULL,
   `CantidadProducto` float NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`idListadoMaterial`),
-  KEY `idListadoActividad` (`idListadoActividad`),
+  PRIMARY KEY (`idListadoMaterialActividadCaldera`),
+  KEY `idListadoActividadCaldera` (`idListadoActividadCaldera`),
   KEY `idProducto` (`idProducto`),
-  CONSTRAINT `ListadoMaterial_ibfk_1` FOREIGN KEY (`idListadoActividad`) REFERENCES `ListadoActividad` (`idListadoActividad`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `ListadoMaterial_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
+  CONSTRAINT `ListadoMaterialActividadCaldera_ibfk_1` FOREIGN KEY (`idListadoActividadCaldera`) REFERENCES `ListadoActividadCaldera` (`idListadoActividadCaldera`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoMaterialActividadCaldera_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ListadoMaterialActividadPretratamiento` (
+  `idListadoMaterialActividadPretratamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idListadoActividadPretratamiento` int(11) NOT NULL,
+  `idProducto` int(11) NOT NULL,
+  `CantidadProducto` float NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idListadoMaterialActividadPretratamiento`),
+  KEY `idListadoActividadPretratamiento` (`idListadoActividadPretratamiento`),
+  KEY `idProducto` (`idProducto`),
+  CONSTRAINT `ListadoMaterialActividadPretratamiento_ibfk_1` FOREIGN KEY (`idListadoActividadPretratamiento`) REFERENCES `ListadoActividadPretratamiento` (`idListadoActividadPretratamiento`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoMaterialActividadPretratamiento_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ListadoMaterialActividadTorreEnfriamiento` (
+  `idListadoMaterialActividadTorreEnfriamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `idListadoActividadTorreEnfriamiento` int(11) NOT NULL,
+  `idProducto` int(11) NOT NULL,
+  `CantidadProducto` float NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idListadoMaterialActividadTorreEnfriamiento`),
+  KEY `idListadoActividadTorreEnfriamiento` (`idListadoActividadTorreEnfriamiento`),
+  KEY `idProducto` (`idProducto`),
+  CONSTRAINT `ListadoMaterialActividadTorreEnfriamiento_ibfk_1` FOREIGN KEY (`idListadoActividadTorreEnfriamiento`) REFERENCES `ListadoActividadTorreEnfriamiento` (`idListadoActividadTorreEnfriamiento`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `ListadoMaterialActividadTorreEnfriamiento_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `Producto` (`idProducto`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

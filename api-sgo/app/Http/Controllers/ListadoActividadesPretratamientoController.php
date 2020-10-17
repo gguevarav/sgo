@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ListadoActividad;
 use App\Models\ListadoActividadPretratamiento;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
@@ -217,6 +218,7 @@ class ListadoActividadesPretratamientoController extends BaseController
                                                                    CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
                                                                    CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
                                                                    E.NombreEstado,
+                                                                   E.idEstado,
                                                                    LAP.FechaCreacionActividad,
                                                                    LAP.FechaConclusionActividad ' . '
                                                             FROM ListadoActividadPretratamiento As LAP
@@ -246,6 +248,107 @@ class ListadoActividadesPretratamientoController extends BaseController
             );
         }
         // Devolvemos la respuesta en un Json
+        return response()->json($json);
+    }
+
+    public function cerrarActividadPretratamiento($id, Request $request){
+        // Inicializamos una variable para almacenar un json nulo
+        $json = null;
+        // Recogemos los Datos que almacenaremos, los ingresamos a un array
+        $Datos = array("EstadoActividad"=>$request->EstadoActividad,
+                       "RealizadoPor"=>$request->RealizadoPor,
+                       "FechaConclusionActividad"=>date('Y-m-d H:i:s'));
+
+        // Validamos que los Datos no estén vacios
+        if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = ["EstadoActividad" => 'required|integer',
+                "RealizadoPor" => 'required|integer'];
+
+            $Mensajes = [
+                "EstadoActividad.required" => 'Es necesario agregar un estado de la actividad.'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
+                );
+            }else{
+                // Obtendremos el ListadoActividad de la base de datos
+                $ObtenerListadoActividadCaldera = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->get();
+
+                if(!empty($ObtenerListadoActividadCaldera[0])){
+                    // Modificamos la información, pasamos la información contenida
+                    // en el array de los datos
+                    $ListadoActividadPretratamiento = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->update($Datos);
+
+                    $json = array(
+                        "status" => 200,
+                        "detalle" => "Registro editado exitosamente"
+                    );
+                }else{
+                    $json = array(
+                        "status" => "404",
+                        "detalle" => "El registro no existe."
+                    );
+                }
+            }
+        }else{
+            $json = array(
+                "status" => "404",
+                "detalle" => "Registros incompletos"
+            );
+        }
+        // Devolvemos la respuesta en un Json
+        return response()->json($json);
+    }
+
+    public function listadoActividadesGeneralPretratamiento(){
+        // Primero obtendremos el array de los datos
+        $Datos = DB::Select('SELECT LAP.idListadoActividadPretratamiento,
+                                          A.NombreArea,
+                                          AP.NombreAreaPretratamiento,
+                                          NA.NombreActividad,
+                                          CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
+                                          CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
+                                          E.NombreEstado,
+                                          LAP.FechaCreacionActividad,  ' . '.
+                                          LAP.FechaConclusionActividad
+                                  FROM ListadoActividadPretratamiento As LAP
+                                         INNER JOIN Area A
+                                                    ON LAP.idArea = A.idArea
+                                         INNER JOIN AreaPretratamiento AP
+                                                    ON LAP.idAreaPretratamiento = AP.idAreaPretratamiento
+                                         INNER JOIN NombreActividad NA
+                                                    ON LAP.idNombreActividad = NA.idNombreActividad
+                                         INNER JOIN users US
+                                                    ON LAP.CreadoPor = US.idUsuario
+                                         INNER JOIN users US2
+                                                    ON LAP.RealizadoPor = US2.idUsuario
+                                         INNER JOIN Estado E
+                                                    ON LAP.EstadoActividad = E.idEstado;');
+
+        // Verificamos que el array no esté vacio
+        if (!empty($Datos[0])) {
+            $json = array(
+                'status' => 200,
+                'total' => count($Datos),
+                'detalle' => $Datos
+            );
+        }else{
+            $json = array(
+                'status' => 200,
+                'total' => 0,
+                'detalle' => "No hay registros"
+            );
+        }
+        // Mostramos la información como un json
         return response()->json($json);
     }
 }

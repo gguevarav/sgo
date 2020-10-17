@@ -29,11 +29,12 @@
 
         <!-- Tabla de usuarios -->
         <v-data-table
-          :headers="headers"
-          :items="datosTabla"
-          :items-per-page="5"
-          sort-by="NombreUsuario"
-          class="elevation-1">
+            dense
+            :headers="headers"
+            :items="datosTabla"
+            :items-per-page="10"
+            sort-by="NombreUsuario"
+            class="elevation-1">
           <template
             v-slot:top>
             <v-toolbar
@@ -402,34 +403,34 @@
         CantidadExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
       defaultItem: {
         idProducto: '',
         CantidadExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
       modificarMinimosMaximos: {
         idProducto: '',
         cantidadAgregar: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
       deafultmodificarMinimosMaximos: {
         idProducto: '',
         cantidadAgregar: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
       cantidadProductoAgregar: {
         idProducto: '',
         cantidadAgregar: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
       defaultCantidadProductoAgregar: {
         idProducto: '',
         cantidadAgregar: '',
-        RegistradoPor: 1,
+        RegistradoPor: localStorage.getItem('idUsuario'),
       },
     }),
 

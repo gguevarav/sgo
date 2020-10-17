@@ -150,8 +150,8 @@ CREATE TABLE ListadoActividadCaldera(
 	idCaldera               TINYINT             NOT NULL,
 	idAreaCaldera           TINYINT             NOT NULL,
 	idNombreActividad		TINYINT				NOT NULL,
-	FechaCreacionActividad	DATE				NOT NULL,
-	FechaConclusionActividad	DATE			NOT NULL,
+	FechaCreacionActividad	DATETIME				NOT NULL,
+	FechaConclusionActividad	DATETIME			NOT NULL,
 	EstadoActividad			TINYINT				NOT NULL,
 	CreadoPor			    TINYINT				NOT NULL,
 	RealizadoPor            TINYINT             NULL,
@@ -218,8 +218,8 @@ CREATE TABLE ListadoActividadPretratamiento(
     idArea					TINYINT				NOT NULL,
     idAreaPretratamiento           TINYINT             NOT NULL,
     idNombreActividad		TINYINT				NOT NULL,
-    FechaCreacionActividad	DATE				NOT NULL,
-    FechaConclusionActividad	DATE			NOT NULL,
+    FechaCreacionActividad	DATETIME				NOT NULL,
+    FechaConclusionActividad	DATETIME			NOT NULL,
     EstadoActividad			TINYINT				NOT NULL,
     CreadoPor			    TINYINT				NULL,
     RealizadoPor            TINYINT             NULL,
@@ -280,8 +280,8 @@ CREATE TABLE ListadoActividadTorreEnfriamiento(
    idListadoActividadTorreEnfriamiento		INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
    idArea					TINYINT				NOT NULL,
    idNombreActividad		TINYINT				NOT NULL,
-   FechaCreacionActividad	DATE				NOT NULL,
-   FechaConclusionActividad	DATE			NOT NULL,
+   FechaCreacionActividad	DATETIME				NOT NULL,
+   FechaConclusionActividad	DATETIME			NOT NULL,
    EstadoActividad			TINYINT				NOT NULL,
    CreadoPor			    TINYINT				NOT NULL,
    RealizadoPor             TINYINT             NULL,
@@ -336,7 +336,9 @@ CREATE TABLE ListadoMaterialActividadTorreEnfriamiento(
 -- Estados
 INSERT INTO Estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
 			VALUES (NULL, 'Activo', NULL, NULL),
-			       (NULL, 'Inactivo', NULL, NULL);
+			       (NULL, 'Inactivo', NULL, NULL),
+                   (NULL, 'En proceso', NULL, NULL),
+                   (NULL, 'Cerrado', NULL, NULL);
 
 -- NombreActividades
 INSERT INTO NombreActividad (NombreActividad, created_at, updated_at)
@@ -527,5 +529,4 @@ FROM ListadoMaterialActividadTorreEnfriamiento As LMATE
          INNER JOIN Producto P
                     ON LMATE.idProducto = P.idProducto
 WHERE idListadoActividadTorreEnfriamiento = 2;
-
 
