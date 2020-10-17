@@ -324,7 +324,8 @@ class InventarioController extends BaseController
             ->join('Inventario', 'Producto.idProducto', '=', 'Inventario.idProducto')
             ->join('UnidadMedida', 'Producto.idUnidadMedida', '=', 'UnidadMedida.idUnidadMedida')
             ->select('Producto.idProducto', 'Producto.CodigoProducto', 'Producto.NombreProducto',
-                             'UnidadMedida.NombreUnidadMedida', 'UnidadMedida.AbreviacionUnidadMedida')
+                             'UnidadMedida.NombreUnidadMedida', 'UnidadMedida.AbreviacionUnidadMedida',
+                             'Inventario.CantidadExistencia')
             ->groupBy('Producto.idProducto')
             ->get();
 

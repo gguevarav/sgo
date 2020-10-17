@@ -265,7 +265,7 @@ class ListadoActividadesCalderaController extends BaseController
         return response()->json($json);
     }
 
-    public function cerrarActividad($id, Request $request){
+    public function cambiarEstadoActividad($id, Request $request){
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array

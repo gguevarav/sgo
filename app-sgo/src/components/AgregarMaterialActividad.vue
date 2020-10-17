@@ -106,7 +106,7 @@ name: "AgregarMaterialActividad",
       })
     },
     // Concatenando el codigo con el nombre
-    NombreCodigoProducto: item => item.CodigoProducto + ' - ' + item.NombreProducto + ' - ' + item.AbreviacionUnidadMedida,
+    NombreCodigoProducto: item => item.CodigoProducto + ' - ' + item.NombreProducto + ' - ' + item.CantidadExistencia + ' - ' + item.AbreviacionUnidadMedida,
 
     // Guardamos los dados
     guardarDatosMateriales(){
@@ -120,7 +120,7 @@ name: "AgregarMaterialActividad",
                 if (response.data.status == 200) {
                   //console.log(response);
                   this.descontarProductosInventario();
-                  this.cerrarActividadEstado();
+                  //this.cerrarActividadEstado();
                   this.$emit("dialog", this.dialog);
                 } else if (response.data.status == 404) {
                   this.listadoErrores = response.data.errores

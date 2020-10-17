@@ -35,10 +35,15 @@
                   </v-card-text>
 
                   <v-card-actions>
-                    <!-- Formulario para cerrar actividad -->
+                    <!-- Formulario para agregar productos actividad -->
                     <DetalleActividadCaldera :Actividad="item.idListadoActividadCaldera">
                     </DetalleActividadCaldera>
-                    <!-- Formulario para cerrar actividad -->
+                    <!-- Formulario para agregar productos actividad -->
+                    <v-spacer></v-spacer>
+                    <!-- Formulario para cambiar estado actividad -->
+                    <CambiarEstadoActividadCaldera :ActividadCambiar="item.idListadoActividadCaldera">
+                    </CambiarEstadoActividadCaldera>
+                    <!-- Formulario para cambiar estado actividad -->
                     <v-spacer></v-spacer>
                   </v-card-actions>
                 </v-card>

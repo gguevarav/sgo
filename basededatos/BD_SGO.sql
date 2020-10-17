@@ -334,11 +334,42 @@ CREATE TABLE ListadoMaterialActividadTorreEnfriamiento(
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
 
 -- Estados
-INSERT INTO Estado ('idEstado', 'NombreEstado', 'created_at', 'updated_at')
+INSERT INTO Estado (idEstado, NombreEstado, created_at, updated_at)
 			VALUES (NULL, 'Activo', NULL, NULL),
 			       (NULL, 'Inactivo', NULL, NULL),
                    (NULL, 'En proceso', NULL, NULL),
                    (NULL, 'Cerrado', NULL, NULL);
+
+-- Puesto
+INSERT INTO Puesto (idPuesto, NombrePuesto, EstadoPuesto,
+                      created_at, updated_at)
+            VALUES (NULL, 'Administrador', 1, NULL, NULL);
+
+-- Rol
+INSERT INTO Rol (idRol, NombreRol, created_at, updated_at)
+         VALUES (NULL, 'Administrador', NULL, NULL);
+
+-- Usuario
+INSERT INTO users (idUsuario, NombreUsuario, ApellidoUsuario,
+                   idPuesto, email, email_verified_at, password,
+                   remember_token, idRol, EstadoUsuario, current_team_id,
+                   profile_photo_path, created_at, updated_at)
+           VALUES (NULL, 'administrador', 'administrador', 1, 'admin@admin.com',
+                   NULL, 'admin12345', NULL, 1, 1, NULL, NULL, NULL, NULL);
+
+-- UnidadesMedida
+INSERT INTO UnidadMedida (idUnidadMedida, NombreUnidadMedida,
+                          AbreviacionUnidadMedida, created_at, updated_at)
+                  VALUES (NULL, 'Libra', 'Lb', NULL, NULL),
+                         (NULL, 'Kilogramo', 'Kg', NULL, NULL),
+                         (NULL, 'Litro', 'Lt', NULL, NULL);
+
+-- Productos
+INSERT INTO Producto (idProducto, CodigoProducto, NombreProducto,
+                      idUnidadMedida, EstadoProducto, created_at, updated_at)
+              VALUES (NULL, '01001', 'Producto 1', 1, 1, NULL, NULL),
+                     (NULL, '01002', 'Producto 2', 2, 1, NULL, NULL),
+                     (NULL, '01003', 'Producto 3', 3, 1, NULL, NULL);
 
 -- NombreActividades
 INSERT INTO NombreActividad (NombreActividad, created_at, updated_at)
@@ -377,25 +408,25 @@ INSERT INTO AreaPretratamiento(idAreaPretratamiento, NombreAreaPretratamiento, c
 INSERT INTO ListadoActividadCaldera(idArea, idCaldera, idAreaCaldera, idNombreActividad,
                                     FechaCreacionActividad, FechaConclusionActividad,
                                     EstadoActividad, CreadoPor, RealizadoPor, created_at, updated_at)
-                            VALUES (1, 1, 1, 1, '2020-10-10', '2020-10-10', 1, 1, 2, null, null),
-                                   (1, 2, 3, 3, '2020-10-10', '2020-10-10', 1, 2, 3, null, null),
-                                   (1, 3, 2, 5, '2020-10-10', '2020-10-10', 1, 1, 2, null, null);
+                            VALUES (1, 1, 1, 1, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                   (1, 2, 3, 3, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                   (1, 3, 2, 5, '2020-10-10', '2020-10-10', 1, 1, 1, null, null);
 
 -- Inserción de listado de actividades de Pretratamiento
 INSERT INTO ListadoActividadPretratamiento(idArea, idAreaPretratamiento, idNombreActividad,
                                            FechaCreacionActividad, FechaConclusionActividad,
                                            EstadoActividad, CreadoPor, RealizadoPor, created_at, updated_at)
-                                   VALUES (2, 2, 4,'2020-10-10', '2020-10-10', 1, 2, 4, null, null),
-                                          (2, 2, 4,'2020-10-10', '2020-10-10', 1, 3, 2, null, null),
-                                          (2, 3, 1,'2020-10-10', '2020-10-10', 1, 2, 1, null, null);
+                                   VALUES (2, 2, 4,'2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                          (2, 2, 4,'2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                          (2, 3, 1,'2020-10-10', '2020-10-10', 1, 1, 1, null, null);
 
 -- Inserción de listado de actividades de Torre de enfriamiento
 INSERT INTO ListadoActividadTorreEnfriamiento(idArea, idNombreActividad, FechaCreacionActividad,
                                               FechaConclusionActividad, EstadoActividad, CreadoPor,
                                               RealizadoPor, created_at, updated_at)
-                                   VALUES (3, 3, '2020-10-10', '2020-10-10', 1, 3, 2, null, null),
-                                          (3, 5, '2020-10-10', '2020-10-10', 1, 2, 4, null, null),
-                                          (3, 1, '2020-10-10', '2020-10-10', 1, 1, 4, null, null);
+                                   VALUES (3, 3, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                          (3, 5, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
+                                          (3, 1, '2020-10-10', '2020-10-10', 1, 1, 1, null, null);
 
 -- Inserción de listado de materiales actividades caldera
 INSERT INTO ListadoMaterialActividadCaldera (idListadoActividadCaldera, idProducto,

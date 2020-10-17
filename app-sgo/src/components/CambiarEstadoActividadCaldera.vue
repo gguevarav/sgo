@@ -12,12 +12,12 @@
               v-bind="attrs"
               v-on="on"
           >
-            Agregar producto
+            Estado
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Cerrar actividad</span>
+            <span class="headline">Cambiar estado actividad</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -89,11 +89,13 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                  <AgregarMaterialActividad
-                      ref="agregarMaterial"
-                      :Actividad="idActividad"
-                      @dialog="dialog=$event">
-                  </AgregarMaterialActividad>
+                  <v-select
+                      :items="datosEstadoUsuario"
+                      item-text='NombreEstadoUsuario'
+                      item-value='idEstadoUsuario'
+                      v-model="actividadCaldera.idEstado"
+                      label="Estado">
+                  </v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -110,7 +112,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="guardarDatos"
+                @click="cambiarEstadoActividad"
             >
               Save
             </v-btn>
@@ -133,14 +135,23 @@ name: "DetalleActividadCaldera",
     alertaErrores: false,
     listadoErrores: [],
     actividadCaldera: [],
+    datosEstadoUsuario: [{
+      idEstadoUsuario: 3,
+      NombreEstadoUsuario: 'En proceso'
+      },
+      {
+        idEstadoUsuario: 4,
+        NombreEstadoUsuario: 'Cerrado'
+      }
+    ],
   }),
   created() {
     this.obtenerActividadCerrar()
   },
-  props:['Actividad'],
+  props:['ActividadCambiar'],
   methods:{
     obtenerActividadCerrar(){
-      this.idActividad = this.Actividad
+      this.idActividad = this.ActividadCambiar
       return new Promise((resolve, reject) => {
         axios.get('/api/listadoactividadescaldera/' + this.idActividad)
             .then(response => {
@@ -163,9 +174,27 @@ name: "DetalleActividadCaldera",
             })
       })
     },
-    guardarDatos(){
-      // Gurdamos los datos, usamos el método del componenete hijo
-      this.$refs.agregarMaterial.guardarDatosMateriales();
+    cambiarEstadoActividad(){
+      // Debemos cerrar la actividad para que no aparezca en el tablero
+      axios.post('/api/cambiarestadoactividad/' + this.idActividad,
+              {
+                EstadoActividad: this.actividadCaldera.idEstado,
+                RealizadoPor: localStorage.getItem('idUsuario'),
+              })
+          .then(response => {
+            if (response.data.status == 200) {
+              //console.log(response);
+              this.dialog = false;
+            } else if (response.data.status == 404) {
+              this.listadoErrores = response.data.errores
+              this.alertaErrores = true
+            }
+          })
+          .catch(error => {
+            //console.log(error)
+          })
+      // Limpiamos todo
+      //this.listadoProductosAgregar = [];
     },
     cerrarDialog(){
       this.dialog = false;

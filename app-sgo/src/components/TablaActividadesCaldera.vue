@@ -38,11 +38,11 @@
           </template>
           <template
               v-slot:item.actions="{ item }">
-            <!-- Formulario para cerrar actividad -->
+            <!-- Formulario para cerrar actividad
             <EditarActividadCaldera
                 :Actividad="item.idListadoActividadCaldera">
             </EditarActividadCaldera>
-            <!-- Formulario para cerrar actividad -->
+            Formulario para cerrar actividad -->
             <!-- Formulario para listar los productos de una actividad de caldera -->
             <DetalleListadoProductosActividadCaldera>
             </DetalleListadoProductosActividadCaldera>

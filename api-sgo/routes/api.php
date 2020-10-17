@@ -130,7 +130,7 @@ Route::post('/listadoactividadescaldera', 'ListadoActividadesCalderaController@s
 Route::delete('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@destroy');
 Route::put('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@update');
 Route::get('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@show');
-Route::post('/cerraractividad/{id}', 'ListadoActividadesCalderaController@cerrarActividad');
+Route::post('/cambiarestadoactividad/{id}', 'ListadoActividadesCalderaController@cambiarEstadoActividad');
 Route::get('/listadoactividadesgeneralcaldera', 'ListadoActividadesCalderaController@listadoActividadesGeneralCaldera');
 
 // CRUD Listado Material Actividad Caldera
