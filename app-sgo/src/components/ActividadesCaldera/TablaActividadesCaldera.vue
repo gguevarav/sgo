@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-app>
-      <div class="text-center">
+      <div
+          class="text-center">
         <!-- Tabla de actividades de caldera -->
         <v-data-table
             dense

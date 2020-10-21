@@ -1,345 +1,335 @@
 <template>
-  <div>
-    <v-app>
-      <!-- Barra principal aplicación -->
-      <AppBar></AppBar>
-      <!-- Barra de navegación -->
-      <NavigationBar></NavigationBar>
-      <!-- Contenido principal -->
-      <div class="text-center">
-        <!-- Snackbar de notificaciones -->
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="timeout"
-          color="success">
+  <!-- Contenido principal -->
+  <div class="text-center">
+    <!-- Snackbar de notificaciones -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success">
+      {{ textoSnackbar }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="success"
+          text
+          v-bind="attrs"
+          @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Termina Snackbar de notificaciones -->
 
-          {{ textoSnackbar }}
+    <!-- Tabla de usuarios -->
+    <v-data-table
+        dense
+        :headers="headers"
+        :items="datosTabla"
+        :items-per-page="10"
+        sort-by="NombreUsuario"
+        class="elevation-1">
+      <template
+        v-slot:top>
+        <v-toolbar
+          flat
+          color="white">
+          <v-toolbar-title>
+            Inventario productos
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
 
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              color="blue darken-1"
-              text
-              v-bind="attrs"
-              @click="snackbar = false">
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
-        <!-- Termina Snackbar de notificaciones -->
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+              v-slot:activator="{ on, attrs }">
+              <v-btn
+                text
+                class="mb-2"
+                @click="dialog = true">
+                <v-icon>
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+              <v-btn
+                text
+                class="mb-2"
+                @click="initialize">
+                <v-icon>
+                  mdi-reload
+                </v-icon>
+              </v-btn>
+            </template>
+          </v-dialog>
+          <!-- Termina dialog de botones de agregar y recargar -->
 
-        <!-- Tabla de usuarios -->
-        <v-data-table
-            dense
-            :headers="headers"
-            :items="datosTabla"
-            :items-per-page="10"
-            sort-by="NombreUsuario"
-            class="elevation-1">
-          <template
-            v-slot:top>
-            <v-toolbar
-              flat
-              color="white">
-              <v-toolbar-title>
-                Inventario productos
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
+          <!-- Cuadro de edición de inventario -->
+          <v-dialog
+            v-model="dialog"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                  {{ formTitle }}
+                </span>
+              </v-card-title>
+              <v-card-text>
+                <v-form>
+                  <v-alert
+                    type="error"
+                    v-model="alertaErrores">
+                    Los registros contienen los siguientes errores:
+                    <li
+                      v-for="value in listadoErrores"
+                      v-bind:key>
+                      {{ value }}
+                    </li>
+                  </v-alert>
+                  <v-container>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-autocomplete
+                          :items="datosProductos"
+                          :item-text="NombreCodigoProducto"
+                          item-value='idProducto'
+                          v-model="editedItem.idProducto"
+                          :disabled="editarProducto"
+                          label="Producto"
+                          :rules="[rules.required]">
+                        </v-autocomplete>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadExistencia"
+                          label="Cantidad en existencia"
+                          :disabled="editarProducto"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadMinima"
+                          label="Cantidad mínima"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadMaxima"
+                          label="Cantidad maxima"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text
+                  @click="cerrarDialogRegistro">
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="guardarInformacion">
+                  Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+            <!-- Termina cuadro de edición de inventario -->
+          </v-dialog>
+          <!-- Cuadro para modificar minimos y maximos -->
+          <v-dialog
+            v-model="dialogModificarMinimosMaximos"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                  Modificar cantidades mínimas y máximas
+                </span>
+              </v-card-title>
+              <v-card-text>
+                <v-form>
+                  <v-alert
+                    type="error"
+                    v-model="alertaErrores">
+                    Los registros contienen los siguientes errores:
+                    <li
+                      v-for="value in listadoErrores"
+                      v-bind:key>
+                      {{ value }}
+                    </li>
+                  </v-alert>
+                  <v-container>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.idProducto"
+                          :disabled="editarProducto"
+                          label="Producto"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadExistencia"
+                          label="Cantidad en existencia"
+                          :disabled="editarProducto"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadMinima"
+                          label="Cantidad mínima"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.CantidadMaxima"
+                          label="Cantidad maxima"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text
+                  @click="cerrarDialogModificarMinimosMaximos">
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="guardarInformacion()">
+                  Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Termina cuadro para editar minimos y maximos -->
 
-              <!-- Dialog de botones de agregar y recargar -->
-              <v-dialog>
-                <template
-                  v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    text
-                    class="mb-2"
-                    @click="dialog = true">
-                    <v-icon>
-                      mdi-plus
-                    </v-icon>
-                  </v-btn>
-                  <v-btn
-                    text
-                    class="mb-2"
-                    @click="initialize">
-                    <v-icon>
-                      mdi-reload
-                    </v-icon>
-                  </v-btn>
-                </template>
-              </v-dialog>
-              <!-- Termina dialog de botones de agregar y recargar -->
-
-              <!-- Cuadro de edición de inventario -->
-              <v-dialog
-                v-model="dialog"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                      {{ formTitle }}
-                    </span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-form>
-                      <v-alert
-                        type="error"
-                        v-model="alertaErrores">
-                        Los registros contienen los siguientes errores:
-                        <li
-                          v-for="value in listadoErrores"
-                          v-bind:key>
-                          {{ value }}
-                        </li>
-                      </v-alert>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-autocomplete
-                              :items="datosProductos"
-                              :item-text="NombreCodigoProducto"
-                              item-value='idProducto'
-                              v-model="editedItem.idProducto"
-                              :disabled="editarProducto"
-                              label="Producto"
-                              :rules="[rules.required]">
-                            </v-autocomplete>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadExistencia"
-                              label="Cantidad en existencia"
-                              :disabled="editarProducto"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadMinima"
-                              label="Cantidad mínima"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadMaxima"
-                              label="Cantidad maxima"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarDialogRegistro">
-                      Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="guardarInformacion">
-                      Guardar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-                <!-- Termina cuadro de edición de inventario -->
-              </v-dialog>
-              <!-- Cuadro para modificar minimos y maximos -->
-              <v-dialog
-                v-model="dialogModificarMinimosMaximos"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                      Modificar cantidades mínimas y máximas
-                    </span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-form>
-                      <v-alert
-                        type="error"
-                        v-model="alertaErrores">
-                        Los registros contienen los siguientes errores:
-                        <li
-                          v-for="value in listadoErrores"
-                          v-bind:key>
-                          {{ value }}
-                        </li>
-                      </v-alert>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.idProducto"
-                              :disabled="editarProducto"
-                              label="Producto"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col 
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadExistencia"
-                              label="Cantidad en existencia"
-                              :disabled="editarProducto"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadMinima"
-                              label="Cantidad mínima"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.CantidadMaxima"
-                              label="Cantidad maxima"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarDialogModificarMinimosMaximos">
-                      Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="guardarInformacion()">
-                      Guardar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- Termina cuadro para editar minimos y maximos -->
-
-              <!-- Cuadro de agregar cantidad de productos -->
-              <v-dialog
-                v-model="dialogAgregarCantidadProducto"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                      {{ formTitle }}
-                    </span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-form>
-                      <v-alert
-                        type="error"
-                        v-model="alertaErrores">
-                        Los registros contienen los siguientes errores:
-                        <li
-                          v-for="value in listadoErrores"
-                          v-bind:key>
-                          {{ value }}
-                        </li>
-                      </v-alert>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="cantidadProductoAgregar.CodigoProducto"
-                              :disabled="editarProducto"
-                              label="Producto"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="cantidadProductoAgregar.cantidadAgregar"
-                              label="Cantidad a agregar"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarDialogAgregarCantidad">
-                      Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="agregarCantidadProductoInventario">
-                      Guardar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- Termina cuadro de agregar cantidad de productos -->
-            </v-toolbar>
-          </template>
-          <template
-            v-slot:item.actions="{ item }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="agregarProductoInventario(item, item.idInventario)">
-              mdi-plus
-            </v-icon>
-            <v-icon
-              small
-              class="mr-2"
-              @click="editarMinimosMaximosProducto(item, item.idInventario)">
-              mdi-pencil
-            </v-icon>
-          </template>
-        </v-data-table>
-        <!-- Termina tabla de usuarios -->
-      </div>
-    </v-app>
+          <!-- Cuadro de agregar cantidad de productos -->
+          <v-dialog
+            v-model="dialogAgregarCantidadProducto"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                  {{ formTitle }}
+                </span>
+              </v-card-title>
+              <v-card-text>
+                <v-form>
+                  <v-alert
+                    type="error"
+                    v-model="alertaErrores">
+                    Los registros contienen los siguientes errores:
+                    <li
+                      v-for="value in listadoErrores"
+                      v-bind:key>
+                      {{ value }}
+                    </li>
+                  </v-alert>
+                  <v-container>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="cantidadProductoAgregar.CodigoProducto"
+                          :disabled="editarProducto"
+                          label="Producto"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="cantidadProductoAgregar.cantidadAgregar"
+                          label="Cantidad a agregar"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text
+                  @click="cerrarDialogAgregarCantidad">
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="agregarCantidadProductoInventario">
+                  Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Termina cuadro de agregar cantidad de productos -->
+        </v-toolbar>
+      </template>
+      <template
+        v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="agregarProductoInventario(item, item.idInventario)">
+          mdi-plus
+        </v-icon>
+        <v-icon
+          small
+          class="mr-2"
+          @click="editarMinimosMaximosProducto(item, item.idInventario)">
+          mdi-pencil
+        </v-icon>
+      </template>
+    </v-data-table>
+    <!-- Termina tabla de usuarios -->
   </div>
 </template>
 
@@ -379,6 +369,10 @@
         {
           text: 'Cantidad maxima',
           value: 'CantidadMaxima'
+        },
+        {
+          text: 'Producto flotante',
+          value: 'TotalFlotante'
         },
         {
           text: 'Actions',

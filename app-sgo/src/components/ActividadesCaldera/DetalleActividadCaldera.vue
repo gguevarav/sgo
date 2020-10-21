@@ -1,23 +1,24 @@
 <template>
   <div>
-    <v-row justify="center">
+    <v-row
+        justify="center">
       <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="600px"
+        v-model="dialog"
+        persistent
+        max-width="600px"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-              text
-              v-bind="attrs"
-              v-on="on"
-          >
-            Agregar producto
+            text
+            small
+            v-bind="attrs"
+            v-on="on">
+              Agregar productos
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Cerrar actividad</span>
+            <span class="headline">Agregar productos</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -83,7 +84,7 @@
                     md="6"
                 >
                   <v-text-field
-                      label="Creado"
+                      label="Fecha de creación"
                       v-model="actividadCaldera.FechaCreacionActividad"
                       disabled
                   ></v-text-field>
@@ -101,18 +102,18 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="blue darken-1"
+                color="error"
                 text
                 @click="dialog = false"
             >
-              Close
+              Cancelar
             </v-btn>
             <v-btn
-                color="blue darken-1"
+                color="primary"
                 text
                 @click="guardarDatos"
             >
-              Save
+              Guardar
             </v-btn>
           </v-card-actions>
         </v-card>

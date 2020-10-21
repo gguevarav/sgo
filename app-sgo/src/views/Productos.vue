@@ -1,284 +1,276 @@
 <template>
-  <div>
-    <v-app>
-      <!-- Barra principal aplicación -->
-      <AppBar></AppBar>
-      <!-- Barra de navegación -->
-      <NavigationBar></NavigationBar>
-      <!-- Contenido principal -->
-      <div class="text-center">
-        <!-- Snackbar de notificaciones -->
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="timeout">
+  <!-- Contenido principal -->
+  <div class="text-center">
+    <!-- Snackbar de notificaciones -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout">
 
-          {{ textoSnackbar }}
+      {{ textoSnackbar }}
 
-          <template
-            v-slot:action="{ attrs }">
-              <v-btn
-                color="success"
-                text
-                v-bind="attrs"
-                @click="snackbar = false">
-                  Close
-              </v-btn>
-          </template>
-        </v-snackbar>
-        <!-- Termina snackbar de notificaciones -->
+      <template
+        v-slot:action="{ attrs }">
+          <v-btn
+            color="success"
+            text
+            v-bind="attrs"
+            @click="snackbar = false">
+              Close
+          </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Termina snackbar de notificaciones -->
 
-        <!-- Tabla de productos -->
-        <v-data-table
-          dense
-          :headers="headers"
-          :items="datosTabla"
-          :items-per-page="10"
-          sort-by="NombreProducto"
-          class="elevation-1">
-          <template
-            v-slot:top>
-            <v-toolbar
-              flat
-              color="white">
-              <v-toolbar-title>
-                Productos
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <!-- Dialog de botones de agregar y recargar -->
-              <v-dialog>
-                <template
-                    v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        text
-                        class="mb-2"
-                        @click="dialog = true">
-                          <v-icon>
-                            mdi-plus
-                          </v-icon>
-                    </v-btn>
-                    <v-btn
-                      text
-                      class="mb-2"
-                      @click="initialize">
-                        <v-icon>
-                          mdi-reload
-                        </v-icon>
-                    </v-btn>
-                  </template>
-              </v-dialog>
-              <!-- Termina dialog de botones de agregar y recargar -->
+    <!-- Tabla de productos -->
+    <v-data-table
+      dense
+      :headers="headers"
+      :items="datosTabla"
+      :items-per-page="10"
+      sort-by="NombreProducto"
+      class="elevation-1">
+      <template
+        v-slot:top>
+        <v-toolbar
+          flat
+          color="white">
+          <v-toolbar-title>
+            Productos
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+                v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    text
+                    class="mb-2"
+                    @click="dialog = true">
+                      <v-icon>
+                        mdi-plus
+                      </v-icon>
+                </v-btn>
+                <v-btn
+                  text
+                  class="mb-2"
+                  @click="initialize">
+                    <v-icon>
+                      mdi-reload
+                    </v-icon>
+                </v-btn>
+              </template>
+          </v-dialog>
+          <!-- Termina dialog de botones de agregar y recargar -->
 
-              <!-- Dialog de registro de producto -->
-              <v-dialog
-                v-model="dialog"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                        {{ formTitle }}
-                    </span>
-                  </v-card-title>
+          <!-- Dialog de registro de producto -->
+          <v-dialog
+            v-model="dialog"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                    {{ formTitle }}
+                </span>
+              </v-card-title>
 
-                  <v-card-text>
-                    <v-form>
-                      <v-container>
-                        <v-alert
-                          type="error"
-                          v-model="alertaErrores">
-                            Los registros contienen los siguientes errores:
-                            <li
-                              v-for="value in listadoErrores"
-                              v-bind:key>
-                                {{ value }}
-                            </li>
-                        </v-alert>
-                        <v-row
-                          align="center"
-                          justify="center">
-                            <v-col
-                              cols="12"
-                              sm="6"
-                              md="6">
-                              <v-text-field
-                                v-model="editedItem.CodigoProducto"
-                                :disabled="editarCodigo"
-                                label="Código"
-                                :rules="[rules.required]"
-                                required>
-                              </v-text-field>
-                            </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-text-field
-                                v-model="editedItem.NombreProducto"
-                                label="Nombre producto"
-                                :rules="[rules.required]"
-                                required>
-                              </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-btn-toggle
-                              v-model="toggle_exclusive"
-                              group
-                              multiple>
-                                <v-select
-                                  :items="datosUnidadMedida"
-                                  item-text='NombreUnidadMedida'
-                                  item-value='idUnidadMedida'
-                                  v-model="editedItem.idUnidadMedida"
-                                  label="UnidadMedida"
-                                  :rules="[rules.required]"
-                                  required>
-                                </v-select>
-                                <v-btn
-                                  text
-                                  @click="dialogUnidadMedida = !dialogUnidadMedida">
-                                    <v-icon>
-                                      mdi-plus
-                                    </v-icon>
-                                </v-btn>
-                            </v-btn-toggle>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-select
-                                :items="datosEstadoProducto"
-                                item-text='NombreEstadoProducto'
-                                item-value='idEstadoProducto'
-                                v-model="editedItem.EstadoProducto"
-                                label="Estado"
-                                :rules="[rules.required]"
-                                required>
-                              </v-select>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
+              <v-card-text>
+                <v-form>
+                  <v-container>
+                    <v-alert
+                      type="error"
+                      v-model="alertaErrores">
+                        Los registros contienen los siguientes errores:
+                        <li
+                          v-for="value in listadoErrores"
+                          v-bind:key>
+                            {{ value }}
+                        </li>
+                    </v-alert>
+                    <v-row
+                      align="center"
+                      justify="center">
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="6">
+                          <v-text-field
+                            v-model="editedItem.CodigoProducto"
+                            :disabled="editarCodigo"
+                            label="Código"
+                            :rules="[rules.required]"
+                            required>
+                          </v-text-field>
+                        </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-text-field
+                            v-model="editedItem.NombreProducto"
+                            label="Nombre producto"
+                            :rules="[rules.required]"
+                            required>
+                          </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-btn-toggle
+                          v-model="toggle_exclusive"
+                          group
+                          multiple>
+                            <v-select
+                              :items="datosUnidadMedida"
+                              item-text='NombreUnidadMedida'
+                              item-value='idUnidadMedida'
+                              v-model="editedItem.idUnidadMedida"
+                              label="UnidadMedida"
+                              :rules="[rules.required]"
+                              required>
+                            </v-select>
+                            <v-btn
+                              text
+                              @click="dialogUnidadMedida = !dialogUnidadMedida">
+                                <v-icon>
+                                  mdi-plus
+                                </v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-select
+                            :items="datosEstadoProducto"
+                            item-text='NombreEstadoProducto'
+                            item-value='idEstadoProducto'
+                            v-model="editedItem.EstadoProducto"
+                            label="Estado"
+                            :rules="[rules.required]"
+                            required>
+                          </v-select>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarDialogRegistro">
-                        Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="guardarProducto">
-                        Guardar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- Termina dialog de registro de producto -->
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text
+                  @click="cerrarDialogRegistro">
+                    Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="guardarProducto">
+                    Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Termina dialog de registro de producto -->
 
-              <!-- Dialog de registro de unidad de medida -->
-              <v-dialog
-                v-model="dialogUnidadMedida"
-                max-width="500px">
-                  <v-card>
-                    <v-card-title>
-                      <span
-                        class="headline">
-                          Nueva unidad de medida
-                      </span>
-                    </v-card-title>
+          <!-- Dialog de registro de unidad de medida -->
+          <v-dialog
+            v-model="dialogUnidadMedida"
+            max-width="500px">
+              <v-card>
+                <v-card-title>
+                  <span
+                    class="headline">
+                      Nueva unidad de medida
+                  </span>
+                </v-card-title>
 
-                    <v-card-text>
+                <v-card-text>
 
-                      <v-alert
-                          type="error"
-                          v-model="alertaErroresUM">
-                            Los registros contienen los siguientes errores:
-                            <li
-                              v-for="value in listadoErroresUM"
-                              v-bind:key>
-                                {{ value }}
-                            </li>
-                        </v-alert>
+                  <v-alert
+                      type="error"
+                      v-model="alertaErroresUM">
+                        Los registros contienen los siguientes errores:
+                        <li
+                          v-for="value in listadoErroresUM"
+                          v-bind:key>
+                            {{ value }}
+                        </li>
+                    </v-alert>
 
-                      <v-form>
-                        <v-container>
-                          <v-row
-                            align="center"
-                            justify="center">
-                            <v-col
-                              cols="12"
-                              sm="6"
-                              md="6">
-                              <v-text-field
-                                v-model="nuevoUM.NombreUnidadMedida"
-                                label="Nombre"
-                                :rules="[rules.required]"
-                                required>
-                              </v-text-field>
-                            </v-col>
-                            <v-col
-                              cols="12"
-                              sm="6"
-                              md="6">
-                                <v-text-field
-                                  v-model="nuevoUM.AbreviacionUnidadMedida"
-                                  label="Abreviatura"
-                                  :rules="[rules.required]"
-                                  required>
-                                </v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-form>
-                    </v-card-text>
+                  <v-form>
+                    <v-container>
+                      <v-row
+                        align="center"
+                        justify="center">
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="6">
+                          <v-text-field
+                            v-model="nuevoUM.NombreUnidadMedida"
+                            label="Nombre"
+                            :rules="[rules.required]"
+                            required>
+                          </v-text-field>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="6">
+                            <v-text-field
+                              v-model="nuevoUM.AbreviacionUnidadMedida"
+                              label="Abreviatura"
+                              :rules="[rules.required]"
+                              required>
+                            </v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-form>
+                </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="cerrarDialogUM">
-                          Cancelar
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="guardarUnidadMedida">
-                          Guardar
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-              </v-dialog>
-              <!-- Termina dialog de registro de unidad de medida -->
-            </v-toolbar>
-          </template>
-          <template
-            v-slot:item.actions="{ item }">
-              <v-icon
-                small
-                class="mr-2"
-                @click="editarProducto(item, item.idProducto)">
-                  mdi-pencil
-              </v-icon>
-              <v-icon
-                small
-                disabled
-                @click="eliminarProducto(item.idProducto)">
-                  mdi-delete
-              </v-icon>
-          </template>
-        </v-data-table>
-        <!-- Termina la tabla de productos -->
-      </div>
-    </v-app>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="error"
+                    text
+                    @click="cerrarDialogUM">
+                      Cancelar
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    text
+                    @click="guardarUnidadMedida">
+                      Guardar
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+          </v-dialog>
+          <!-- Termina dialog de registro de unidad de medida -->
+        </v-toolbar>
+      </template>
+      <template
+        v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editarProducto(item, item.idProducto)">
+              mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            disabled
+            @click="eliminarProducto(item.idProducto)">
+              mdi-delete
+          </v-icon>
+      </template>
+    </v-data-table>
+    <!-- Termina la tabla de productos -->
   </div>
 </template>
 

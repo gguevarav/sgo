@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <v-app>
-      <v-content>
-        <v-container>
-          <router-view></router-view>
-        </v-container>
-      </v-content>
-    </v-app>
-  </div>
+  <v-app>
+    <BarraNavegacion></BarraNavegacion>
+    <v-main>
+      <v-container>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -15,12 +14,5 @@
 export default {
   name: 'App',
 
-  components: {
-
-  },
-
-  data: () => ({
-
-  }),
 };
 </script>

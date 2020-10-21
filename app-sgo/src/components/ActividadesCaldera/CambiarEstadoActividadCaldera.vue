@@ -1,23 +1,27 @@
 <template>
   <div>
-
-      <v-icon
-          small
-          class="mr-2"
-          @click="dialog = true">
-        mdi-pencil
-      </v-icon>
-
-
     <v-row justify="center">
       <v-dialog
           v-model="dialog"
           persistent
           max-width="600px"
       >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              text
+              v-bind="attrs"
+              v-on="on"
+              small
+          >
+            Seguimiento
+          </v-btn>
+        </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Editar actividad</span>
+            <span
+                class="headline">
+              Cambio de estado de actividad
+            </span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -68,8 +72,8 @@
                 </v-col>
                 <v-col
                     cols="12"
-                    sm="4"
-                    md="4"
+                    sm="6"
+                    md="6"
                 >
                   <v-text-field
                       label="Creado por"
@@ -79,8 +83,8 @@
                 </v-col>
                 <v-col
                     cols="12"
-                    sm="4"
-                    md="4"
+                    sm="6"
+                    md="6"
                 >
                   <v-text-field
                       label="Fecha de creación"
@@ -88,10 +92,7 @@
                       disabled
                   ></v-text-field>
                 </v-col>
-                <v-col
-                    cols="12"
-                    sm="4"
-                    md="4">
+                <v-col cols="12">
                   <v-select
                       :items="datosEstadoUsuario"
                       item-text='NombreEstadoUsuario'
@@ -106,18 +107,18 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-                color="blue darken-1"
+                color="error"
                 text
                 @click="dialog = false"
             >
-              Close
+              Cancelar
             </v-btn>
             <v-btn
-                color="blue darken-1"
+                color="primary"
                 text
-                @click="cerrarActividadEstado"
+                @click="cambiarEstadoActividad"
             >
-              Save
+              Cambiar estado
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -139,29 +140,26 @@ name: "DetalleActividadCaldera",
     listadoErrores: [],
     actividadCaldera: [],
     datosEstadoUsuario: [{
-      idEstadoUsuario: 1,
-      NombreEstadoUsuario: 'Activo'
-    },
+      idEstadoUsuario: 3,
+      NombreEstadoUsuario: 'En proceso'
+      },
       {
         idEstadoUsuario: 4,
         NombreEstadoUsuario: 'Cerrado'
+      },
+      {
+        idEstadoUsuario: 5,
+        NombreEstadoUsuario: 'Cancelado'
       }
     ],
-    cambiarEstadoCerrar:[
-      {
-        EstadoActividad: '',
-        RealizadoPor: localStorage.getItem('idUsuario'),
-      }
-    ]
   }),
   created() {
-    this.obtenerActividadCambiarEstado()
-    //console.log(this.Actividad)
+    this.obtenerActividadCerrar()
   },
-  props:['Actividad'],
+  props:['ActividadCambiar'],
   methods:{
-    obtenerActividadCambiarEstado(){
-      this.idActividad = this.Actividad
+    obtenerActividadCerrar(){
+      this.idActividad = this.ActividadCambiar
       return new Promise((resolve, reject) => {
         axios.get('/api/listadoactividadescaldera/' + this.idActividad)
             .then(response => {
@@ -184,9 +182,9 @@ name: "DetalleActividadCaldera",
             })
       })
     },
-    cerrarActividadEstado(){
+    cambiarEstadoActividad(){
       // Debemos cerrar la actividad para que no aparezca en el tablero
-      axios.post('/api/cerraractividad/' + this.idActividad,
+      axios.post('/api/cambiarestadoactividadcaldera/' + this.idActividad,
               {
                 EstadoActividad: this.actividadCaldera.idEstado,
                 RealizadoPor: localStorage.getItem('idUsuario'),
@@ -205,6 +203,9 @@ name: "DetalleActividadCaldera",
           })
       // Limpiamos todo
       //this.listadoProductosAgregar = [];
+    },
+    cerrarDialog(){
+      this.dialog = false;
     },
   },
 }

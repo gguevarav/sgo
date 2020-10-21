@@ -3,44 +3,53 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-
-import NavigationBar from './components/NavigationBar';
-import AppBar from './components/AppBar';
-import ActividadesCaldera from './components/ActividadesCaldera';
-import ActividadesPretratamiento from './components/ActividadesPretratamiento';
-import ActividadesTorreEnfriamiento from './components/ActividadesTorreEnfriamiento';
-import AgregarActividadCaldera from './components/AgregarActividadCaldera';
+// Barra de Navegación
+import BarraNavegacion from './components/NavigationBar';
+// Barra de Notificación
 import Notificacion from './components/Notificacion';
-import DetalleActividadCaldera from './components/DetalleActividadCaldera';
-import AgregarMaterialActividad from './components/AgregarMaterialActividad';
-import CambiarEstadoActividadCaldera from './components/CambiarEstadoActividadCaldera';
-import EditarActividadCaldera from './components/EditarActividadCaldera';
-import EditarActividadPretratamiento from "@/components/EditarActividadPretratamiento";
-import TablaActividadesCaldera from './components/TablaActividadesCaldera';
-import TablaActividadesPretratamiento from "@/components/TablaActividadesPretratamiento";
-import TablaActividadesTorreEnfriamiento from "@/components/TablaActividadesTorreEnfriamiento";
-import DetalleListadoProductosActividadCaldera from './components/DetalleListadoProductosActividadCaldera';
+// Actividades caldera
+import ActividadesCaldera from './components/ActividadesCaldera/ActividadesCaldera';
+import AgregarActividadCaldera from './components/ActividadesCaldera/AgregarActividadCaldera';
+import DetalleActividadCaldera from './components/ActividadesCaldera/DetalleActividadCaldera';
+import AgregarMaterialActividad from './components/ActividadesCaldera/AgregarMaterialActividad';
+import CambiarEstadoActividadCaldera from './components/ActividadesCaldera/CambiarEstadoActividadCaldera';
+import EditarActividadCaldera from './components/ActividadesCaldera/EditarActividadCaldera';
+import TablaActividadesCaldera from './components/ActividadesCaldera/TablaActividadesCaldera';
+import DetalleListadoProductosActividadCaldera from './components/ActividadesCaldera/DetalleListadoProductosActividadCaldera';
 
-Vue.component('NavigationBar', NavigationBar);
-Vue.component('AppBar', AppBar);
+import ActividadesPretratamiento from './components/ActividadesPretratamiento/ActividadesPretratamiento';
+import ActividadesTorreEnfriamiento from './components/ActividadesTorreEnfriamiento/ActividadesTorreEnfriamiento';
+import EditarActividadPretratamiento from "@/components/ActividadesPretratamiento/EditarActividadPretratamiento";
+import TablaActividadesPretratamiento from "@/components/ActividadesPretratamiento/TablaActividadesPretratamiento";
+import TablaActividadesTorreEnfriamiento from "@/components/ActividadesTorreEnfriamiento/TablaActividadesTorreEnfriamiento";
+
+// Nombres componentes
+// Barra de navegación
+Vue.component('BarraNavegacion', BarraNavegacion);
+// Notificaciones
 Vue.component('ActividadesCaldera', ActividadesCaldera);
-Vue.component('ActividadesPretratamiento', ActividadesPretratamiento);
-Vue.component('ActividadesTorreEnfriamiento', ActividadesTorreEnfriamiento);
-Vue.component('AgregarActividadCaldera', AgregarActividadCaldera);
 Vue.component('Notificacion', Notificacion);
+// Actividades de caldera
+Vue.component('AgregarActividadCaldera', AgregarActividadCaldera);
 Vue.component('DetalleActividadCaldera', DetalleActividadCaldera);
 Vue.component('CambiarEstadoActividadCaldera', CambiarEstadoActividadCaldera);
 Vue.component('AgregarMaterialActividad', AgregarMaterialActividad);
 Vue.component('EditarActividadCaldera', EditarActividadCaldera);
-Vue.component('EditarActividadPretratamiento', EditarActividadPretratamiento);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
-Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
-Vue.component('TablaActividadesTorreEnfriamiento', TablaActividadesTorreEnfriamiento);
 Vue.component('DetalleListadoProductosActividadCaldera', DetalleListadoProductosActividadCaldera);
 
 
+Vue.component('ActividadesPretratamiento', ActividadesPretratamiento);
+Vue.component('ActividadesTorreEnfriamiento', ActividadesTorreEnfriamiento);
+Vue.component('EditarActividadPretratamiento', EditarActividadPretratamiento);
+Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
+Vue.component('TablaActividadesTorreEnfriamiento', TablaActividadesTorreEnfriamiento);
+
+
 Vue.config.productionTip = false
+
+export const bus = new Vue();
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {

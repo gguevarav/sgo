@@ -79,7 +79,9 @@ CREATE TABLE users(
 CREATE TABLE Inventario(
     idInventario			INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
     idProducto				INTEGER				NOT NULL,
-    CantidadExistencia		DECIMAL				NOT NULL,
+    idListadoActividadCaldera   INTEGER             NOT NULL,
+    CantidadExistencia		DECIMAL(4,2)    	NOT NULL,
+    ProductoFlotante        DECIMAL(4,2)        NULL,
     RegistradoPor           TINYINT             NOT NULL,
     created_at				TIMESTAMP			NULL,
     updated_at				TIMESTAMP			NULL,
@@ -88,6 +90,11 @@ CREATE TABLE Inventario(
        REFERENCES Producto(idProducto)
        ON DELETE CASCADE
        ON UPDATE NO ACTION,
+    INDEX (idListadoActividadCaldera),
+    FOREIGN KEY (idListadoActividadCaldera)
+        REFERENCES ListadoActividadCaldera(idListadoActividadCaldera)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION,
     INDEX (RegistradoPor),
     FOREIGN KEY (RegistradoPor)
        REFERENCES users(idUsuario)
@@ -98,8 +105,8 @@ CREATE TABLE Inventario(
 CREATE TABLE MinimosMaximos(
    idMinimosMaximos        INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
    idProducto              INTEGER				NOT NULL,
-   CantidadMinima			DECIMAL				NOT NULL,
-   CantidadMaxima			DECIMAL				NOT NULL,
+   CantidadMinima			DECIMAL(4,2)		NOT NULL,
+   CantidadMaxima			DECIMAL(4,2)		NOT NULL,
    created_at				TIMESTAMP			NULL,
    updated_at				TIMESTAMP			NULL,
    INDEX (idProducto),
@@ -422,7 +429,8 @@ INSERT INTO Estado (idEstado, NombreEstado, created_at, updated_at)
 			VALUES (NULL, 'Activo', NULL, NULL),
 			       (NULL, 'Inactivo', NULL, NULL),
                    (NULL, 'En proceso', NULL, NULL),
-                   (NULL, 'Cerrado', NULL, NULL);
+                   (NULL, 'Cerrado', NULL, NULL),
+                   (NULL, 'Cancelado', NULL, NULL);
 
 -- Puesto
 INSERT INTO Puesto (idPuesto, NombrePuesto, EstadoPuesto,

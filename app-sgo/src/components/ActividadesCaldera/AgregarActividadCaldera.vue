@@ -81,13 +81,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-              color="blue darken-1"
+              color="error"
               text
               @click="cerrarDialog">
             Cancelar
           </v-btn>
           <v-btn
-              color="blue darken-1"
+              color="primary"
               text
               @click="agregarActividad">
             Guardar

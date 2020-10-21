@@ -106,7 +106,7 @@ name: "AgregarMaterialActividad",
       })
     },
     // Concatenando el codigo con el nombre
-    NombreCodigoProducto: item => item.CodigoProducto + ' - ' + item.NombreProducto + ' - ' + item.CantidadExistencia + ' - ' + item.AbreviacionUnidadMedida,
+    NombreCodigoProducto: item => item.CodigoProducto + ' - ' + item.NombreProducto + ' - ' + item.TotalExistencia + ' - ' + item.AbreviacionUnidadMedida,
 
     // Guardamos los dados
     guardarDatosMateriales(){
@@ -146,6 +146,7 @@ name: "AgregarMaterialActividad",
           axios.post('/api/descontarproductosinventario',
               {
                 idProducto: element.idProducto,
+                idListadoActividadCaldera: element.idListadoActividadCaldera,
                 CantidadExistencia: element.CantidadProducto,
                 RegistradoPor: localStorage.getItem('idUsuario'),
               })

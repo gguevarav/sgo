@@ -1,303 +1,295 @@
 <template>
-  <div>
-    <v-app>
-      <!-- Barra principal aplicación -->
-      <AppBar></AppBar>
-      <!-- Barra de navegación -->
-      <NavigationBar></NavigationBar>
-      <!-- Contenido principal -->
-      <div class="text-center">
-        <!-- Snackbar de notificaciones -->
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="timeout"
-          color="success">
+  <!-- Contenido principal -->
+  <div class="text-center">
+    <!-- Snackbar de notificaciones -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success">
 
-          {{ textoSnackbar }}
+      {{ textoSnackbar }}
 
-          <template
-            v-slot:action="{ attrs }">
-            <v-btn
-              color="blue darken-1"
-              text
-              v-bind="attrs"
-              @click="snackbar = false">
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
-        <!-- Termina Snackbar de notificaciones -->
+      <template
+        v-slot:action="{ attrs }">
+        <v-btn
+          color="success"
+          text
+          v-bind="attrs"
+          @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Termina Snackbar de notificaciones -->
 
-        <!-- Tabla de usuarios -->
-        <v-data-table
-          :headers="headers"
-          :items="datosTabla"
-          :items-per-page="5"
-          sort-by="NombreUsuario"
-          class="elevation-1">
-          <template v-slot:top>
-            <v-toolbar
-              flat
-              color="white">
-              <v-toolbar-title>
-                Usuarios
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
+    <!-- Tabla de usuarios -->
+    <v-data-table
+      :headers="headers"
+      :items="datosTabla"
+      :items-per-page="5"
+      sort-by="NombreUsuario"
+      class="elevation-1">
+      <template v-slot:top>
+        <v-toolbar
+          flat
+          color="white">
+          <v-toolbar-title>
+            Usuarios
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
 
-              <!-- Dialog de botones de agregar y recargar -->
-              <v-dialog>
-                <template
-                    v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        text
-                        class="mb-2"
-                        @click="dialog = true">
-                          <v-icon>
-                            mdi-plus
-                          </v-icon>
-                    </v-btn>
-                    <v-btn
-                      text
-                      class="mb-2"
-                      @click="initialize">
-                        <v-icon>
-                          mdi-reload
-                        </v-icon>
-                    </v-btn>
-                  </template>
-              </v-dialog>
-              <!-- Termina dialog de botones de agregar y recargar -->
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+                v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    text
+                    class="mb-2"
+                    @click="dialog = true">
+                      <v-icon>
+                        mdi-plus
+                      </v-icon>
+                </v-btn>
+                <v-btn
+                  text
+                  class="mb-2"
+                  @click="initialize">
+                    <v-icon>
+                      mdi-reload
+                    </v-icon>
+                </v-btn>
+              </template>
+          </v-dialog>
+          <!-- Termina dialog de botones de agregar y recargar -->
 
-              <!-- Cuadro de edición de usuario -->
-              <v-dialog
-                v-model="dialog"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                      {{ formTitle }}
-                    </span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-form>
-                      <v-alert
-                        type="error"
-                        v-model="alertaErrores">
-                        Los registros contienen los siguientes errores:
-                        <li
-                          v-for="value in listadoErrores"
-                          v-bind:key>
-                          {{ value }}
-                        </li>
-                      </v-alert>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-text-field
-                                v-model="editedItem.NombreUsuario"
-                                label="Nombre"
-                                :rules="[rules.required]">
-                              </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-text-field
-                              v-model="editedItem.ApellidoUsuario"
-                              label="Apellido"
-                              :rules="[rules.required]">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-text-field
-                                v-model="editedItem.email"
-                                :disabled="editarCorreo"
-                                label="Correo"
-                                placeholder="usuario@example.com"
-                                :rules="[rules.required, rules.email]">
-                              </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-text-field
-                              v-model="editedItem.password"
-                              :append-icon="verContrasenia ? 'mdi-eye' : 'mdi-eye-off'"
-                              :rules="[rules.required, rules.min]"
-                              :type="verContrasenia ? 'text' : 'password'"
-                              name="input-10-1"
-                              autocomplete="new-password"
-                              label="Contraseña"
-                              placeholder="********"
-                              hint="Al menos 8 caracteres"
-                              counter
-                              @click:append="verContrasenia = !verContrasenia">
-                            </v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="12">
-                            <v-btn-toggle
-                              v-model="toggle_exclusive"
-                              group
-                              multiple>
-                              <v-select
-                                :items="datosPuestos"
-                                item-text='NombrePuesto'
-                                item-value='idPuesto'
-                                v-model="editedItem.idPuesto"
-                                label="Puesto"
-                                :rules="[rules.required]">
-                              </v-select>
-                              <v-btn
-                                text
-                                @click="dialogPuestos = !dialogPuestos">
-                                  <v-icon>
-                                    mdi-plus
-                                  </v-icon>
-                              </v-btn>
-                            </v-btn-toggle>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                            <v-select
-                              :items="datosRoles"
-                              item-text='NombreRol'
-                              item-value='idRol'
-                              v-model="editedItem.idRol"
-                              label="Rol"
-                              :rules="[rules.required]">
-                            </v-select>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="6"
-                            md="6">
-                              <v-select
-                                :items="datosEstadoUsuario"
-                                item-text='NombreEstadoUsuario'
-                                item-value='idEstadoUsuario'
-                                v-model="editedItem.EstadoUsuario"
-                                :disabled="estadoHabilitado"
-                                label="Estado"
-                                :rules="[rules.required]">
-                              </v-select>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text @click="cerrarDialogRegistro">
-                        Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="guardarInformacion">
-                        Guardar
-                      </v-btn>
-                  </v-card-actions>
-                </v-card>
-                <!-- Termina cuadro de edición de usuario -->
-              </v-dialog>
+          <!-- Cuadro de edición de usuario -->
+          <v-dialog
+            v-model="dialog"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                  {{ formTitle }}
+                </span>
+              </v-card-title>
+              <v-card-text>
+                <v-form>
+                  <v-alert
+                    type="error"
+                    v-model="alertaErrores">
+                    Los registros contienen los siguientes errores:
+                    <li
+                      v-for="value in listadoErrores"
+                      v-bind:key>
+                      {{ value }}
+                    </li>
+                  </v-alert>
+                  <v-container>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-text-field
+                            v-model="editedItem.NombreUsuario"
+                            label="Nombre"
+                            :rules="[rules.required]">
+                          </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-text-field
+                          v-model="editedItem.ApellidoUsuario"
+                          label="Apellido"
+                          :rules="[rules.required]">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-text-field
+                            v-model="editedItem.email"
+                            :disabled="editarCorreo"
+                            label="Correo"
+                            placeholder="usuario@example.com"
+                            :rules="[rules.required, rules.email]">
+                          </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-text-field
+                          v-model="editedItem.password"
+                          :append-icon="verContrasenia ? 'mdi-eye' : 'mdi-eye-off'"
+                          :rules="[rules.required, rules.min]"
+                          :type="verContrasenia ? 'text' : 'password'"
+                          name="input-10-1"
+                          autocomplete="new-password"
+                          label="Contraseña"
+                          placeholder="********"
+                          hint="Al menos 8 caracteres"
+                          counter
+                          @click:append="verContrasenia = !verContrasenia">
+                        </v-text-field>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="12"
+                        md="12">
+                        <v-btn-toggle
+                          v-model="toggle_exclusive"
+                          group
+                          multiple>
+                          <v-select
+                            :items="datosPuestos"
+                            item-text='NombrePuesto'
+                            item-value='idPuesto'
+                            v-model="editedItem.idPuesto"
+                            label="Puesto"
+                            :rules="[rules.required]">
+                          </v-select>
+                          <v-btn
+                            text
+                            @click="dialogPuestos = !dialogPuestos">
+                              <v-icon>
+                                mdi-plus
+                              </v-icon>
+                          </v-btn>
+                        </v-btn-toggle>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                        <v-select
+                          :items="datosRoles"
+                          item-text='NombreRol'
+                          item-value='idRol'
+                          v-model="editedItem.idRol"
+                          label="Rol"
+                          :rules="[rules.required]">
+                        </v-select>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="6">
+                          <v-select
+                            :items="datosEstadoUsuario"
+                            item-text='NombreEstadoUsuario'
+                            item-value='idEstadoUsuario'
+                            v-model="editedItem.EstadoUsuario"
+                            :disabled="estadoHabilitado"
+                            label="Estado"
+                            :rules="[rules.required]">
+                          </v-select>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text @click="cerrarDialogRegistro">
+                    Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="guardarInformacion">
+                    Guardar
+                  </v-btn>
+              </v-card-actions>
+            </v-card>
+            <!-- Termina cuadro de edición de usuario -->
+          </v-dialog>
 
-              <!-- Cuadro de registro de nuevo puesto -->
-              <v-dialog
-                v-model="dialogPuestos"
-                max-width="500px">
-                <v-card>
-                  <v-card-title>
-                    <span
-                      class="headline">
-                        Nuevo puesto
-                    </span>
-                  </v-card-title>
+          <!-- Cuadro de registro de nuevo puesto -->
+          <v-dialog
+            v-model="dialogPuestos"
+            max-width="500px">
+            <v-card>
+              <v-card-title>
+                <span
+                  class="headline">
+                    Nuevo puesto
+                </span>
+              </v-card-title>
 
-                  <v-card-text>
-                    <v-alert
-                        type="error"
-                        v-model="alertaErroresPuesto">
-                        Los registros contienen los siguientes errores:
-                        <li
-                          v-for="value in listadoErroresPuesto"
-                          v-bind:key>
-                          {{ value }}
-                        </li>
-                    </v-alert>
-                    <v-form>
-                      <v-container>
-                        <v-row
-                          align="center"
-                          justify="center">
-                          <v-col
-                            cols="12">
-                            <v-text-field
-                              ref="NombrePuesto"
-                              v-model="nuevoPuesto.NombrePuesto"
-                              label="Nombre"
-                              :rules="[rules.required]"
-                              required>
-                            </v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarDialogPuesto">
-                        Cancelar
-                    </v-btn>
-                    <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="guardarPuesto">
-                        Guardar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <!-- Termina cuadro de registro de nuevo puesto -->
-            </v-toolbar>
-          </template>
-          <template
-            v-slot:item.actions="{ item }">
-              <v-icon
-                small
-                class="mr-2"
-                @click="editarUsuario(item, item.idUsuario)">
-                  mdi-pencil
-              </v-icon>
-              <v-icon
-                small
-                disabled
-                @click="eliminarUsuario(item.idUsuario)">
-                  mdi-delete
-              </v-icon>
-          </template>
-        </v-data-table>
-        <!-- Termina tabla de usuarios -->
-      </div>
-    </v-app>
+              <v-card-text>
+                <v-alert
+                    type="error"
+                    v-model="alertaErroresPuesto">
+                    Los registros contienen los siguientes errores:
+                    <li
+                      v-for="value in listadoErroresPuesto"
+                      v-bind:key>
+                      {{ value }}
+                    </li>
+                </v-alert>
+                <v-form>
+                  <v-container>
+                    <v-row
+                      align="center"
+                      justify="center">
+                      <v-col
+                        cols="12">
+                        <v-text-field
+                          ref="NombrePuesto"
+                          v-model="nuevoPuesto.NombrePuesto"
+                          label="Nombre"
+                          :rules="[rules.required]"
+                          required>
+                        </v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  text
+                  @click="cerrarDialogPuesto">
+                    Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="guardarPuesto">
+                    Guardar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- Termina cuadro de registro de nuevo puesto -->
+        </v-toolbar>
+      </template>
+      <template
+        v-slot:item.actions="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            @click="editarUsuario(item, item.idUsuario)">
+              mdi-pencil
+          </v-icon>
+          <v-icon
+            small
+            disabled
+            @click="eliminarUsuario(item.idUsuario)">
+              mdi-delete
+          </v-icon>
+      </template>
+    </v-data-table>
+    <!-- Termina tabla de usuarios -->
   </div>
 </template>
 

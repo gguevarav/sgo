@@ -1,24 +1,24 @@
 <template>
-    <!-- Snackbar de notificaciones -->
-      <v-snackbar
-        v-model="activar"
-        :timeout="timeout"
-        :color="color">
+  <!-- Snackbar de notificaciones -->
+  <v-snackbar
+    v-model="activar"
+    :timeout="timeout"
+    :color="color">
 
-        {{ textoSnackbar }}
+    {{ textoSnackbar }}
 
-        <template
-            v-slot:action="{ attrs }">
-            <v-btn
-            color="blue darken-1"
-            text
-            v-bind="attrs"
-            @click="cerrarNotificacion">
-            Close
-            </v-btn>
-        </template>
-      </v-snackbar>
-    <!-- Termina Snackbar de notificaciones -->
+    <template
+        v-slot:action="{ attrs }">
+        <v-btn
+        color="blue darken-1"
+        text
+        v-bind="attrs"
+        @click="cerrarNotificacion">
+        Close
+        </v-btn>
+    </template>
+  </v-snackbar>
+  <!-- Termina Snackbar de notificaciones -->
 </template>
 
 <script>

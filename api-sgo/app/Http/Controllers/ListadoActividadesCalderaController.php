@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\ListadoActividadCaldera;
+use App\Models\Inventario;
 
 class ListadoActividadesCalderaController extends BaseController
 {
@@ -37,7 +38,7 @@ class ListadoActividadesCalderaController extends BaseController
                                                 ON LAC.RealizadoPor = US2.idUsuario
                                      INNER JOIN Estado E
                                                 ON LAC.EstadoActividad = E.idEstado
-                            WHERE LAC.EstadoActividad != 4;');
+                            WHERE LAC.EstadoActividad != 4 AND LAC.EstadoActividad != 5;');
 
         // Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {
@@ -265,7 +266,7 @@ class ListadoActividadesCalderaController extends BaseController
         return response()->json($json);
     }
 
-    public function cambiarEstadoActividad($id, Request $request){
+    public function cambiarEstadoActividadCaldera($id, Request $request){
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
@@ -302,6 +303,14 @@ class ListadoActividadesCalderaController extends BaseController
                     // en el array de los datos
                     $ListadoActividadCaldera = ListadoActividadCaldera::where("idListadoActividadCaldera", $id)->update($Datos);
 
+                    // Si estamos cerrando la actividad debemos devolver todos los productos.
+                    if($Datos["EstadoActividad"] === 5){
+                        $this->devolucionProductosInventario($id);
+                    }
+                    else if($Datos["EstadoActividad"] === 4){
+                        $this->liberacionProductoFlotante($id);
+                    }
+
                     $json = array(
                         "status" => 200,
                         "detalle" => "Registro editado exitosamente"
@@ -321,6 +330,21 @@ class ListadoActividadesCalderaController extends BaseController
         }
         // Devolvemos la respuesta en un Json
         return response()->json($json);
+    }
+
+    public function devolucionProductosInventario($id){
+        Inventario::where("idListadoActividadCaldera", $id)
+                    ->update([
+                             'CantidadExistencia' => 0.0,
+                             'ProductoFlotante' => 0.0
+                            ]);
+    }
+
+    public function liberacionProductoFlotante($id){
+        Inventario::where("idListadoActividadCaldera", $id)
+                    ->update([
+                        'ProductoFlotante' => 0.0
+                    ]);
     }
 
     public function listadoActividadesGeneralCaldera(){

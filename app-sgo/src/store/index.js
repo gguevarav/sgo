@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import router from "@/router";
+import {bus} from "@/main";
 
 //axios.defaults.withCredentials = true;
 axios.defaults.baseURL ="http://localhost:8000"
@@ -88,11 +90,16 @@ export default new Vuex.Store({
         
         return new Promise((resolve, reject) => {
           axios.post('/api/auth/logout', '', {
-              headers: { Authorization: context.state.token }
+              headers: { Authorization: 'Bearer ' + context.state.token }
             })
             .then(response => {
               //console.log(response)
               localStorage.removeItem('access_token')
+              localStorage.removeItem('idUsuario')
+              localStorage.removeItem('NombreUsuario')
+              localStorage.removeItem('CorreoUsuario')
+              bus.$emit('logged', 'User logged');
+              router.push({ name: "login" });
               context.commit('destroyToken')
   
               resolve(response)
@@ -100,6 +107,11 @@ export default new Vuex.Store({
             .catch(error => {
               //console.log(error)
               localStorage.removeItem('access_token')
+              localStorage.removeItem('idUsuario')
+              localStorage.removeItem('NombreUsuario')
+              localStorage.removeItem('CorreoUsuario')
+              bus.$emit('logged', 'User logged');
+              router.push({ name: "login" });
               context.commit('destroyToken')
 
               reject(error)

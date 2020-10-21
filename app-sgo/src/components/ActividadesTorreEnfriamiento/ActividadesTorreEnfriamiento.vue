@@ -1,7 +1,10 @@
 <template>
-  <v-card>
+  <v-card
+    flat>
     <v-card-title>
-      Torre de enfriamiento
+      <h4>
+        Torre de enfriamiento
+      </h4>
       <v-spacer></v-spacer>
       <v-dialog>
         <template
@@ -27,9 +30,11 @@
     </v-card-title>
     <v-card-text>
       <v-container>
-        <v-row v-for="item in listadoActividadesTorreEnfriamiento">
+        <v-row v-for="(item, index) in listadoActividadesTorreEnfriamiento" v-bind:key="index">
           <v-col>
             <v-card
+                shaped
+                elevation="10"
                 :color="colorEstadoActividad(item.NombreEstado)">
               <v-card-title class="headline">{{ item.NombreActividad }}</v-card-title>
               <v-card-text>
@@ -77,11 +82,11 @@ name: "ActividadesTorreEnfriamiento",
     // Color por status de actividad
     colorEstadoActividad(estado){
       if(estado == 'Activo'){
-        return 'red';
+        return 'activo';
       }else if(estado == 'En proceso'){
-        return 'yellow';
+        return 'enproceso';
       }else if(estado == 'Cerrado') {
-        return 'green';
+        return 'cerrado';
       }
     },
   },

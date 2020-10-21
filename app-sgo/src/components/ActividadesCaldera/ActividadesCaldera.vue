@@ -1,19 +1,13 @@
 <template>
-  <v-card>
+  <v-card
+    flat>
     <v-card-title>
-      Pretratamiento
+      Caldera
       <v-spacer></v-spacer>
       <v-dialog>
         <template
             v-slot:activator="{ on, attrs }">
-          <v-btn
-              text
-              x-small
-              @click="dialog = true">
-            <v-icon>
-              mdi-plus
-            </v-icon>
-          </v-btn>
+          <AgregarActividadCaldera></AgregarActividadCaldera>
           <v-btn
               text
               x-small
@@ -27,19 +21,31 @@
     </v-card-title>
     <v-card-text>
       <v-container>
-        <v-row v-for="item in listadoActividadesPretratamiento" v-bind:key>
+        <v-row v-for="(item, index) in  listadoActividadesCaldera" v-bind:key="index">
           <v-col>
             <v-card
+                shaped
+                elevation="10"
                 :color="colorEstadoActividad(item.NombreEstado)">
               <v-card-title class="headline">{{ item.NombreActividad }}</v-card-title>
               <v-card-text>
-                <div>Area: {{ item.NombreAreaPretratamiento }}</div>
-                <div>Fecha de creación: {{ item.FechaCreacion }}</div>
+                <div>Caldera: {{ item.NombreCaldera }}</div>
+                <div>Area: {{ item.NombreAreaCaldera }}</div>
+                <div>Fecha de creación: {{ item.FechaCreacionActividad }}</div>
                 <div>Creado por: {{ item.CreadoPor }}</div>
               </v-card-text>
 
               <v-card-actions>
-                <v-btn text>Editar</v-btn>
+                <!-- Formulario para agregar productos actividad -->
+                <DetalleActividadCaldera :Actividad="item.idListadoActividadCaldera">
+                </DetalleActividadCaldera>
+                <!-- Formulario para agregar productos actividad -->
+                <v-spacer></v-spacer>
+                <!-- Formulario para cambiar estado actividad -->
+                <CambiarEstadoActividadCaldera :ActividadCambiar="item.idListadoActividadCaldera">
+                </CambiarEstadoActividadCaldera>
+                <!-- Formulario para cambiar estado actividad -->
+                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -53,20 +59,20 @@
 import axios from "axios";
 
 export default {
-name: "ActividadesPretratamiento",
+name: "ActividadesCaldera",
   data: () => ({
-    listadoActividadesPretratamiento: [],
+    listadoActividadesCaldera: [],
   }),
-  created() {
+  created(){
     this.inicializar();
   },
-  methods:{
+  methods: {
     inicializar(){
       new Promise((resolve, reject) => {
-        axios.get("/api/listadoactividadespretratamiento")
+        axios.get("/api/listadoactividadescaldera")
             .then(response => {
               if (response.data.total != 0) {
-                this.listadoActividadesPretratamiento = response.data.detalle
+                this.listadoActividadesCaldera = response.data.detalle
                 //console.log(this.listadoActividadesCaldera)
               }
             })
@@ -78,11 +84,11 @@ name: "ActividadesPretratamiento",
     // Color por status de actividad
     colorEstadoActividad(estado){
       if(estado == 'Activo'){
-        return 'red';
+        return 'activo';
       }else if(estado == 'En proceso'){
-        return 'yellow';
+        return 'enproceso';
       }else if(estado == 'Cerrado') {
-        return 'green';
+        return 'cerrado';
       }
     },
   },

@@ -17,7 +17,8 @@ class InventarioController extends BaseController
             ->join('Producto', 'Inventario.idProducto', '=', 'Producto.idProducto')
             ->join('MinimosMaximos', 'Inventario.idProducto', '=', 'MinimosMaximos.idProducto')
             ->select('Inventario.*', 'MinimosMaximos.*','Producto.CodigoProducto', 'Producto.NombreProducto',
-                DB::raw('SUM(CantidadExistencia) as TotalExistencia'))
+                DB::raw('SUM(CantidadExistencia) as TotalExistencia'),
+                DB::raw('SUM(ProductoFlotante) as TotalFlotante'))
             ->groupBy('Producto.idProducto')
             ->get();
 
@@ -121,6 +122,7 @@ class InventarioController extends BaseController
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
         $Datos = array("idProducto"=>$request->input("idProducto"),
             "CantidadExistencia"=>$request->input("CantidadExistencia"),
+            "idListadoActividadCaldera"=>$request->input("idListadoActividadCaldera"),
             "RegistradoPor"=>$request->input("RegistradoPor"));
 
         // Validamos que los Datos no estén vacios
@@ -130,12 +132,14 @@ class InventarioController extends BaseController
             $Reglas = [
                 "idProducto" => 'required|integer',
                 "CantidadExistencia" => 'required|numeric',
+                "idListadoActividadCaldera" => 'required|numeric',
                 "RegistradoPor" => 'required|integer'];
 
             $Mensajes = [
-                "idProducto.required" => 'Es necesario agregar un código de producto',
-                "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia',
-                "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado'];
+                "idProducto.required" => 'Es necesario agregar un código de producto.',
+                "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia.',
+                "idListadoActividadCaldera.required" => 'Es necesario agregar una actividad.',
+                "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -153,7 +157,9 @@ class InventarioController extends BaseController
 
                 // Ingresamos los datos
                 $Inventario->idProducto = $Datos["idProducto"];
+                $Inventario->idListadoActividadCaldera = $Datos["idListadoActividadCaldera"];
                 $Inventario->CantidadExistencia = $Datos["CantidadExistencia"] * -1;
+                $Inventario->ProductoFlotante = $Datos["CantidadExistencia"] * -1;
                 $Inventario->RegistradoPor = $Datos["RegistradoPor"];
 
                 // Ejecutamos la acción de guardar el usuario
@@ -325,7 +331,8 @@ class InventarioController extends BaseController
             ->join('UnidadMedida', 'Producto.idUnidadMedida', '=', 'UnidadMedida.idUnidadMedida')
             ->select('Producto.idProducto', 'Producto.CodigoProducto', 'Producto.NombreProducto',
                              'UnidadMedida.NombreUnidadMedida', 'UnidadMedida.AbreviacionUnidadMedida',
-                             'Inventario.CantidadExistencia')
+                             'Inventario.CantidadExistencia',
+                              DB::raw('SUM(Inventario.CantidadExistencia) as TotalExistencia'))
             ->groupBy('Producto.idProducto')
             ->get();
 

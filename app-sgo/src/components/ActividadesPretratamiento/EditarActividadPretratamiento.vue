@@ -1,23 +1,20 @@
 <template>
   <div>
+    <v-icon
+      small
+      class="mr-2"
+      @click="dialog = true">
+      mdi-pencil
+    </v-icon>
     <v-row justify="center">
       <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="600px"
+        v-model="dialog"
+        persistent
+        max-width="600px"
       >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-              text
-              v-bind="attrs"
-              v-on="on"
-          >
-            Estado
-          </v-btn>
-        </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Cambiar estado actividad</span>
+            <span class="headline">Editar actividad</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -25,22 +22,11 @@
                 <v-col
                     cols="12"
                     sm="6"
-                    md="2"
+                    md="4"
                 >
                   <v-text-field
                       label="Area"
-                      v-model="actividadCaldera.NombreArea"
-                      disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                    md="2"
-                >
-                  <v-text-field
-                      label="Caldera"
-                      v-model="actividadCaldera.NombreCaldera"
+                      v-model="actividadPretratamiento.NombreArea"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -50,8 +36,8 @@
                     md="3"
                 >
                   <v-text-field
-                      label="Area caldera"
-                      v-model="actividadCaldera.NombreAreaCaldera"
+                      label="Area pretratamiento"
+                      v-model="actividadPretratamiento.NombreAreaPretratamiento"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -62,38 +48,41 @@
                 >
                   <v-text-field
                       label="Actividad a realizar"
-                      v-model="actividadCaldera.NombreActividad"
+                      v-model="actividadPretratamiento.NombreActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
                 <v-col
                     cols="12"
-                    sm="6"
-                    md="6"
+                    sm="4"
+                    md="4"
                 >
                   <v-text-field
                       label="Creado por"
-                      v-model="actividadCaldera.CreadoPor"
+                      v-model="actividadPretratamiento.CreadoPor"
                       disabled
                   ></v-text-field>
                 </v-col>
                 <v-col
                     cols="12"
-                    sm="6"
-                    md="6"
+                    sm="4"
+                    md="4"
                 >
                   <v-text-field
-                      label="Creado"
-                      v-model="actividadCaldera.FechaCreacionActividad"
+                      label="Fecha de creación"
+                      v-model="actividadPretratamiento.FechaCreacionActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12">
+                <v-col
+                    cols="12"
+                    sm="4"
+                    md="4">
                   <v-select
                       :items="datosEstadoUsuario"
                       item-text='NombreEstadoUsuario'
                       item-value='idEstadoUsuario'
-                      v-model="actividadCaldera.idEstado"
+                      v-model="actividadPretratamiento.idEstado"
                       label="Estado">
                   </v-select>
                 </v-col>
@@ -112,7 +101,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="cambiarEstadoActividad"
+                @click="cerrarActividadEstado"
             >
               Save
             </v-btn>
@@ -127,37 +116,44 @@
 import axios from "axios";
 
 export default {
-name: "DetalleActividadCaldera",
+name: "DetalleActividadPretratamiento",
   data: () => ({
     valid: true,
     dialog: false,
     idActividad: '',
     alertaErrores: false,
     listadoErrores: [],
-    actividadCaldera: [],
+    actividadPretratamiento: [],
     datosEstadoUsuario: [{
-      idEstadoUsuario: 3,
-      NombreEstadoUsuario: 'En proceso'
-      },
+      idEstadoUsuario: 1,
+      NombreEstadoUsuario: 'Activo'
+    },
       {
         idEstadoUsuario: 4,
         NombreEstadoUsuario: 'Cerrado'
       }
     ],
+    cambiarEstadoCerrar:[
+      {
+        EstadoActividad: '',
+        RealizadoPor: localStorage.getItem('idUsuario'),
+      }
+    ]
   }),
   created() {
-    this.obtenerActividadCerrar()
+    this.obtenerActividadCambiarEstado()
+    //console.log(this.Actividad)
   },
-  props:['ActividadCambiar'],
+  props:['Actividad'],
   methods:{
-    obtenerActividadCerrar(){
-      this.idActividad = this.ActividadCambiar
+    obtenerActividadCambiarEstado(){
+      this.idActividad = this.Actividad
       return new Promise((resolve, reject) => {
-        axios.get('/api/listadoactividadescaldera/' + this.idActividad)
+        axios.get('/api/listadoactividadespretratamiento/' + this.idActividad)
             .then(response => {
               if (response.data.status == 200) {
                 //console.log(response)
-                this.actividadCaldera = response.data.detalle[0]
+                this.actividadPretratamiento = response.data.detalle[0]
                 //console.log(this.actividadCaldera)
                 //this.cerrarDialog()
               } else if (response.data.status == 404) {
@@ -174,11 +170,11 @@ name: "DetalleActividadCaldera",
             })
       })
     },
-    cambiarEstadoActividad(){
+    cerrarActividadEstado(){
       // Debemos cerrar la actividad para que no aparezca en el tablero
-      axios.post('/api/cambiarestadoactividad/' + this.idActividad,
+      axios.post('/api/cerraractividadpretratamiento/' + this.idActividad,
               {
-                EstadoActividad: this.actividadCaldera.idEstado,
+                EstadoActividad: this.actividadPretratamiento.idEstado,
                 RealizadoPor: localStorage.getItem('idUsuario'),
               })
           .then(response => {
@@ -193,11 +189,8 @@ name: "DetalleActividadCaldera",
           .catch(error => {
             //console.log(error)
           })
-      // Limpiamos todo
-      //this.listadoProductosAgregar = [];
-    },
-    cerrarDialog(){
-      this.dialog = false;
+      // Recargamos
+      //this.obtenerActividadCambiarEstado();
     },
   },
 }
