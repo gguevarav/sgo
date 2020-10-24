@@ -14,7 +14,7 @@ CREATE TABLE UnidadMedida(
 
 CREATE TABLE Estado(
 	idEstado				TINYINT				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
-	NombreEstado			VARCHAR(10)			NOT NULL,
+	NombreEstado			VARCHAR(12)			NOT NULL,
 	created_at				TIMESTAMP			NULL,
 	updated_at				TIMESTAMP			NULL
 )ENGINE = InnoDB CHARSET=utf8 COLLATE utf8_spanish_ci;
@@ -80,8 +80,8 @@ CREATE TABLE Inventario(
     idInventario			INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
     idProducto				INTEGER				NOT NULL,
     idListadoActividadCaldera   INTEGER             NOT NULL,
-    CantidadExistencia		DECIMAL(4,2)    	NOT NULL,
-    ProductoFlotante        DECIMAL(4,2)        NULL,
+    CantidadExistencia		DECIMAL(6,2)    	NOT NULL,
+    ProductoFlotante        DECIMAL(6,2)        NULL,
     RegistradoPor           TINYINT             NOT NULL,
     created_at				TIMESTAMP			NULL,
     updated_at				TIMESTAMP			NULL,
@@ -90,11 +90,6 @@ CREATE TABLE Inventario(
        REFERENCES Producto(idProducto)
        ON DELETE CASCADE
        ON UPDATE NO ACTION,
-    INDEX (idListadoActividadCaldera),
-    FOREIGN KEY (idListadoActividadCaldera)
-        REFERENCES ListadoActividadCaldera(idListadoActividadCaldera)
-        ON DELETE CASCADE
-        ON UPDATE NO ACTION,
     INDEX (RegistradoPor),
     FOREIGN KEY (RegistradoPor)
        REFERENCES users(idUsuario)
@@ -105,8 +100,8 @@ CREATE TABLE Inventario(
 CREATE TABLE MinimosMaximos(
    idMinimosMaximos        INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
    idProducto              INTEGER				NOT NULL,
-   CantidadMinima			DECIMAL(4,2)		NOT NULL,
-   CantidadMaxima			DECIMAL(4,2)		NOT NULL,
+   CantidadMinima			DECIMAL(6,2)		NOT NULL,
+   CantidadMaxima			DECIMAL(6,2)		NOT NULL,
    created_at				TIMESTAMP			NULL,
    updated_at				TIMESTAMP			NULL,
    INDEX (idProducto),
@@ -426,16 +421,18 @@ CREATE TABLE `password_resets` (
 
 -- Estados
 INSERT INTO Estado (idEstado, NombreEstado, created_at, updated_at)
-			VALUES (NULL, 'Activo', NULL, NULL),
+			VALUES (NULL, 'Creado', NULL, NULL),
+			       (NULL, 'Activo', NULL, NULL),
 			       (NULL, 'Inactivo', NULL, NULL),
                    (NULL, 'En proceso', NULL, NULL),
                    (NULL, 'Cerrado', NULL, NULL),
-                   (NULL, 'Cancelado', NULL, NULL);
+                   (NULL, 'Cancelado', NULL, NULL),
+                   (NULL, 'Inventariado', NULL, NULL);
 
 -- Puesto
 INSERT INTO Puesto (idPuesto, NombrePuesto, EstadoPuesto,
                       created_at, updated_at)
-            VALUES (NULL, 'Administrador', 1, NULL, NULL);
+            VALUES (NULL, 'Administrador', 2, NULL, NULL);
 
 -- Rol
 INSERT INTO Rol (idRol, NombreRol, created_at, updated_at)
@@ -447,7 +444,8 @@ INSERT INTO users (idUsuario, NombreUsuario, ApellidoUsuario,
                    remember_token, idRol, EstadoUsuario, current_team_id,
                    profile_photo_path, created_at, updated_at)
            VALUES (NULL, 'administrador', 'administrador', 1, 'admin@admin.com',
-                   NULL, 'admin12345', NULL, 1, 1, NULL, NULL, NULL, NULL);
+                   NULL, '$2y$10$2vEWqXrBS8Qwp/KBW7fdwuxXzXB0YDL92M99OBhkSNLn4z3IHT1Va',
+                   NULL, 1, 2, NULL, NULL, NULL, NULL);
 
 -- UnidadesMedida
 INSERT INTO UnidadMedida (idUnidadMedida, NombreUnidadMedida,
@@ -459,9 +457,24 @@ INSERT INTO UnidadMedida (idUnidadMedida, NombreUnidadMedida,
 -- Productos
 INSERT INTO Producto (idProducto, CodigoProducto, NombreProducto,
                       idUnidadMedida, EstadoProducto, created_at, updated_at)
-              VALUES (NULL, '01001', 'Producto 1', 1, 1, NULL, NULL),
-                     (NULL, '01002', 'Producto 2', 2, 1, NULL, NULL),
-                     (NULL, '01003', 'Producto 3', 3, 1, NULL, NULL);
+              VALUES (NULL, '01001', 'Producto 1', 1, 2, NULL, NULL),
+                     (NULL, '01002', 'Producto 2', 2, 2, NULL, NULL),
+                     (NULL, '01003', 'Producto 3', 3, 2, NULL, NULL);
+
+-- Inventario
+INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        CantidadExistencia, ProductoFlotante, RegistradoPor,
+                        created_at, updated_at)
+                VALUES (NULL, 1, 0, 150, 0, 1, NULL, NULL),
+                       (NULL, 2, 0, 125, 0, 1, NULL, NULL),
+                       (NULL, 3, 0, 100, 0, 1, NULL, NULL);
+
+-- MinimosMaximon
+INSERT INTO MinimosMaximos (idMinimosMaximos, idProducto, CantidadMinima,
+                            CantidadMaxima, created_at, updated_at)
+                    VALUES (NULL, 1, 50, 200, NULL, NULL),
+                           (NULL, 2, 25, 125, NULL, NULL),
+                           (NULL, 3, 30, 100, NULL, NULL);
 
 -- NombreActividades
 INSERT INTO NombreActividad (NombreActividad, created_at, updated_at)
@@ -500,25 +513,25 @@ INSERT INTO AreaPretratamiento(idAreaPretratamiento, NombreAreaPretratamiento, c
 INSERT INTO ListadoActividadCaldera(idArea, idCaldera, idAreaCaldera, idNombreActividad,
                                     FechaCreacionActividad, FechaConclusionActividad,
                                     EstadoActividad, CreadoPor, RealizadoPor, created_at, updated_at)
-                            VALUES (1, 1, 1, 1, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                   (1, 2, 3, 3, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                   (1, 3, 2, 5, '2020-10-10', '2020-10-10', 1, 1, 1, null, null);
+                            VALUES (1, 1, 1, 1, '2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                   (1, 2, 3, 3, '2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                   (1, 3, 2, 5, '2020-10-10', '2020-10-10', 2, 1, 1, null, null);
 
 -- Inserción de listado de actividades de Pretratamiento
 INSERT INTO ListadoActividadPretratamiento(idArea, idAreaPretratamiento, idNombreActividad,
                                            FechaCreacionActividad, FechaConclusionActividad,
                                            EstadoActividad, CreadoPor, RealizadoPor, created_at, updated_at)
-                                   VALUES (2, 2, 4,'2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                          (2, 2, 4,'2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                          (2, 3, 1,'2020-10-10', '2020-10-10', 1, 1, 1, null, null);
+                                   VALUES (2, 2, 4,'2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                          (2, 2, 4,'2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                          (2, 3, 1,'2020-10-10', '2020-10-10', 2, 1, 1, null, null);
 
 -- Inserción de listado de actividades de Torre de enfriamiento
 INSERT INTO ListadoActividadTorreEnfriamiento(idArea, idNombreActividad, FechaCreacionActividad,
                                               FechaConclusionActividad, EstadoActividad, CreadoPor,
                                               RealizadoPor, created_at, updated_at)
-                                   VALUES (3, 3, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                          (3, 5, '2020-10-10', '2020-10-10', 1, 1, 1, null, null),
-                                          (3, 1, '2020-10-10', '2020-10-10', 1, 1, 1, null, null);
+                                   VALUES (3, 3, '2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                          (3, 5, '2020-10-10', '2020-10-10', 2, 1, 1, null, null),
+                                          (3, 1, '2020-10-10', '2020-10-10', 2, 1, 1, null, null);
 
 -- Inserción de listado de materiales actividades caldera
 INSERT INTO ListadoMaterialActividadCaldera (idListadoActividadCaldera, idProducto,
@@ -530,15 +543,39 @@ INSERT INTO ListadoMaterialActividadCaldera (idListadoActividadCaldera, idProduc
                                             (1, 3, 9, null, null),
                                             (2, 2, 2, null, null),
                                             (1, 3, 10, null, null);
+
+-- decontarInventario
+INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        CantidadExistencia, ProductoFlotante, RegistradoPor,
+                        created_at, updated_at)
+                VALUES (NULL, 2, 1, -12.5, -12.5, 1, NULL, NULL),
+                       (NULL, 1, 3, -20, -20, 1, NULL, NULL),
+                       (NULL, 3, 2, -4, -4, 1, NULL, NULL),
+                       (NULL, 1, 3, -16, -16, 1, NULL, NULL),
+                       (NULL, 3, 1, -9, -9, 1, NULL, NULL),
+                       (NULL, 2, 2, -2, -2, 1, NULL, NULL),
+                       (NULL, 3, 1, -10, -10, 1, NULL, NULL);
+
 -- Inseción de listado de materiales de actividades de Pretratamiento
 INSERT INTO ListadoMaterialActividadPretratamiento (idListadoActividadPretratamiento, idProducto,
                                                     CantidadProducto, created_at, updated_at)
-                                            VALUES (3, 1, 16, null, null),
+                                            VALUES (3, 2, 16, null, null),
                                                    (1, 3, 3, null, null),
                                                    (2, 1, 5, null, null),
-                                                   (1, 3, 3, null, null),
+                                                   (1, 2, 3, null, null),
                                                    (3, 1, 13, null, null),
                                                    (2, 3, 28, null, null);
+
+-- decontarInventario
+INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        CantidadExistencia, ProductoFlotante, RegistradoPor,
+                        created_at, updated_at)
+                VALUES (NULL, 2, 3, -16, -16, 1, NULL, NULL),
+                       (NULL, 3, 1, -3, -3, 1, NULL, NULL),
+                       (NULL, 1, 2, -5, -5, 1, NULL, NULL),
+                       (NULL, 2, 1, -3, -3, 1, NULL, NULL),
+                       (NULL, 1, 3, -13, -13, 1, NULL, NULL),
+                       (NULL, 3, 2, -28, -28, 1, NULL, NULL);
 
 -- Inseción de listado de materiales de actividades de torre de enfriamiento
 INSERT INTO ListadoMaterialActividadTorreEnfriamiento (idListadoActividadTorreEnfriamiento, idProducto,
@@ -548,7 +585,22 @@ INSERT INTO ListadoMaterialActividadTorreEnfriamiento (idListadoActividadTorreEn
                                                        (2, 1, 7, null, null),
                                                        (1, 2, 8, null, null),
                                                        (3, 1, 12, null, null),
-                                                       (2, 3, 45, null, null);
+                                                       (2, 3, 9, null, null);
+
+-- decontarInventario
+INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        CantidadExistencia, ProductoFlotante, RegistradoPor,
+                        created_at, updated_at)
+                VALUES (NULL, 3, 3, -4, -4, 1, NULL, NULL),
+                       (NULL, 2, 1, -2, -2, 1, NULL, NULL),
+                       (NULL, 1, 2, -7, -7, 1, NULL, NULL),
+                       (NULL, 2, 1, -8, -8, 1, NULL, NULL),
+                       (NULL, 1, 3, -12, -12, 1, NULL, NULL),
+                       (NULL, 3, 2, -9, -9, 1, NULL, NULL);
+
+/*
+    Selects
+*/
 
 -- Ver listadoActividadesCaldera
 SELECT LAC.idListadoActividadCaldera,

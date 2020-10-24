@@ -5,8 +5,6 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 // Barra de Navegación
 import BarraNavegacion from './components/NavigationBar';
-// Barra de Notificación
-import Notificacion from './components/Notificacion';
 // Actividades caldera
 import ActividadesCaldera from './components/ActividadesCaldera/ActividadesCaldera';
 import AgregarActividadCaldera from './components/ActividadesCaldera/AgregarActividadCaldera';
@@ -16,6 +14,7 @@ import CambiarEstadoActividadCaldera from './components/ActividadesCaldera/Cambi
 import EditarActividadCaldera from './components/ActividadesCaldera/EditarActividadCaldera';
 import TablaActividadesCaldera from './components/ActividadesCaldera/TablaActividadesCaldera';
 import DetalleListadoProductosActividadCaldera from './components/ActividadesCaldera/DetalleListadoProductosActividadCaldera';
+import ExportarAExcel from './components/ExportarAExcel';
 
 import ActividadesPretratamiento from './components/ActividadesPretratamiento/ActividadesPretratamiento';
 import ActividadesTorreEnfriamiento from './components/ActividadesTorreEnfriamiento/ActividadesTorreEnfriamiento';
@@ -26,10 +25,8 @@ import TablaActividadesTorreEnfriamiento from "@/components/ActividadesTorreEnfr
 // Nombres componentes
 // Barra de navegación
 Vue.component('BarraNavegacion', BarraNavegacion);
-// Notificaciones
-Vue.component('ActividadesCaldera', ActividadesCaldera);
-Vue.component('Notificacion', Notificacion);
 // Actividades de caldera
+Vue.component('ActividadesCaldera', ActividadesCaldera);
 Vue.component('AgregarActividadCaldera', AgregarActividadCaldera);
 Vue.component('DetalleActividadCaldera', DetalleActividadCaldera);
 Vue.component('CambiarEstadoActividadCaldera', CambiarEstadoActividadCaldera);
@@ -38,6 +35,7 @@ Vue.component('EditarActividadCaldera', EditarActividadCaldera);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
 Vue.component('DetalleListadoProductosActividadCaldera', DetalleListadoProductosActividadCaldera);
+Vue.component('ExportarAExcel', ExportarAExcel);
 
 
 Vue.component('ActividadesPretratamiento', ActividadesPretratamiento);

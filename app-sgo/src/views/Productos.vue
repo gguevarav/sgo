@@ -331,11 +331,11 @@
       select: [],
       datosUnidadMedida: [],
       datosEstadoProducto: [{
-          idEstadoProducto: 1,
+          idEstadoProducto: 2,
           NombreEstadoProducto: 'Activo'
         },
         {
-          idEstadoProducto: 2,
+          idEstadoProducto: 3,
           NombreEstadoProducto: 'Inactivo'
         }
       ],

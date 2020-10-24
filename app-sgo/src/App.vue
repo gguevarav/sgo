@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <!-- Barra de navegación -->
     <BarraNavegacion></BarraNavegacion>
     <v-main>
       <v-container>

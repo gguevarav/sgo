@@ -7,7 +7,9 @@
       <v-dialog>
         <template
             v-slot:activator="{ on, attrs }">
-          <AgregarActividadCaldera></AgregarActividadCaldera>
+          <AgregarActividadCaldera
+            @inicializar="inicializar">
+          </AgregarActividadCaldera>
           <v-btn
               text
               x-small
@@ -36,13 +38,19 @@
               </v-card-text>
 
               <v-card-actions>
+                <v-spacer></v-spacer>
                 <!-- Formulario para agregar productos actividad -->
-                <DetalleActividadCaldera :Actividad="item.idListadoActividadCaldera">
+                <DetalleActividadCaldera
+                    :Actividad="item.idListadoActividadCaldera"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? true : false">
                 </DetalleActividadCaldera>
                 <!-- Formulario para agregar productos actividad -->
-                <v-spacer></v-spacer>
                 <!-- Formulario para cambiar estado actividad -->
-                <CambiarEstadoActividadCaldera :ActividadCambiar="item.idListadoActividadCaldera">
+                <CambiarEstadoActividadCaldera
+                    :ActividadCambiar="item.idListadoActividadCaldera"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? false : true">
                 </CambiarEstadoActividadCaldera>
                 <!-- Formulario para cambiar estado actividad -->
                 <v-spacer></v-spacer>
@@ -83,7 +91,9 @@ name: "ActividadesCaldera",
     },
     // Color por status de actividad
     colorEstadoActividad(estado){
-      if(estado == 'Activo'){
+      if(estado == 'Creado') {
+        return 'creado';
+      }else if(estado == 'Activo'){
         return 'activo';
       }else if(estado == 'En proceso'){
         return 'enproceso';

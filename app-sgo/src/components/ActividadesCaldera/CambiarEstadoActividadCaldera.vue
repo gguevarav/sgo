@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-row justify="center">
       <v-dialog
           v-model="dialog"
@@ -140,18 +141,25 @@ name: "DetalleActividadCaldera",
     listadoErrores: [],
     actividadCaldera: [],
     datosEstadoUsuario: [{
-      idEstadoUsuario: 3,
+      idEstadoUsuario: 4,
       NombreEstadoUsuario: 'En proceso'
       },
       {
-        idEstadoUsuario: 4,
+        idEstadoUsuario: 5,
         NombreEstadoUsuario: 'Cerrado'
       },
       {
-        idEstadoUsuario: 5,
+        idEstadoUsuario: 6,
         NombreEstadoUsuario: 'Cancelado'
       }
     ],
+    actividadCalderaVacio:{
+      idArea: '',
+      idCaldera: '',
+      idAreaCaldera: '',
+      idNombreActividad: '',
+      EstadoActividad: '',
+    },
   }),
   created() {
     this.obtenerActividadCerrar()
@@ -193,6 +201,8 @@ name: "DetalleActividadCaldera",
             if (response.data.status == 200) {
               //console.log(response);
               this.dialog = false;
+              this.actividadCaldera = Object.assign({}, this.actividadCalderaVacio);
+              this.$emit("inicializar");
             } else if (response.data.status == 404) {
               this.listadoErrores = response.data.errores
               this.alertaErrores = true

@@ -13,6 +13,7 @@ export default new Vuetify({
                 secondary: colors.green.darken4,
                 accent: colors.shades.black,
                 error: colors.green.accent4,
+                creado: colors.teal.accent3,
                 activo: colors.teal.darken1,
                 enproceso: colors.yellow.darken3,
                 cerrado: colors.green.darken2,

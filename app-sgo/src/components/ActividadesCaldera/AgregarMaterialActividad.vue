@@ -15,6 +15,24 @@
         </v-btn>
       </v-col>
     </v-row>
+    <!-- Notificación -->
+    <v-snackbar
+        v-model="activarNotificacion"
+        :timeout="timeout"
+        :color="colorNotificacion">
+      {{ textoMostrarNotificacion }}
+      <template
+          v-slot:action="{ attrs }">
+        <v-btn
+            color="secondary"
+            text
+            v-bind="attrs"
+            @click="activarNotificacion = !activarNotificacion">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Notificación -->
     <v-alert
         type="error"
         v-model="alertaErrores">
@@ -61,15 +79,15 @@ export default {
 name: "AgregarMaterialActividad",
   data: () => ({
     dialog: false,
+    activarNotificacion: false,
+    timeout: 3000,
+    colorNotificacion: 'success',
+    textoMostrarNotificacion: '',
     listadoProductosAgregar: [],
     listadoProductos: [],
     alertaErrores: false,
     listadoErrores: [],
     idActividad: '',
-    cambiarEstadoCerrar: {
-      EstadoActividad: 4,
-      RealizadoPor: localStorage.getItem('idUsuario'),
-    }
   }),
   created() {
     this.inicializar();
@@ -85,7 +103,7 @@ name: "AgregarMaterialActividad",
       )
     },
     inicializar(){
-      this.idActividad = this.Actividad
+      this.idActividad = this.Actividad;
       return new Promise((resolve, reject) => {
         axios.get('/api/productoinventariado')
             .then(response => {
@@ -119,9 +137,12 @@ name: "AgregarMaterialActividad",
               .then(response => {
                 if (response.data.status == 200) {
                   //console.log(response);
-                  this.descontarProductosInventario();
-                  //this.cerrarActividadEstado();
+                  this.descontarProductosInventario(element);
+                  this.cambiarEstadoActividad();
                   this.$emit("dialog", this.dialog);
+                  this.$emit("actualizar");
+                  this.mostrarNotificacion();
+                  //console.log(element)
                 } else if (response.data.status == 404) {
                   this.listadoErrores = response.data.errores
                   this.alertaErrores = true
@@ -137,10 +158,9 @@ name: "AgregarMaterialActividad",
       });
     },
 
-    descontarProductosInventario(){
+    descontarProductosInventario(element){
       // Descontamos los productos del inventario
-      this.listadoProductosAgregar.forEach(element => {
-        // Guardamos todos los productos que seleccionamos
+      // Guardamos todos los productos que seleccionamos
         return new Promise((resolve, reject) => {
           //console.log(element);
           axios.post('/api/descontarproductosinventario',
@@ -165,15 +185,18 @@ name: "AgregarMaterialActividad",
                 reject(error)
               })
         })
-      });
     },
-
-    cerrarActividadEstado(){
+    cambiarEstadoActividad(){
       // Debemos cerrar la actividad para que no aparezca en el tablero
-      axios.post('/api/cerraractividad/' + this.idActividad, this.cambiarEstadoCerrar)
+      axios.post('/api/cambiarestadoactividadcaldera/' + this.idActividad,
+          {
+            EstadoActividad: 2,
+            RealizadoPor: localStorage.getItem('idUsuario'),
+          })
           .then(response => {
             if (response.data.status == 200) {
               //console.log(response);
+              this.dialog = false;
             } else if (response.data.status == 404) {
               this.listadoErrores = response.data.errores
               this.alertaErrores = true
@@ -182,8 +205,11 @@ name: "AgregarMaterialActividad",
           .catch(error => {
             //console.log(error)
           })
-      // Limpiamos todo
-      this.listadoProductosAgregar = [];
+    },
+    mostrarNotificacion(){
+      this.textoMostrarNotificacion = 'Material registrado exitosamente';
+      this.colorNotificacion = 'success';
+      this.activarNotificacion = !this.activarNotificacion
     },
   },
   props:[

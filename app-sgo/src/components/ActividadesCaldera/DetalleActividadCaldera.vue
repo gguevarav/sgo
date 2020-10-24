@@ -93,6 +93,7 @@
                   <AgregarMaterialActividad
                       ref="agregarMaterial"
                       :Actividad="idActividad"
+                      @actualizar="actualizar"
                       @dialog="dialog=$event">
                   </AgregarMaterialActividad>
                 </v-col>
@@ -170,6 +171,9 @@ name: "DetalleActividadCaldera",
     },
     cerrarDialog(){
       this.dialog = false;
+    },
+    actualizar(){
+      this.$emit("inicializar");
     },
   },
 }

@@ -137,11 +137,11 @@ name: "DetalleActividadCaldera",
     listadoErrores: [],
     actividadCaldera: [],
     datosEstadoUsuario: [{
-      idEstadoUsuario: 1,
+      idEstadoUsuario: 2,
       NombreEstadoUsuario: 'Activo'
     },
       {
-        idEstadoUsuario: 4,
+        idEstadoUsuario: 5,
         NombreEstadoUsuario: 'Cerrado'
       }
     ],

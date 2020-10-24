@@ -80,12 +80,15 @@ name: "ActividadesTorreEnfriamiento",
       });
     },
     // Color por status de actividad
-    colorEstadoActividad(estado){
-      if(estado == 'Activo'){
+    // Color por status de actividad
+    colorEstadoActividad(estado) {
+      if (estado == 'Creado') {
+        return 'creado';
+      } else if (estado == 'Activo') {
         return 'activo';
-      }else if(estado == 'En proceso'){
+      } else if (estado == 'En proceso') {
         return 'enproceso';
-      }else if(estado == 'Cerrado') {
+      } else if (estado == 'Cerrado') {
         return 'cerrado';
       }
     },

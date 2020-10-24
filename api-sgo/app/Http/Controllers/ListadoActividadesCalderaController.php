@@ -38,7 +38,9 @@ class ListadoActividadesCalderaController extends BaseController
                                                 ON LAC.RealizadoPor = US2.idUsuario
                                      INNER JOIN Estado E
                                                 ON LAC.EstadoActividad = E.idEstado
-                            WHERE LAC.EstadoActividad != 4 AND LAC.EstadoActividad != 5;');
+                            WHERE LAC.EstadoActividad != 5
+                            AND LAC.EstadoActividad != 6
+                            AND LAC.EstadoActividad != 7;');
 
         // Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {
@@ -304,10 +306,10 @@ class ListadoActividadesCalderaController extends BaseController
                     $ListadoActividadCaldera = ListadoActividadCaldera::where("idListadoActividadCaldera", $id)->update($Datos);
 
                     // Si estamos cerrando la actividad debemos devolver todos los productos.
-                    if($Datos["EstadoActividad"] === 5){
+                    if($Datos["EstadoActividad"] === 6){
                         $this->devolucionProductosInventario($id);
                     }
-                    else if($Datos["EstadoActividad"] === 4){
+                    else if($Datos["EstadoActividad"] === 5){
                         $this->liberacionProductoFlotante($id);
                     }
 

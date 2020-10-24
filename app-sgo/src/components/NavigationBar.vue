@@ -7,7 +7,10 @@
         app
         v-if="isLogged">
       <v-app-bar-nav-icon
-          @click="barraNavegacion = !barraNavegacion">
+          @click="ocultarBarra()">
+        <v-icon>
+          {{ iconoBarra }}
+        </v-icon>
       </v-app-bar-nav-icon>
       <v-toolbar-title>Sistema de gestión operativa</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -166,6 +169,7 @@ export default {
   data () {
     return {
       barraNavegacion: true,
+      iconoBarra: 'mdi-minus',
       NombreUsuario: localStorage.getItem('NombreUsuario'),
       CorreoUsuario: localStorage.getItem('CorreoUsuario'),
       isLogged: this.checkIfIsLogged(),
@@ -190,6 +194,15 @@ export default {
         return true
       } else {
         return false
+      }
+    },
+    ocultarBarra(){
+      if(this.barraNavegacion == true){
+        this.barraNavegacion = false;
+        this.iconoBarra = 'mdi-plus'
+      }else if(this.barraNavegacion == false){
+        this.barraNavegacion = true;
+        this.iconoBarra = 'mdi-minus'
       }
     },
   },

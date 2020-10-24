@@ -360,11 +360,11 @@
       datosPuestos: [],
       datosRoles: [],
       datosEstadoUsuario: [{
-          idEstadoUsuario: 1,
+          idEstadoUsuario: 2,
           NombreEstadoUsuario: 'Activo'
         },
         {
-          idEstadoUsuario: 2,
+          idEstadoUsuario: 3,
           NombreEstadoUsuario: 'Inactivo'
         }
       ],
@@ -379,7 +379,7 @@
         idPuesto: '',
         password: '',
         idRol: '',
-        EstadoUsuario: 1,
+        EstadoUsuario: 2,
       },
       defaultItem: {
         NombreUsuario: '',
@@ -388,15 +388,15 @@
         idPuesto: '',
         password: '',
         idRol: '',
-        EstadoUsuario: 1,
+        EstadoUsuario: 2,
       },
       nuevoPuesto: {
         NombrePuesto: '',
-        EstadoPuesto: 1,
+        EstadoPuesto: 2
       },
       defaultnuevoPuesto: {
         NombrePuesto: '',
-        EstadoPuesto: 1,
+        EstadoPuesto: 2,
       },
     }),
 

@@ -48,7 +48,7 @@ CREATE TABLE `Caldera` (
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Estado` (
   `idEstado` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `NombreEstado` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `NombreEstado` varchar(12) COLLATE utf8_spanish_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idEstado`)
@@ -59,7 +59,9 @@ CREATE TABLE `Estado` (
 CREATE TABLE `Inventario` (
   `idInventario` int(11) NOT NULL AUTO_INCREMENT,
   `idProducto` int(11) NOT NULL,
-  `CantidadExistencia` decimal(10,0) NOT NULL,
+  `idListadoActividadCaldera` int(11) NOT NULL,
+  `CantidadExistencia` decimal(6,2) NOT NULL,
+  `ProductoFlotante` decimal(6,2) DEFAULT NULL,
   `RegistradoPor` tinyint(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -113,7 +115,7 @@ CREATE TABLE `ListadoActividadPretratamiento` (
   `FechaConclusionActividad` datetime NOT NULL,
   `EstadoActividad` tinyint(4) NOT NULL,
   `CreadoPor` tinyint(4) DEFAULT NULL,
-  `RealizadoPor` tinyint(4) NOT NULL,
+  `RealizadoPor` tinyint(4) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idListadoActividadPretratamiento`),
@@ -210,8 +212,8 @@ CREATE TABLE `ListadoMaterialActividadTorreEnfriamiento` (
 CREATE TABLE `MinimosMaximos` (
   `idMinimosMaximos` int(11) NOT NULL AUTO_INCREMENT,
   `idProducto` int(11) NOT NULL,
-  `CantidadMinima` decimal(10,0) NOT NULL,
-  `CantidadMaxima` decimal(10,0) NOT NULL,
+  `CantidadMinima` decimal(6,2) NOT NULL,
+  `CantidadMaxima` decimal(6,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`idMinimosMaximos`),
@@ -407,10 +409,3 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (1,'2014_10_12_100000_create_password_resets_table',1);
-INSERT INTO `migrations` VALUES (2,'2016_06_01_000001_create_oauth_auth_codes_table',1);
-INSERT INTO `migrations` VALUES (3,'2016_06_01_000002_create_oauth_access_tokens_table',1);
-INSERT INTO `migrations` VALUES (4,'2016_06_01_000003_create_oauth_refresh_tokens_table',1);
-INSERT INTO `migrations` VALUES (5,'2016_06_01_000004_create_oauth_clients_table',1);
-INSERT INTO `migrations` VALUES (6,'2016_06_01_000005_create_oauth_personal_access_clients_table',1);
-INSERT INTO `migrations` VALUES (7,'2019_08_19_000000_create_failed_jobs_table',1);
