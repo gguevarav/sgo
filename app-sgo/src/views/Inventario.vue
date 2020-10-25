@@ -57,6 +57,10 @@
                   mdi-reload
                 </v-icon>
               </v-btn>
+              <ExportarAExcel
+                  nombreArchivo="actividadescaldera"
+                  :datosTabla="datosTabla">
+              </ExportarAExcel>
             </template>
           </v-dialog>
           <!-- Termina dialog de botones de agregar y recargar -->
