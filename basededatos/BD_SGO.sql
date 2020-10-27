@@ -79,7 +79,9 @@ CREATE TABLE users(
 CREATE TABLE Inventario(
     idInventario			INTEGER				NOT NULL				PRIMARY KEY             AUTO_INCREMENT,
     idProducto				INTEGER				NOT NULL,
-    idListadoActividadCaldera   INTEGER             NOT NULL,
+    idListadoActividadCaldera   INTEGER            NOT NULL,
+    idListadoActividadPretratamiento   INTEGER            NOT NULL,
+    idListadoActividadTorreEnfriamiento   INTEGER            NOT NULL,
     CantidadExistencia		DECIMAL(6,2)    	NOT NULL,
     ProductoFlotante        DECIMAL(6,2)        NULL,
     RegistradoPor           TINYINT             NOT NULL,

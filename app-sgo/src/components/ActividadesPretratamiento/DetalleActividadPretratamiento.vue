@@ -30,18 +30,7 @@
                 >
                   <v-text-field
                       label="Area"
-                      v-model="actividadCaldera.NombreArea"
-                      disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                    md="2"
-                >
-                  <v-text-field
-                      label="Caldera"
-                      v-model="actividadCaldera.NombreCaldera"
+                      v-model="actividadPretratamiento.NombreArea"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -51,8 +40,8 @@
                     md="3"
                 >
                   <v-text-field
-                      label="Area caldera"
-                      v-model="actividadCaldera.NombreAreaCaldera"
+                      label="Area pretratamiento"
+                      v-model="actividadPretratamiento.NombreAreaPretratamiento"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -63,7 +52,7 @@
                 >
                   <v-text-field
                       label="Actividad a realizar"
-                      v-model="actividadCaldera.NombreActividad"
+                      v-model="actividadPretratamiento.NombreActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -74,7 +63,7 @@
                 >
                   <v-text-field
                       label="Creado por"
-                      v-model="actividadCaldera.CreadoPor"
+                      v-model="actividadPretratamiento.CreadoPor"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -85,7 +74,7 @@
                 >
                   <v-text-field
                       label="Fecha de creación"
-                      v-model="actividadCaldera.FechaCreacionActividad"
+                      v-model="actividadPretratamiento.FechaCreacionActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -93,7 +82,7 @@
                   <AgregarMaterialActividad
                       ref="agregarMaterial"
                       :Actividad="idActividad"
-                      tipoActividad="caldera"
+                      tipoActividad="pretratamiento"
                       @actualizar="actualizar"
                       @dialog="dialog=$event">
                   </AgregarMaterialActividad>
@@ -128,14 +117,14 @@
 import axios from "axios";
 
 export default {
-name: "DetalleActividadCaldera",
+name: "DetalleActividadPretratamiento",
   data: () => ({
     valid: true,
     dialog: false,
     idActividad: '',
     alertaErrores: false,
     listadoErrores: [],
-    actividadCaldera: [],
+    actividadPretratamiento: [],
   }),
   created() {
     this.obtenerActividadCerrar()
@@ -145,23 +134,17 @@ name: "DetalleActividadCaldera",
     obtenerActividadCerrar(){
       this.idActividad = this.Actividad
       return new Promise((resolve, reject) => {
-        axios.get('/api/listadoactividadescaldera/' + this.idActividad)
+        axios.get('/api/listadoactividadespretratamiento/' + this.idActividad)
             .then(response => {
               if (response.data.status == 200) {
-                //console.log(response)
-                this.actividadCaldera = response.data.detalle[0]
-                //console.log(this.actividadCaldera)
-                //this.cerrarDialog()
+                this.actividadPretratamiento = response.data.detalle[0]
               } else if (response.data.status == 404) {
-                //console.log("error")
-                //this.listadoErrores = response.data.errores
-                //this.alertaErrores = true
+                console.log("error")
               }
               resolve(response)
             })
             .catch(error => {
-              //console.log(error)
-
+              console.log(error)
               reject(error)
             })
       })

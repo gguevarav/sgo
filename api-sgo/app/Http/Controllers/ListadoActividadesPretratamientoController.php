@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Inventario;
 use App\Models\ListadoActividad;
 use App\Models\ListadoActividadPretratamiento;
 use Illuminate\Routing\Controller as BaseController;
@@ -33,7 +34,10 @@ class ListadoActividadesPretratamientoController extends BaseController
                                          INNER JOIN users US2
                                                     ON LAP.RealizadoPor = US2.idUsuario
                                          INNER JOIN Estado E
-                                                    ON LAP.EstadoActividad = E.idEstado;');
+                                                    ON LAP.EstadoActividad = E.idEstado
+                                  WHERE LAP.EstadoActividad != 5
+                                    AND LAP.EstadoActividad != 6
+                                    AND LAP.EstadoActividad != 7;');
 
         // Verificamos que el array no esté vacio
         if (!empty($Datos[0])) {
@@ -60,8 +64,8 @@ class ListadoActividadesPretratamientoController extends BaseController
         $Datos = array("idArea"=>$request->idArea,
                        "idAreaPretratamiento"=>$request->idAreaPretratamiento,
                        "idNombreActividad"=>$request->idNombreActividad,
-                       "FechaCreacionActividad"=>$request->FechaCreacionActividad,
-                       "FechaConclusionActividad"=>$request->FechaConclusionActividad,
+                       //"FechaCreacionActividad"=>$request->FechaCreacionActividad,
+                       //"FechaConclusionActividad"=>$request->FechaConclusionActividad,
                        "EstadoActividad"=>$request->EstadoActividad,
                        "CreadoPor"=>$request->CreadoPor,
                        "RealizadoPor"=>$request->CreadoPor);
@@ -73,8 +77,8 @@ class ListadoActividadesPretratamientoController extends BaseController
             $Reglas = ["idArea" => 'required|integer',
                        "idAreaPretratamiento" => 'required|integer',
                        "idNombreActividad" => 'required|integer',
-                       "FechaCreacionActividad" => 'required|date',
-                       "FechaConclusionActividad" => 'required|date',
+                       //"FechaCreacionActividad" => 'required|date',
+                       //"FechaConclusionActividad" => 'required|date',
                        "EstadoActividad" => 'required|integer',
                        "CreadoPor" => 'required|integer',
                        "RealizadoPor" => 'required|integer'];
@@ -83,8 +87,8 @@ class ListadoActividadesPretratamientoController extends BaseController
                 "idArea.required" => 'Es necesario registrar el área donde se realizará.',
                 "idAreaPretratamiento.required" => 'Es necesario registrar el área donde se realizará.',
                 "idNombreActividad.required" => 'Es necesario agregar un nombre de la actividad.',
-                "FechaCreacionActividad.required" => 'Es necesario agregar la fecha en que se crea la actividad.',
-                "FechaConclusionActividad.required" => 'Es necesario agregar un la fecha en que se concluye la actividad.',
+                //"FechaCreacionActividad.required" => 'Es necesario agregar la fecha en que se crea la actividad.',
+                //"FechaConclusionActividad.required" => 'Es necesario agregar un la fecha en que se concluye la actividad.',
                 "EstadoActividad.required" => 'Es necesario agregar un de la actividad.',
                 "CreadoPor.required" => 'Es necesario agregar un solicitante.',
                 "RealizadoPor.required" => 'Es necesario agregar un encargado de realización de la actividad.'];
@@ -107,8 +111,8 @@ class ListadoActividadesPretratamientoController extends BaseController
                 $ListadoActividadPretratamiento->idArea = $Datos["idArea"];
                 $ListadoActividadPretratamiento->idAreaPretratamiento = $Datos["idAreaPretratamiento"];
                 $ListadoActividadPretratamiento->idNombreActividad = $Datos["idNombreActividad"];
-                $ListadoActividadPretratamiento->FechaCreacionActividad = $Datos["FechaCreacionActividad"];
-                $ListadoActividadPretratamiento->FechaConclusionActividad = $Datos["FechaConclusionActividad"];
+                $ListadoActividadPretratamiento->FechaCreacionActividad = date('Y-m-d H:i:s');
+                $ListadoActividadPretratamiento->FechaConclusionActividad = date('Y-m-d H:i:s');
                 $ListadoActividadPretratamiento->EstadoActividad = $Datos["EstadoActividad"];
                 $ListadoActividadPretratamiento->CreadoPor = $Datos["CreadoPor"];
                 $ListadoActividadPretratamiento->RealizadoPor = $Datos["RealizadoPor"];
@@ -251,7 +255,7 @@ class ListadoActividadesPretratamientoController extends BaseController
         return response()->json($json);
     }
 
-    public function cerrarActividadPretratamiento($id, Request $request){
+    public function cambiarEstadoActividadPretratamiento($id, Request $request){
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
@@ -264,10 +268,9 @@ class ListadoActividadesPretratamientoController extends BaseController
             // Separamos la validación
             // Reglas
             $Reglas = ["EstadoActividad" => 'required|integer',
-                "RealizadoPor" => 'required|integer'];
+                       "RealizadoPor" => 'required|integer'];
 
-            $Mensajes = [
-                "EstadoActividad.required" => 'Es necesario agregar un estado de la actividad.'];
+            $Mensajes = ["EstadoActividad.required" => 'Es necesario agregar un estado de la actividad.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -288,6 +291,14 @@ class ListadoActividadesPretratamientoController extends BaseController
                     // en el array de los datos
                     $ListadoActividadPretratamiento = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->update($Datos);
 
+                    // Si estamos cancelando la actividad debemos devolver todos los productos.
+                    if($Datos["EstadoActividad"] === 6){
+                        $this->devolucionProductosInventario($id);
+                    }
+                    else if($Datos["EstadoActividad"] === 5){
+                        $this->liberacionProductoFlotante($id);
+                    }
+
                     $json = array(
                         "status" => 200,
                         "detalle" => "Registro editado exitosamente"
@@ -307,6 +318,21 @@ class ListadoActividadesPretratamientoController extends BaseController
         }
         // Devolvemos la respuesta en un Json
         return response()->json($json);
+    }
+
+    public function devolucionProductosInventario($id){
+        Inventario::where("idListadoActividadPretratamiento", $id)
+            ->update([
+                'CantidadExistencia' => 0.0,
+                'ProductoFlotante' => 0.0
+            ]);
+    }
+
+    public function liberacionProductoFlotante($id){
+        Inventario::where("idListadoActividadPretratamiento", $id)
+            ->update([
+                'ProductoFlotante' => 0.0
+            ]);
     }
 
     public function listadoActividadesGeneralPretratamiento(){
@@ -349,6 +375,94 @@ class ListadoActividadesPretratamientoController extends BaseController
             );
         }
         // Mostramos la información como un json
+        return response()->json($json);
+    }
+
+    public function listadoActividadesPorFecha(Request $request){
+        // Inicializamos una variable para almacenar un json nulo
+        $json = null;
+        // Recogemos los Datos que almacenaremos, los ingresamos a un array
+        $Datos = array("FechaInicial"=>$request->FechaInicial,
+            "FechaFinal"=>$request->FechaFinal);
+
+        // Validamos que los Datos no estén vacios
+        if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = ["FechaInicial" => 'required',
+                "FechaFinal" => 'required'];
+
+            $Mensajes = [
+                "FechaInicial.required" => 'Es necesario marcar una fecha inicial.',
+                "FechaFinal.required" => 'Es necesario marcar una fecha final.'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
+                );
+            }else {
+                // Ordenaremos las fechas en caso estar al revés
+                if($Datos["FechaInicial"] > $Datos["FechaFinal"]){
+                    $temporal = $Datos["FechaInicial"];
+                    $Datos["FechaInicial"] = $Datos["FechaFinal"];
+                    $Datos["FechaFinal"] = $temporal;
+                }
+                // Primero obtendremos el array de los datos
+                $Datos = DB::Select('SELECT LAP.idListadoActividadPretratamiento,
+                                          A.NombreArea,
+                                          AP.NombreAreaPretratamiento,
+                                          NA.NombreActividad,
+                                          CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
+                                          CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
+                                          E.NombreEstado,
+                                          LAP.FechaCreacionActividad,  ' . '.
+                                          LAP.FechaConclusionActividad
+                                  FROM ListadoActividadPretratamiento As LAP
+                                         INNER JOIN Area A
+                                                    ON LAP.idArea = A.idArea
+                                         INNER JOIN AreaPretratamiento AP
+                                                    ON LAP.idAreaPretratamiento = AP.idAreaPretratamiento
+                                         INNER JOIN NombreActividad NA
+                                                    ON LAP.idNombreActividad = NA.idNombreActividad
+                                         INNER JOIN users US
+                                                    ON LAP.CreadoPor = US.idUsuario
+                                         INNER JOIN users US2
+                                                    ON LAP.RealizadoPor = US2.idUsuario
+                                         INNER JOIN Estado E
+                                                    ON LAP.EstadoActividad = E.idEstado
+                                                    WHERE CAST(LAP.ListadoActividadPretratamiento AS DATE)
+                                                    BETWEEN "' . $Datos["FechaInicial"] .'"
+                                                        AND
+                                                        "' . $Datos["FechaFinal"] .'";');
+
+                // Verificamos que el array no esté vacio
+                if (!empty($Datos[0])) {
+                    $json = array(
+                        'status' => 200,
+                        'total' => count($Datos),
+                        'detalle' => $Datos
+                    );
+                } else {
+                    $json = array(
+                        'status' => 200,
+                        'total' => 0,
+                        'detalle' => "No hay registros"
+                    );
+                }
+            }
+        }else{
+            $json = array(
+                "status" => "404",
+                "detalle" => "Registros incompletos"
+            );
+        }
+        // Devolvemos la respuesta en un Json
         return response()->json($json);
     }
 }

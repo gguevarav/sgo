@@ -9,14 +9,24 @@ import BarraNavegacion from './components/NavigationBar';
 import ActividadesCaldera from './components/ActividadesCaldera/ActividadesCaldera';
 import AgregarActividadCaldera from './components/ActividadesCaldera/AgregarActividadCaldera';
 import DetalleActividadCaldera from './components/ActividadesCaldera/DetalleActividadCaldera';
-import AgregarMaterialActividad from './components/ActividadesCaldera/AgregarMaterialActividad';
+import AgregarMaterialActividad from './components/Material/AgregarMaterialActividad';
 import CambiarEstadoActividadCaldera from './components/ActividadesCaldera/CambiarEstadoActividadCaldera';
 import EditarActividadCaldera from './components/ActividadesCaldera/EditarActividadCaldera';
 import TablaActividadesCaldera from './components/ActividadesCaldera/TablaActividadesCaldera';
 import DetalleListadoProductosActividadCaldera from './components/ActividadesCaldera/DetalleListadoProductosActividadCaldera';
-import ExportarAExcel from './components/ExportarAExcel';
+import ExportarAExcel from './components/Exportar/ExportarAExcel';
+import ExportarActividades from './components/Exportar/ExportarActividades';
+///////////////////////////////////////////////////////////////////////
 
+// Actividades Pretratamiento
 import ActividadesPretratamiento from './components/ActividadesPretratamiento/ActividadesPretratamiento';
+
+import DetalleActividadPretratamiento from './components/ActividadesPretratamiento/DetalleActividadPretratamiento';
+
+import CambiarEstadoActividadPretratamiento from './components/ActividadesPretratamiento/CambiarEstadoActividadPretratamiento';
+///////////////////////////////////////////////////////////////////////
+
+// Actividades torre enfriamiento
 import ActividadesTorreEnfriamiento from './components/ActividadesTorreEnfriamiento/ActividadesTorreEnfriamiento';
 import EditarActividadPretratamiento from "@/components/ActividadesPretratamiento/EditarActividadPretratamiento";
 import TablaActividadesPretratamiento from "@/components/ActividadesPretratamiento/TablaActividadesPretratamiento";
@@ -25,7 +35,7 @@ import TablaActividadesTorreEnfriamiento from "@/components/ActividadesTorreEnfr
 // Nombres componentes
 // Barra de navegación
 Vue.component('BarraNavegacion', BarraNavegacion);
-// Actividades de caldera
+// Importe de componenetes de actividades de caldera
 Vue.component('ActividadesCaldera', ActividadesCaldera);
 Vue.component('AgregarActividadCaldera', AgregarActividadCaldera);
 Vue.component('DetalleActividadCaldera', DetalleActividadCaldera);
@@ -33,15 +43,26 @@ Vue.component('CambiarEstadoActividadCaldera', CambiarEstadoActividadCaldera);
 Vue.component('AgregarMaterialActividad', AgregarMaterialActividad);
 Vue.component('EditarActividadCaldera', EditarActividadCaldera);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
-Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
 Vue.component('DetalleListadoProductosActividadCaldera', DetalleListadoProductosActividadCaldera);
 Vue.component('ExportarAExcel', ExportarAExcel);
+Vue.component('ExportarActividades', ExportarActividades);
 
-
+// Importe de actividades de Pretratamiento
 Vue.component('ActividadesPretratamiento', ActividadesPretratamiento);
-Vue.component('ActividadesTorreEnfriamiento', ActividadesTorreEnfriamiento);
+
+Vue.component('DetalleActividadPretratamiento', DetalleActividadPretratamiento);
+Vue.component('CambiarEstadoActividadPretratamiento', CambiarEstadoActividadPretratamiento);
+
 Vue.component('EditarActividadPretratamiento', EditarActividadPretratamiento);
 Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
+
+
+
+
+
+
+// Importe de actividades de Torre de enfriamiento
+Vue.component('ActividadesTorreEnfriamiento', ActividadesTorreEnfriamiento);
 Vue.component('TablaActividadesTorreEnfriamiento', TablaActividadesTorreEnfriamiento);
 
 

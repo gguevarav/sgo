@@ -276,4 +276,90 @@ class ListadoActividadesTorreEnfriamientoController extends BaseController
         // Mostramos la información como un json
         return response()->json($json);
     }
+
+    public function listadoActividadesPorFecha(Request $request){
+        // Inicializamos una variable para almacenar un json nulo
+        $json = null;
+        // Recogemos los Datos que almacenaremos, los ingresamos a un array
+        $Datos = array("FechaInicial"=>$request->FechaInicial,
+            "FechaFinal"=>$request->FechaFinal);
+
+        // Validamos que los Datos no estén vacios
+        if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = ["FechaInicial" => 'required',
+                "FechaFinal" => 'required'];
+
+            $Mensajes = [
+                "FechaInicial.required" => 'Es necesario marcar una fecha inicial.',
+                "FechaFinal.required" => 'Es necesario marcar una fecha final.'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
+                );
+            }else {
+                // Ordenaremos las fechas en caso estar al revés
+                if($Datos["FechaInicial"] > $Datos["FechaFinal"]){
+                    $temporal = $Datos["FechaInicial"];
+                    $Datos["FechaInicial"] = $Datos["FechaFinal"];
+                    $Datos["FechaFinal"] = $temporal;
+                }
+                // Primero obtendremos el array de los datos
+                $Datos = DB::Select('SELECT LATE.idListadoActividadTorreEnfriamiento,
+                                          A.NombreArea,
+                                          NA.NombreActividad,
+                                          CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
+                                          CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
+                                          E.NombreEstado,
+                                          E.idEstado,
+                                          LATE.FechaCreacionActividad,
+                                          LATE.FechaConclusionActividad ' .'
+                                   FROM ListadoActividadTorreEnfriamiento As LATE
+                                            INNER JOIN Area A
+                                                       ON LATE.idArea = A.idArea
+                                            INNER JOIN NombreActividad NA
+                                                       ON LATE.idNombreActividad = NA.idNombreActividad
+                                            INNER JOIN users US
+                                                       ON LATE.CreadoPor = US.idUsuario
+                                            INNER JOIN users US2
+                                                       ON LATE.RealizadoPor = US2.idUsuario
+                                            INNER JOIN Estado E
+                                                       ON LATE.EstadoActividad = E.idEstado;
+                                                    WHERE CAST(LATE.ListadoActividadTorreEnfriamiento AS DATE)
+                                                    BETWEEN "' . $Datos["FechaInicial"] .'"
+                                                        AND
+                                                        "' . $Datos["FechaFinal"] .'";');
+
+                // Verificamos que el array no esté vacio
+                if (!empty($Datos[0])) {
+                    $json = array(
+                        'status' => 200,
+                        'total' => count($Datos),
+                        'detalle' => $Datos
+                    );
+                } else {
+                    $json = array(
+                        'status' => 200,
+                        'total' => 0,
+                        'detalle' => "No hay registros"
+                    );
+                }
+            }
+        }else{
+            $json = array(
+                "status" => "404",
+                "detalle" => "Registros incompletos"
+            );
+        }
+        // Devolvemos la respuesta en un Json
+        return response()->json($json);
+    }
 }

@@ -88,6 +88,7 @@ name: "AgregarMaterialActividad",
     alertaErrores: false,
     listadoErrores: [],
     idActividad: '',
+    tipoActividadProcesar: '',
   }),
   created() {
     this.inicializar();
@@ -96,7 +97,7 @@ name: "AgregarMaterialActividad",
     agregarProducto(){
       this.listadoProductosAgregar.push(
           {
-            idListadoActividadCaldera: this.idActividad,
+            idListadoActividad: this.idActividad,
             idProducto: '',
             CantidadProducto: '',
           }
@@ -128,17 +129,30 @@ name: "AgregarMaterialActividad",
 
     // Guardamos los dados
     guardarDatosMateriales(){
+      // Verificaremos de que tipo de actividad estamos guardando la información.
+      this.tipoActividadProcesar = this.tipoActividad;
+      // Creamos una variable que contendrá la ruta
+      let ruta;
+      if(this.tipoActividadProcesar === "caldera"){
+        ruta = "listadomaterialactividadescaldera";
+      }
+        else if (this.tipoActividadProcesar === "pretratamiento"){
+          ruta = "listadomaterialactividadespretratamiento";
+        }
+          else if (this.tipoActividadProcesar === "torreEnfriamiento") {
+            ruta = "listadomaterialactividadestorre";
+          }
       // Si vamos a cerrar el dialog o no
       // Guardamos el listado de materiales de la actividad
       this.listadoProductosAgregar.forEach(element => {
         // Guardamos todos los productos que seleccionamos
         return new Promise((resolve, reject) => {
-          axios.post('/api/listadomaterialactividadescaldera', element)
+          axios.post('/api/' + ruta, element)
               .then(response => {
                 if (response.data.status == 200) {
                   //console.log(response);
-                  this.descontarProductosInventario(element);
-                  this.cambiarEstadoActividad();
+                  this.descontarProductosInventario(element, this.tipoActividadProcesar);
+                  this.cambiarEstadoActividad(this.tipoActividadProcesar);
                   this.$emit("dialog", this.dialog);
                   this.$emit("actualizar");
                   this.mostrarNotificacion();
@@ -158,37 +172,76 @@ name: "AgregarMaterialActividad",
       });
     },
 
-    descontarProductosInventario(element){
-      // Descontamos los productos del inventario
-      // Guardamos todos los productos que seleccionamos
-        return new Promise((resolve, reject) => {
-          //console.log(element);
-          axios.post('/api/descontarproductosinventario',
-              {
-                idProducto: element.idProducto,
-                idListadoActividadCaldera: element.idListadoActividadCaldera,
-                CantidadExistencia: element.CantidadProducto,
-                RegistradoPor: localStorage.getItem('idUsuario'),
-              })
-              .then(response => {
-                if (response.data.status == 200) {
-                  //console.log(response);
-                } else if (response.data.status == 404) {
-                  this.listadoErrores = response.data.errores
-                  this.alertaErrores = true
-                }
-                resolve(response)
-              })
-              .catch(error => {
-                //console.log(error)
+    descontarProductosInventario(element, tipoActividadProcesar){
+      // Verificaremos de que tipo de actividad estamos guardando la información.
+      let productoDescontar;
+      if(tipoActividadProcesar === "caldera"){
+        productoDescontar = {
+          idProducto: element.idProducto,
+          idListadoActividadCaldera: element.idListadoActividad,
+          idListadoActividadPretratamiento: 0,
+          idListadoActividadTorreEnfriamiento: 0,
+          CantidadExistencia: element.CantidadProducto,
+          RegistradoPor: localStorage.getItem('idUsuario'),
+        };
+      }
+        else if (tipoActividadProcesar === "pretratamiento"){
+          productoDescontar = {
+            idProducto: element.idProducto,
+            idListadoActividadCaldera: 0,
+            idListadoActividadPretratamiento: element.idListadoActividad,
+            idListadoActividadTorreEnfriamiento: 0,
+            CantidadExistencia: element.CantidadProducto,
+            RegistradoPor: localStorage.getItem('idUsuario'),
+          };
+        }
+          else if (tipoActividadProcesar === "torreEnfriamiento") {
+            productoDescontar = {
+              idProducto: element.idProducto,
+              idListadoActividadCaldera: 0,
+              idListadoActividadPretratamiento: 0,
+              idListadoActividadTorreEnfriamiento: element.idListadoActividad,
+              CantidadExistencia: element.CantidadProducto,
+              RegistradoPor: localStorage.getItem('idUsuario'),
+            };
+          }
 
-                reject(error)
-              })
-        })
+          // Descontamos los productos del inventario
+          // Guardamos todos los productos que seleccionamos
+            return new Promise((resolve, reject) => {
+              //console.log(element);
+              axios.post('/api/descontarproductosinventario', productoDescontar)
+                  .then(response => {
+                    if (response.data.status == 200) {
+                      //console.log(response);
+                    } else if (response.data.status == 404) {
+                      this.listadoErrores = response.data.errores
+                      this.alertaErrores = true
+                    }
+                    resolve(response)
+                  })
+                  .catch(error => {
+                    //console.log(error)
+
+                    reject(error)
+                  })
+            })
     },
-    cambiarEstadoActividad(){
+    cambiarEstadoActividad(tipoActividadProcesar){
+      // Verificaremos de que tipo de actividad estamos guardando la información.
+      // Donde almacenaremos la ruta
+      let ruta;
+      if(tipoActividadProcesar === "caldera"){
+        ruta = "cambiarestadoactividadcaldera";
+      }
+      else if (tipoActividadProcesar === "pretratamiento"){
+        ruta = "cambiarestadoactividadpretratamiento";
+      }
+      else if (tipoActividadProcesar === "torreEnfriamiento") {
+        ruta = "cambiarestadoactividadtorre";
+      }
       // Debemos cerrar la actividad para que no aparezca en el tablero
-      axios.post('/api/cambiarestadoactividadcaldera/' + this.idActividad,
+      axios.post('/api/'+ ruta + "/" + this.idActividad,
           {
             EstadoActividad: 2,
             RealizadoPor: localStorage.getItem('idUsuario'),
@@ -213,7 +266,8 @@ name: "AgregarMaterialActividad",
     },
   },
   props:[
-      'Actividad'
+      'Actividad',
+      'tipoActividad'
   ],
 }
 

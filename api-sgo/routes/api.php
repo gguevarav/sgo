@@ -132,6 +132,7 @@ Route::put('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaControll
 Route::get('/listadoactividadescaldera/{id}', 'ListadoActividadesCalderaController@show');
 Route::post('/cambiarestadoactividadcaldera/{id}', 'ListadoActividadesCalderaController@cambiarEstadoActividadCaldera');
 Route::get('/listadoactividadesgeneralcaldera', 'ListadoActividadesCalderaController@listadoActividadesGeneralCaldera');
+Route::post('/listadoactividadesporfechacaldera', 'ListadoActividadesCalderaController@listadoActividadesPorFecha');
 
 // CRUD Listado Material Actividad Caldera
 Route::get('/listadomaterialactividadescaldera', 'ListadoMaterialActividadesCalderaController@index');
@@ -146,8 +147,9 @@ Route::post('/listadoactividadespretratamiento', 'ListadoActividadesPretratamien
 Route::delete('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@destroy');
 Route::put('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@update');
 Route::get('/listadoactividadespretratamiento/{id}', 'ListadoActividadesPretratamientoController@show');
-Route::post('/cerraractividadpretratamiento/{id}', 'ListadoActividadesPretratamientoController@cerrarActividadPretratamiento');
+Route::post('/cambiarestadoactividadpretratamiento/{id}', 'ListadoActividadesPretratamientoController@cambiarEstadoActividadPretratamiento');
 Route::get('/listadoactividadesgeneralpretratamiento', 'ListadoActividadesPretratamientoController@listadoActividadesGeneralPretratamiento');
+Route::post('/listadoactividadesporfechapretratamiento', 'ListadoActividadesPretratamientoController@listadoActividadesPorFecha');
 
 // CRUD Listado Material Actividad Pretratamiento
 Route::get('/listadomaterialactividadespretratamiento', 'ListadoMaterialActividadesPretratamientoController@index');
@@ -164,6 +166,7 @@ Route::put('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamiento
 Route::get('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@show');
 Route::post('/cerraractividadtorreenfrimiento/{id}', 'ListadoActividadesTorreEnfriamientoController@cerrarActividadTorreEnfriamiento');
 Route::get('/listadoactividadesgeneraltorreenfriamiento', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesGeneralTorreEnfriamiento');
+Route::post('/listadoactividadesporfechatorreenfriamiento', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesPorFecha');
 
 
 // CRUD Listado Material Actividad Torre de Enfriamiento

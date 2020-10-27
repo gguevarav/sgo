@@ -118,8 +118,8 @@ class ListadoActividadesCalderaController extends BaseController
                 $ListadoActividadCaldera->idCaldera = $Datos["idCaldera"];
                 $ListadoActividadCaldera->idAreaCaldera = $Datos["idAreaCaldera"];
                 $ListadoActividadCaldera->idNombreActividad = $Datos["idNombreActividad"];
-                $ListadoActividadCaldera->FechaCreacionActividad = date('Y-m-d H:i:s');;
-                $ListadoActividadCaldera->FechaConclusionActividad = date('Y-m-d H:i:s');;
+                $ListadoActividadCaldera->FechaCreacionActividad = date('Y-m-d H:i:s');
+                $ListadoActividadCaldera->FechaConclusionActividad = date('Y-m-d H:i:s');
                 $ListadoActividadCaldera->EstadoActividad = $Datos["EstadoActividad"];
                 $ListadoActividadCaldera->CreadoPor = $Datos["CreadoPor"];
                 $ListadoActividadCaldera->RealizadoPor = $Datos["RealizadoPor"];
@@ -283,8 +283,7 @@ class ListadoActividadesCalderaController extends BaseController
             $Reglas = ["EstadoActividad" => 'required|integer',
                        "RealizadoPor" => 'required|integer'];
 
-            $Mensajes = [
-                "EstadoActividad.required" => 'Es necesario agregar un estado de la actividad.'];
+            $Mensajes = ["EstadoActividad.required" => 'Es necesario agregar un estado de la actividad.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -305,7 +304,7 @@ class ListadoActividadesCalderaController extends BaseController
                     // en el array de los datos
                     $ListadoActividadCaldera = ListadoActividadCaldera::where("idListadoActividadCaldera", $id)->update($Datos);
 
-                    // Si estamos cerrando la actividad debemos devolver todos los productos.
+                    // Si estamos cancelando la actividad debemos devolver todos los productos.
                     if($Datos["EstadoActividad"] === 6){
                         $this->devolucionProductosInventario($id);
                     }
@@ -392,6 +391,99 @@ class ListadoActividadesCalderaController extends BaseController
             );
         }
         // Mostramos la información como un json
+        return response()->json($json);
+    }
+
+    public function listadoActividadesPorFecha(Request $request){
+        // Inicializamos una variable para almacenar un json nulo
+        $json = null;
+        // Recogemos los Datos que almacenaremos, los ingresamos a un array
+        $Datos = array("FechaInicial"=>$request->FechaInicial,
+            "FechaFinal"=>$request->FechaFinal);
+
+        // Validamos que los Datos no estén vacios
+        if(!empty($Datos)){
+            // Separamos la validación
+            // Reglas
+            $Reglas = ["FechaInicial" => 'required',
+                "FechaFinal" => 'required'];
+
+            $Mensajes = [
+                "FechaInicial.required" => 'Es necesario marcar una fecha inicial.',
+                "FechaFinal.required" => 'Es necesario marcar una fecha final.'];
+            // Validamos los Datos antes de insertarlos en la base de Datos
+            $validacion = Validator::make($Datos,$Reglas,$Mensajes);
+
+            // Revisamos la validación
+            if($validacion->fails()){
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => $validacion->errors()->all()
+                );
+            }else {
+                // Ordenaremos las fechas en caso estar al revés
+                if($Datos["FechaInicial"] > $Datos["FechaFinal"]){
+                    $temporal = $Datos["FechaInicial"];
+                    $Datos["FechaInicial"] = $Datos["FechaFinal"];
+                    $Datos["FechaFinal"] = $temporal;
+                }
+                // Primero obtendremos el array de los datos
+                $Datos = DB::Select('SELECT LAC.idListadoActividadCaldera,
+                                       A.NombreArea,
+                                       C.NombreCaldera,
+                                       AC.NombreAreaCaldera,
+                                       NA.NombreActividad,
+                                       CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
+                                       CONCAT(US2.NombreUsuario, " ", US2.ApellidoUsuario) AS CreadoPor,
+                                       E.NombreEstado,
+                                       LAC.FechaCreacionActividad,
+                                       LAC.FechaConclusionActividad ' . '
+                                FROM ListadoActividadCaldera As LAC
+
+                                         INNER JOIN Area A
+                                                    ON LAC.idArea = A.idArea
+                                         INNER JOIN Caldera C
+                                                    ON LAC.idCaldera = C.idCaldera
+                                         INNER JOIN AreaCaldera AC
+                                                    ON LAC.idAreaCaldera = AC.idAreaCaldera
+                                         INNER JOIN NombreActividad NA
+                                                    ON LAC.idNombreActividad = NA.idNombreActividad
+                                         INNER JOIN users US
+                                                    ON LAC.CreadoPor = US.idUsuario
+                                         INNER JOIN users US2
+                                                    ON LAC.RealizadoPor = US2.idUsuario
+                                         INNER JOIN Estado E
+                                                    ON LAC.EstadoActividad = E.idEstado
+
+                                                    WHERE CAST(LAC.FechaCreacionActividad AS DATE)
+                                BETWEEN "' . $Datos["FechaInicial"] .'"
+                                        AND
+                                        "' . $Datos["FechaFinal"] .'";');
+
+                // Verificamos que el array no esté vacio
+                if (!empty($Datos[0])) {
+                    $json = array(
+                        'status' => 200,
+                        'total' => count($Datos),
+                        'detalle' => $Datos
+                    );
+                } else {
+                    $json = array(
+                        'status' => 200,
+                        'total' => 0,
+                        'detalle' => "No hay registros"
+                    );
+                }
+            }
+        }else{
+            $json = array(
+                "status" => "404",
+                "detalle" => "Registros incompletos"
+            );
+        }
+        // Devolvemos la respuesta en un Json
         return response()->json($json);
     }
 }

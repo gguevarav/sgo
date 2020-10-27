@@ -16,9 +16,10 @@ class InventarioController extends BaseController
         $Datos = DB::table('Inventario')
             ->join('Producto', 'Inventario.idProducto', '=', 'Producto.idProducto')
             ->join('MinimosMaximos', 'Inventario.idProducto', '=', 'MinimosMaximos.idProducto')
-            ->select('Inventario.*', 'MinimosMaximos.*','Producto.CodigoProducto', 'Producto.NombreProducto',
+            ->select('Producto.CodigoProducto', 'Producto.NombreProducto',
                 DB::raw('SUM(CantidadExistencia) as TotalExistencia'),
-                DB::raw('SUM(ProductoFlotante) as TotalFlotante'))
+                DB::raw('SUM(ProductoFlotante) as TotalFlotante'),
+                'MinimosMaximos.CantidadMinima', 'MinimosMaximos.CantidadMaxima')
             ->groupBy('Producto.idProducto')
             ->get();
 
@@ -121,25 +122,29 @@ class InventarioController extends BaseController
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
         $Datos = array("idProducto"=>$request->input("idProducto"),
-            "CantidadExistencia"=>$request->input("CantidadExistencia"),
-            "idListadoActividadCaldera"=>$request->input("idListadoActividadCaldera"),
-            "RegistradoPor"=>$request->input("RegistradoPor"));
+                       "CantidadExistencia"=>$request->input("CantidadExistencia"),
+                       "idListadoActividadCaldera"=>$request->input("idListadoActividadCaldera"),
+                       "idListadoActividadPretratamiento"=>$request->input("idListadoActividadPretratamiento"),
+                       "idListadoActividadTorreEnfriamiento"=>$request->input("idListadoActividadTorreEnfriamiento"),
+                       "RegistradoPor"=>$request->input("RegistradoPor"));
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
             // Separamos la validación
             // Reglas
-            $Reglas = [
-                "idProducto" => 'required|integer',
-                "CantidadExistencia" => 'required|numeric',
-                "idListadoActividadCaldera" => 'required|numeric',
-                "RegistradoPor" => 'required|integer'];
+            $Reglas = ["idProducto" => 'required|integer',
+                       "CantidadExistencia" => 'required|numeric',
+                       "idListadoActividadCaldera" => 'required|numeric',
+                       "idListadoActividadPretratamiento" => 'required|numeric',
+                       "idListadoActividadTorreEnfriamiento" => 'required|numeric',
+                       "RegistradoPor" => 'required|integer'];
 
-            $Mensajes = [
-                "idProducto.required" => 'Es necesario agregar un código de producto.',
-                "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia.',
-                "idListadoActividadCaldera.required" => 'Es necesario agregar una actividad.',
-                "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado.'];
+            $Mensajes = ["idProducto.required" => 'Es necesario agregar un código de producto.',
+                         "CantidadExistencia.required" => 'Es necesario agregar una cantidad en existencia.',
+                         "idListadoActividadCaldera.required" => 'Es necesario agregar una actividad de caldera.',
+                         "idListadoActividadPretratamiento.required" => 'Es necesario agregar una actividad de pretratamiento.',
+                         "idListadoActividadTorreEnfriamiento.required" => 'Es necesario agregar una actividad de torre de enfriamiento.',
+                         "RegistradoPor.required" => 'Es necesario agregar un usuario que haya registrado.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -158,6 +163,8 @@ class InventarioController extends BaseController
                 // Ingresamos los datos
                 $Inventario->idProducto = $Datos["idProducto"];
                 $Inventario->idListadoActividadCaldera = $Datos["idListadoActividadCaldera"];
+                $Inventario->idListadoActividadPretratamiento = $Datos["idListadoActividadPretratamiento"];
+                $Inventario->idListadoActividadTorreEnfriamiento = $Datos["idListadoActividadTorreEnfriamiento"];
                 $Inventario->CantidadExistencia = $Datos["CantidadExistencia"] * -1;
                 $Inventario->ProductoFlotante = $Datos["CantidadExistencia"] * -1;
                 $Inventario->RegistradoPor = $Datos["RegistradoPor"];

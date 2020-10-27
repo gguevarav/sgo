@@ -43,7 +43,7 @@ class ListadoMaterialActividadesCalderaController extends BaseController
         // Inicializamos una variable para almacenar un json nulo
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
-        $Datos = array("idListadoActividadCaldera"=>$request->idListadoActividadCaldera,
+        $Datos = array("idListadoActividadCaldera"=>$request->idListadoActividad,
                        "idProducto"=>$request->idProducto,
                        "CantidadProducto"=>$request->CantidadProducto);
 

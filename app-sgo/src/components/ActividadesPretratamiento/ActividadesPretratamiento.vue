@@ -7,14 +7,9 @@
       <v-dialog>
         <template
             v-slot:activator="{ on, attrs }">
-          <v-btn
-              text
-              x-small
-              @click="dialog = true">
-            <v-icon>
-              mdi-plus
-            </v-icon>
-          </v-btn>
+          <AgregarActividadPretratamiento
+              @inicializar="inicializar">
+          </AgregarActividadPretratamiento>
           <v-btn
               text
               x-small
@@ -42,7 +37,22 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn text>Editar</v-btn>
+                <v-spacer></v-spacer>
+                <!-- Formulario para agregar productos actividad -->
+                <DetalleActividadPretratamiento
+                    :Actividad="item.idListadoActividadPretratamiento"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? true : false">
+                </DetalleActividadPretratamiento>
+                <!-- Formulario para agregar productos actividad -->
+                <!-- Formulario para cambiar estado actividad -->
+                <CambiarEstadoActividadPretratamiento
+                    :ActividadCambiar="item.idListadoActividadPretratamiento"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? false : true">
+                </CambiarEstadoActividadPretratamiento>
+                <!-- Formulario para cambiar estado actividad -->
+                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -54,9 +64,11 @@
 
 <script>
 import axios from "axios";
+import AgregarActividadPretratamiento from "@/components/ActividadesPretratamiento/AgregarActividadPretratamiento";
 
 export default {
 name: "ActividadesPretratamiento",
+  components: {AgregarActividadPretratamiento},
   data: () => ({
     listadoActividadesPretratamiento: [],
   }),
