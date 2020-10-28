@@ -8,12 +8,12 @@
         <template
             v-slot:activator="{ on, attrs }">
           <AgregarActividadPretratamiento
-              @inicializar="inicializar">
+              @inicializar="inicializarDatosPretratamiento">
           </AgregarActividadPretratamiento>
           <v-btn
               text
               x-small
-              @click="inicializar">
+              @click="inicializarDatosPretratamiento">
             <v-icon>
               mdi-reload
             </v-icon>
@@ -23,33 +23,33 @@
     </v-card-title>
     <v-card-text>
       <v-container>
-        <v-row v-for="(item, index) in listadoActividadesPretratamiento" v-bind:key="index">
+        <v-row v-for="(itemPretratamiento, indexPretratamiento) in listadoActividadesPretratamiento" v-bind:key="indexPretratamiento">
           <v-col>
             <v-card
                 shaped
                 elevation="10"
-                :color="colorEstadoActividad(item.NombreEstado)">
-              <v-card-title class="headline">{{ item.NombreActividad }}</v-card-title>
+                :color="colorEstadoActividad(itemPretratamiento.NombreEstado)">
+              <v-card-title class="headline">{{ itemPretratamiento.NombreActividad }}</v-card-title>
               <v-card-text>
-                <div>Area: {{ item.NombreAreaPretratamiento }}</div>
-                <div>Fecha de creación: {{ item.FechaCreacion }}</div>
-                <div>Creado por: {{ item.CreadoPor }}</div>
+                <div>Area: {{ itemPretratamiento.NombreAreaPretratamiento }}</div>
+                <div>Fecha de creación: {{ itemPretratamiento.FechaCreacionActividad }}</div>
+                <div>Creado por: {{ itemPretratamiento.CreadoPor }}</div>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <!-- Formulario para agregar productos actividad -->
                 <DetalleActividadPretratamiento
-                    :Actividad="item.idListadoActividadPretratamiento"
-                    @inicializar="inicializar"
-                    v-if="item.NombreEstado == 'Creado' ? true : false">
+                    :Actividad="itemPretratamiento.idListadoActividadPretratamiento"
+                    @inicializar="inicializarDatosPretratamiento"
+                    v-if="itemPretratamiento.NombreEstado == 'Creado' ? true : false">
                 </DetalleActividadPretratamiento>
                 <!-- Formulario para agregar productos actividad -->
                 <!-- Formulario para cambiar estado actividad -->
                 <CambiarEstadoActividadPretratamiento
-                    :ActividadCambiar="item.idListadoActividadPretratamiento"
-                    @inicializar="inicializar"
-                    v-if="item.NombreEstado == 'Creado' ? false : true">
+                    :ActividadCambiar="itemPretratamiento.idListadoActividadPretratamiento"
+                    @inicializar="inicializarDatosPretratamiento"
+                    v-if="itemPretratamiento.NombreEstado == 'Creado' ? false : true">
                 </CambiarEstadoActividadPretratamiento>
                 <!-- Formulario para cambiar estado actividad -->
                 <v-spacer></v-spacer>
@@ -71,16 +71,15 @@ name: "ActividadesPretratamiento",
     listadoActividadesPretratamiento: [],
   }),
   created() {
-    this.inicializar();
+    this.inicializarDatosPretratamiento();
   },
   methods:{
-    inicializar(){
+    inicializarDatosPretratamiento(){
       new Promise((resolve, reject) => {
         axios.get("/api/listadoactividadespretratamiento")
             .then(response => {
               if (response.data.total != 0) {
-                this.listadoActividadesPretratamiento = response.data.detalle
-                //console.log(this.listadoActividadesCaldera)
+                this.listadoActividadesPretratamiento = response.data.detalle;
               }
             })
             .catch(function (error) {

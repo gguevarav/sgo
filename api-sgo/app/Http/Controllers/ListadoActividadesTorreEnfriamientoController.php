@@ -398,7 +398,7 @@ class ListadoActividadesTorreEnfriamientoController extends BaseController
                     $Datos["FechaFinal"] = $temporal;
                 }
                 // Primero obtendremos el array de los datos
-                $Datos = DB::Select('SELECT LATE.idListadoActividadTorreEnfriamiento,
+                $Datos = DB::Select('SELECT LATE.idListadoActividadTorreEnfriamiento AS CodigoActividad,
                                           A.NombreArea,
                                           NA.NombreActividad,
                                           CONCAT(US.NombreUsuario, " ", US.ApellidoUsuario) AS RealizadoPor,
@@ -417,8 +417,8 @@ class ListadoActividadesTorreEnfriamientoController extends BaseController
                                             INNER JOIN users US2
                                                        ON LATE.RealizadoPor = US2.idUsuario
                                             INNER JOIN Estado E
-                                                       ON LATE.EstadoActividad = E.idEstado;
-                                                    WHERE CAST(LATE.ListadoActividadTorreEnfriamiento AS DATE)
+                                                       ON LATE.EstadoActividad = E.idEstado
+                                                    WHERE CAST(LATE.FechaCreacionActividad AS DATE)
                                                     BETWEEN "' . $Datos["FechaInicial"] .'"
                                                         AND
                                                         "' . $Datos["FechaFinal"] .'";');

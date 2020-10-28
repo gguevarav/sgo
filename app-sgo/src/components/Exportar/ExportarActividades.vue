@@ -71,12 +71,28 @@ export default {
   props:['tipoActividad'],
   methods: {
     exportExcel: function () {
+      // Guardamos el tipo de actividad que estamos exportando
       let TipoActividad = this.tipoActividad;
+      // La ruta de donde obtendremos los datos
+      let ruta;
+      // Nombre del archivo
+      let nombreArchivo;
       // Verificar origen para determinar el nombre y la ruta a utilizar.
-      if(TipoActividad === "caldera"){
+      if(TipoActividad === "caldera") {
+        ruta = "listadoactividadesporfechacaldera";
+        nombreArchivo = "actividadescaldera";
+      }
+        else if(TipoActividad === "pretratamiento"){
+          ruta = "listadoactividadesporfechapretratamiento";
+          nombreArchivo = "actividadespretratamiento";
+        }
+          else if(TipoActividad === "torreEnfriamiento"){
+            ruta = "listadoactividadesporfechatorre";
+            nombreArchivo = "actividadestorreenfriamiento";
+          }
         // Primero obtendremos los datos
         return new Promise((resolve, reject) => {
-          axios.post('/api/listadoactividadesporfechacaldera',
+          axios.post('/api/' + ruta,
               {
                 FechaInicial: this.dates[0],
                 FechaFinal: this.dates[1]
@@ -86,7 +102,7 @@ export default {
                   if(response.data.total === 0){
                     alert("No hay datos para exportar");
                   }else{
-                    this.nombreParaGuardar = "actividadescaldera"
+                    this.nombreParaGuardar = nombreArchivo;
                     let data = XLSX.utils.json_to_sheet(response.data.detalle)
                     const workbook = XLSX.utils.book_new()
                     const filename = this.nombreParaGuardar;
@@ -104,7 +120,7 @@ export default {
                 reject(error)
               })
         })
-      }
+
     }
   },
 }

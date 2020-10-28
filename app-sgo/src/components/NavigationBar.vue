@@ -129,7 +129,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Pretraramiento</v-list-item-title>
+            <v-list-item-title>Pretratamiento</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -207,8 +207,13 @@ export default {
     },
   },
   computed: {
-    mini() {
-      return (this.$vuetify.breakpoint.smAndDown) || this.toggleMini
+    mini: {
+      get() {
+        return this.$vuetify.breakpoint.mdAndDown || this.overwriteBreakpoint;
+      },
+      set(value) {
+        this.overwriteBreakpoint = value;
+      }
     },
   },
 }

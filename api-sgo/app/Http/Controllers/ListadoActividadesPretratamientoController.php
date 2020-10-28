@@ -382,18 +382,18 @@ class ListadoActividadesPretratamientoController extends BaseController
         $json = null;
         // Recogemos los Datos que almacenaremos, los ingresamos a un array
         $Datos = array("FechaInicial"=>$request->FechaInicial,
-            "FechaFinal"=>$request->FechaFinal);
+                       "FechaFinal"=>$request->FechaFinal);
 
         // Validamos que los Datos no estén vacios
         if(!empty($Datos)){
             // Separamos la validación
             // Reglas
             $Reglas = ["FechaInicial" => 'required',
-                "FechaFinal" => 'required'];
+                       "FechaFinal" => 'required'];
 
             $Mensajes = [
-                "FechaInicial.required" => 'Es necesario marcar una fecha inicial.',
-                "FechaFinal.required" => 'Es necesario marcar una fecha final.'];
+                         "FechaInicial.required" => 'Es necesario marcar una fecha inicial.',
+                         "FechaFinal.required" => 'Es necesario marcar una fecha final.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -401,9 +401,9 @@ class ListadoActividadesPretratamientoController extends BaseController
             if($validacion->fails()){
                 // Devolvemos el mensaje que falló la validación de Datos
                 $json = array(
-                    "status" => 404,
-                    "detalle" => "Los registros tienen errores",
-                    "errores" => $validacion->errors()->all()
+                              "status" => 404,
+                              "detalle" => "Los registros tienen errores",
+                              "errores" => $validacion->errors()->all()
                 );
             }else {
                 // Ordenaremos las fechas en caso estar al revés
@@ -413,7 +413,7 @@ class ListadoActividadesPretratamientoController extends BaseController
                     $Datos["FechaFinal"] = $temporal;
                 }
                 // Primero obtendremos el array de los datos
-                $Datos = DB::Select('SELECT LAP.idListadoActividadPretratamiento,
+                $Datos = DB::Select('SELECT LAP.idListadoActividadPretratamiento AS CodigoActividad,
                                           A.NombreArea,
                                           AP.NombreAreaPretratamiento,
                                           NA.NombreActividad,
@@ -435,7 +435,7 @@ class ListadoActividadesPretratamientoController extends BaseController
                                                     ON LAP.RealizadoPor = US2.idUsuario
                                          INNER JOIN Estado E
                                                     ON LAP.EstadoActividad = E.idEstado
-                                                    WHERE CAST(LAP.ListadoActividadPretratamiento AS DATE)
+                                                    WHERE CAST(LAP.FechaCreacionActividad AS DATE)
                                                     BETWEEN "' . $Datos["FechaInicial"] .'"
                                                         AND
                                                         "' . $Datos["FechaFinal"] .'";');

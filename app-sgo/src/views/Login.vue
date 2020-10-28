@@ -1,5 +1,24 @@
 <template>
   <v-container class="fill-height" fluid>
+    <!-- Snackbar de notificaciones -->
+    <v-snackbar
+        v-model="activarNotificacion"
+        :timeout="timeout"
+        :color="colorNotificacion">
+      {{ textoMostrarNotificacion }}
+
+      <template
+          v-slot:action="{ attrs }">
+        <v-btn
+            color="success"
+            text
+            v-bind="attrs"
+            @click="activarNotificacion = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- Termina snackbar de notificaciones -->
     <v-row align="center" justify="center">
         <v-col cols="12" md="8" sm="8">
             <v-card
@@ -47,14 +66,6 @@
                     </v-window-item>
                 </v-window>
             </v-card>
-          <!-- Notificación -->
-          <Notificacion
-              :activar="activarNotificacion"
-              :textoSnackbar="textoMostrarNotificacion"
-              :color="colorNotificacion"
-              @cerrarNotificacion="cerrarNotificacion">
-          </Notificacion>
-          <!-- Notificación -->
         </v-col>
     </v-row>
   </v-container>
@@ -81,6 +92,7 @@ export default {
       activarNotificacion: false,
       textoMostrarNotificacion: '',
       colorNotificacion: '',
+      timeout: 3000,
     }
   },
   methods: {

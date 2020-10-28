@@ -67,10 +67,15 @@ name: "TablaActividades",
   data: function () {
     return {
       encabezadosTabla: [{
-        text: 'Nombre de actividad',
-        align: 'center',
-        sortable: false,
-        value: 'NombreActividad',
+          text: 'Codigo de actividad',
+          align: 'center',
+          sortable: false,
+          value: 'idListadoActividadCaldera',
+        },
+        {
+          text: 'Nombre de actividad',
+          align: 'start',
+          value: 'NombreActividad'
         },
         {
           text: 'Caldera',

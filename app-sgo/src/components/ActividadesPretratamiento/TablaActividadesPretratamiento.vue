@@ -31,10 +31,9 @@
                       mdi-reload
                     </v-icon>
                   </v-btn>
-                  <ExportarAExcel
-                      nombreArchivo="actividadespretratamiento"
-                      :datosTabla="datosTabla">
-                  </ExportarAExcel>
+                  <ExportarActividades
+                      tipoActividad="pretratamiento">
+                  </ExportarActividades>
                 </template>
               </v-dialog>
               <!-- Termina dialog de botones de agregar y recargar -->
@@ -67,11 +66,16 @@ name: "TablaActividadesPretratamiento",
   data: function () {
     return {
       encabezadosTabla: [{
-        text: 'Nombre de actividad',
-        align: 'center',
-        sortable: false,
-        value: 'NombreActividad',
-      },
+          text: 'Código de actividad',
+          align: 'center',
+          sortable: false,
+          value: 'idListadoActividadPretratamiento',
+        },
+        {
+          text: 'Nombre de actividad',
+          align: 'center',
+          value: 'NombreActividad'
+        },
         {
           text: 'Nombre de area en pretratamiento',
           align: 'center',

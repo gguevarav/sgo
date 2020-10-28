@@ -430,7 +430,7 @@ class ListadoActividadesCalderaController extends BaseController
                     $Datos["FechaFinal"] = $temporal;
                 }
                 // Primero obtendremos el array de los datos
-                $Datos = DB::Select('SELECT LAC.idListadoActividadCaldera,
+                $Datos = DB::Select('SELECT LAC.idListadoActividadCaldera AS CodigoActividad,
                                        A.NombreArea,
                                        C.NombreCaldera,
                                        AC.NombreAreaCaldera,

@@ -29,10 +29,9 @@
                   mdi-reload
                 </v-icon>
               </v-btn>
-              <ExportarAExcel
-                  nombreArchivo="actividadestorreenfriamiento"
-                  :datosTabla="datosTabla">
-              </ExportarAExcel>
+              <ExportarActividades
+                  tipoActividad="torreEnfriamiento">
+              </ExportarActividades>
             </template>
           </v-dialog>
           <!-- Termina dialog de botones de agregar y recargar -->
@@ -51,15 +50,15 @@ export default {
   data: function () {
     return {
       encabezadosTabla: [{
-        text: 'Nombre de actividad',
-        align: 'center',
-        sortable: false,
-        value: 'NombreActividad',
-      },
-        {
-          text: 'Nombre de area en pretratamiento',
+          text: 'Codigo de actividad',
           align: 'center',
-          value: 'NombreAreaPretratamiento'
+          sortable: false,
+          value: 'idListadoActividadTorreEnfriamiento',
+        },
+        {
+          text: 'Nombre de actividad',
+          align: 'center',
+          value: 'NombreActividad'
         },
         {
           text: 'Creado por',
@@ -102,7 +101,7 @@ export default {
   methods:{
     inicializar: function (){
       return new Promise((resolve, reject) => {
-        axios.get('/api/listadoactividadesgeneraltorreenfriamiento')
+        axios.get('/api/listadoactividadesgeneraltorre')
             .then(response => {
               if (response.data.status == 200) {
                 this.datosTabla = response.data.detalle
