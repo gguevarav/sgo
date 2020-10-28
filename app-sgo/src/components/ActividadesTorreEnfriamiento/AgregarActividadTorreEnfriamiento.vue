@@ -63,18 +63,8 @@
                 :items="listadoNombreActividad"
                 item-text='NombreActividad'
                 item-value='idNombreActividad'
-                v-model="actividadPretratamiento.idNombreActividad"
+                v-model="actividadTorreEnfriamiento.idNombreActividad"
                 label="Actividad a realizar"
-                :rules="[rules.required]"
-                required>
-            </v-select>
-
-            <v-select
-                :items="listadoAreaPretratamiento"
-                item-text='NombreAreaPretratamiento'
-                item-value='idAreaPretratamiento'
-                v-model="actividadPretratamiento.idAreaPretratamiento"
-                label="Area"
                 :rules="[rules.required]"
                 required>
             </v-select>
@@ -105,7 +95,7 @@
 import axios from "axios";
 
 export default {
-  name: "AgregarActividadPretratamiento",
+  name: "AgregarActividadTorreEnfriamiento",
   data: () => ({
     dialog: false,
     activarNotificacion: false,
@@ -116,23 +106,20 @@ export default {
     valid: true,
     alertaErrores: false,
     listadoErrores: [],
-    actividadPretratamiento:{
-      idArea: 2,
-      idAreaPretratamiento: '',
+    actividadTorreEnfriamiento:{
+      idArea: 3,
       idNombreActividad: '',
       EstadoActividad: 1,
       CreadoPor: localStorage.getItem('idUsuario'),
       RealizadoPor: localStorage.getItem('idUsuario'),
     },
-    actividadPretratamientoVacio:{
-      idArea: 2,
-      idAreaPretratamiento: '',
+    actividadTorreEnfriamientoVacio:{
+      idArea: 3,
       idNombreActividad: '',
       EstadoActividad: 1,
       CreadoPor: localStorage.getItem('idUsuario'),
       RealizadoPor: localStorage.getItem('idUsuario'),
     },
-    listadoAreaPretratamiento: [],
     listadoNombreActividad: [],
     rules: {
       required: value => !!value || 'Campo requerido.',
@@ -150,18 +137,6 @@ export default {
   },
   methods:{
     inicializar(){
-      // Obtener areas pretratamiento
-      new Promise((resolve, reject) => {
-        axios.get("/api/areaspretratamiento")
-            .then(response => {
-              if (response.data.total != 0) {
-                this.listadoAreaPretratamiento = response.data.detalle
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            })
-      });
       // Obtener nombre de actividades
       new Promise((resolve, reject) => {
         axios.get("/api/nombreactividades")
@@ -178,7 +153,7 @@ export default {
     agregarActividad () {
       this.$refs.form.validate()
       new Promise((resolve, reject) => {
-        axios.post("/api/listadoactividadespretratamiento", this.actividadPretratamiento)
+        axios.post("/api/listadoactividadestorre", this.actividadTorreEnfriamiento)
             .then(response => {
               //console.log(this.actividadCaldera)
               if (response.data.status == 200) {
@@ -207,7 +182,7 @@ export default {
       this.dialogAgregarCantidadProducto = false
       this.dialog = false
       this.$nextTick(() => {
-        this.actividadPretratamiento = Object.assign({}, this.actividadPretratamientoVacio)
+        this.actividadTorreEnfriamiento = Object.assign({}, this.actividadTorreEnfriamientoVacio)
       })
     },
   },

@@ -164,9 +164,9 @@ Route::post('/listadoactividadestorre', 'ListadoActividadesTorreEnfriamientoCont
 Route::delete('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@destroy');
 Route::put('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@update');
 Route::get('/listadoactividadestorre/{id}', 'ListadoActividadesTorreEnfriamientoController@show');
-Route::post('/cerraractividadtorreenfrimiento/{id}', 'ListadoActividadesTorreEnfriamientoController@cerrarActividadTorreEnfriamiento');
-Route::get('/listadoactividadesgeneraltorreenfriamiento', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesGeneralTorreEnfriamiento');
-Route::post('/listadoactividadesporfechatorreenfriamiento', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesPorFecha');
+Route::post('/cambiarestadoactividadtorre/{id}', 'ListadoActividadesTorreEnfriamientoController@cambiarEstadoActividadTorreEnfriamiento');
+Route::get('/listadoactividadesgeneraltorre', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesGeneralTorreEnfriamiento');
+Route::post('/listadoactividadesporfechatorre', 'ListadoActividadesTorreEnfriamientoController@listadoActividadesPorFecha');
 
 
 // CRUD Listado Material Actividad Torre de Enfriamiento

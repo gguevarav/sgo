@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Models\Inventario;
-use App\Models\ListadoActividad;
 use App\Models\ListadoActividadPretratamiento;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
@@ -84,14 +83,14 @@ class ListadoActividadesPretratamientoController extends BaseController
                        "RealizadoPor" => 'required|integer'];
 
             $Mensajes = [
-                "idArea.required" => 'Es necesario registrar el área donde se realizará.',
-                "idAreaPretratamiento.required" => 'Es necesario registrar el área donde se realizará.',
-                "idNombreActividad.required" => 'Es necesario agregar un nombre de la actividad.',
-                //"FechaCreacionActividad.required" => 'Es necesario agregar la fecha en que se crea la actividad.',
-                //"FechaConclusionActividad.required" => 'Es necesario agregar un la fecha en que se concluye la actividad.',
-                "EstadoActividad.required" => 'Es necesario agregar un de la actividad.',
-                "CreadoPor.required" => 'Es necesario agregar un solicitante.',
-                "RealizadoPor.required" => 'Es necesario agregar un encargado de realización de la actividad.'];
+                         "idArea.required" => 'Es necesario registrar el área donde se realizará.',
+                         "idAreaPretratamiento.required" => 'Es necesario registrar el área donde se realizará.',
+                         "idNombreActividad.required" => 'Es necesario agregar un nombre de la actividad.',
+                         //"FechaCreacionActividad.required" => 'Es necesario agregar la fecha en que se crea la actividad.',
+                         //"FechaConclusionActividad.required" => 'Es necesario agregar un la fecha en que se concluye la actividad.',
+                         "EstadoActividad.required" => 'Es necesario agregar un de la actividad.',
+                         "CreadoPor.required" => 'Es necesario agregar un solicitante.',
+                         "RealizadoPor.required" => 'Es necesario agregar un encargado de realización de la actividad.'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 
@@ -284,9 +283,9 @@ class ListadoActividadesPretratamientoController extends BaseController
                 );
             }else{
                 // Obtendremos el ListadoActividad de la base de datos
-                $ObtenerListadoActividadCaldera = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->get();
+                $ObtenerListadoActividadPretratamiento = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->get();
 
-                if(!empty($ObtenerListadoActividadCaldera[0])){
+                if(!empty($ObtenerListadoActividadPretratamiento[0])){
                     // Modificamos la información, pasamos la información contenida
                     // en el array de los datos
                     $ListadoActividadPretratamiento = ListadoActividadPretratamiento::where("idListadoActividadPretratamiento", $id)->update($Datos);

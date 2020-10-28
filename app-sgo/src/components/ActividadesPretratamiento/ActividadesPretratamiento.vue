@@ -64,11 +64,9 @@
 
 <script>
 import axios from "axios";
-import AgregarActividadPretratamiento from "@/components/ActividadesPretratamiento/AgregarActividadPretratamiento";
 
 export default {
 name: "ActividadesPretratamiento",
-  components: {AgregarActividadPretratamiento},
   data: () => ({
     listadoActividadesPretratamiento: [],
   }),

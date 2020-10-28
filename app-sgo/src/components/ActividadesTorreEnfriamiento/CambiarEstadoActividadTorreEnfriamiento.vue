@@ -30,33 +30,22 @@
                 <v-col
                     cols="12"
                     sm="6"
-                    md="2"
+                    md="6"
                 >
                   <v-text-field
                       label="Area"
-                      v-model="actividadPretratamiento.NombreArea"
+                      v-model="actividadTorreEnfriamiento.NombreArea"
                       disabled
                   ></v-text-field>
                 </v-col>
                 <v-col
                     cols="12"
                     sm="6"
-                    md="3"
-                >
-                  <v-text-field
-                      label="Area pretratamiento"
-                      v-model="actividadPretratamiento.NombreAreaPretratamiento"
-                      disabled
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                    cols="12"
-                    sm="6"
-                    md="5"
+                    md="6"
                 >
                   <v-text-field
                       label="Actividad a realizar"
-                      v-model="actividadPretratamiento.NombreActividad"
+                      v-model="actividadTorreEnfriamiento.NombreActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -67,7 +56,7 @@
                 >
                   <v-text-field
                       label="Creado por"
-                      v-model="actividadPretratamiento.CreadoPor"
+                      v-model="actividadTorreEnfriamiento.CreadoPor"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -78,7 +67,7 @@
                 >
                   <v-text-field
                       label="Fecha de creación"
-                      v-model="actividadPretratamiento.FechaCreacionActividad"
+                      v-model="actividadTorreEnfriamiento.FechaCreacionActividad"
                       disabled
                   ></v-text-field>
                 </v-col>
@@ -87,7 +76,7 @@
                       :items="datosEstadoUsuario"
                       item-text='NombreEstadoUsuario'
                       item-value='idEstadoUsuario'
-                      v-model="actividadPretratamiento.idEstado"
+                      v-model="actividadTorreEnfriamiento.idEstado"
                       label="Estado">
                   </v-select>
                 </v-col>
@@ -121,14 +110,14 @@
 import axios from "axios";
 
 export default {
-name: "DetalleActividadPretratamiento",
+name: "DetalleActividadTorreEnfriamiento",
   data: () => ({
     valid: true,
     dialog: false,
     idActividad: '',
     alertaErrores: false,
     listadoErrores: [],
-    actividadPretratamiento: [],
+    actividadTorreEnfriamiento: [],
     datosEstadoUsuario: [{
       idEstadoUsuario: 4,
       NombreEstadoUsuario: 'En proceso'
@@ -142,9 +131,8 @@ name: "DetalleActividadPretratamiento",
         NombreEstadoUsuario: 'Cancelado'
       }
     ],
-    actividadPretratamientoVacio:{
+    actividadTorreEnfriamientoVacio:{
       idArea: '',
-      idAreaPretratamiento: '',
       idNombreActividad: '',
       EstadoActividad: '',
     },
@@ -157,10 +145,10 @@ name: "DetalleActividadPretratamiento",
     obtenerActividadCerrar(){
       this.idActividad = this.ActividadCambiar
       return new Promise((resolve, reject) => {
-        axios.get('/api/listadoactividadespretratamiento/' + this.idActividad)
+        axios.get('/api/listadoactividadestorre/' + this.idActividad)
             .then(response => {
               if (response.data.status == 200) {
-                this.actividadPretratamiento = response.data.detalle[0]
+                this.actividadTorreEnfriamiento = response.data.detalle[0]
               } else if (response.data.status == 404) {
                 console.log("error")
               }
@@ -174,15 +162,15 @@ name: "DetalleActividadPretratamiento",
     },
     cambiarEstadoActividad(){
       // Debemos cerrar la actividad para que no aparezca en el tablero
-      axios.post('/api/cambiarestadoactividadpretratamiento/' + this.idActividad,
+      axios.post('/api/cambiarestadoactividadtorre/' + this.idActividad,
               {
-                EstadoActividad: this.actividadPretratamiento.idEstado,
+                EstadoActividad: this.actividadTorreEnfriamiento.idEstado,
                 RealizadoPor: localStorage.getItem('idUsuario'),
               })
           .then(response => {
             if (response.data.status == 200) {
               this.dialog = false;
-              this.actividadPretratamiento = Object.assign({}, this.actividadPretratamientoVacio);
+              this.actividadTorreEnfriamiento = Object.assign({}, this.actividadTorreEnfriamientoVacio);
               this.$emit("inicializar");
             } else if (response.data.status == 404) {
               this.listadoErrores = response.data.errores

@@ -9,14 +9,9 @@
       <v-dialog>
         <template
             v-slot:activator="{ on, attrs }">
-          <v-btn
-              text
-              x-small
-              @click="dialog = true">
-            <v-icon>
-              mdi-plus
-            </v-icon>
-          </v-btn>
+          <AgregarActividadTorreEnfriamiento
+              @inicializar="inicializar">
+          </AgregarActividadTorreEnfriamiento>
           <v-btn
               text
               x-small
@@ -43,7 +38,22 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn text>Editar</v-btn>
+                <v-spacer></v-spacer>
+                <!-- Formulario para agregar productos actividad -->
+                <DetalleActividadTorreEnfriamiento
+                    :Actividad="item.idListadoActividadTorreEnfriamiento"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? true : false">
+                </DetalleActividadTorreEnfriamiento>
+                <!-- Formulario para agregar productos actividad -->
+                <!-- Formulario para cambiar estado actividad -->
+                <CambiarEstadoActividadTorreEnfriamiento
+                    :ActividadCambiar="item.idListadoActividadTorreEnfriamiento"
+                    @inicializar="inicializar"
+                    v-if="item.NombreEstado == 'Creado' ? false : true">
+                </CambiarEstadoActividadTorreEnfriamiento>
+                <!-- Formulario para cambiar estado actividad -->
+                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-col>

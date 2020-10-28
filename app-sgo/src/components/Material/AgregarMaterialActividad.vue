@@ -142,34 +142,34 @@ name: "AgregarMaterialActividad",
           else if (this.tipoActividadProcesar === "torreEnfriamiento") {
             ruta = "listadomaterialactividadestorre";
           }
-      // Si vamos a cerrar el dialog o no
-      // Guardamos el listado de materiales de la actividad
-      this.listadoProductosAgregar.forEach(element => {
-        // Guardamos todos los productos que seleccionamos
-        return new Promise((resolve, reject) => {
-          axios.post('/api/' + ruta, element)
-              .then(response => {
-                if (response.data.status == 200) {
-                  //console.log(response);
-                  this.descontarProductosInventario(element, this.tipoActividadProcesar);
-                  this.cambiarEstadoActividad(this.tipoActividadProcesar);
-                  this.$emit("dialog", this.dialog);
-                  this.$emit("actualizar");
-                  this.mostrarNotificacion();
-                  //console.log(element)
-                } else if (response.data.status == 404) {
-                  this.listadoErrores = response.data.errores
-                  this.alertaErrores = true
-                }
-                resolve(response)
-              })
-              .catch(error => {
-                //console.log(error)
+          // Si vamos a cerrar el dialog o no
+          // Guardamos el listado de materiales de la actividad
+          this.listadoProductosAgregar.forEach(element => {
+            // Guardamos todos los productos que seleccionamos
+            return new Promise((resolve, reject) => {
+              axios.post('/api/' + ruta, element)
+                  .then(response => {
+                    if (response.data.status == 200) {
+                      //console.log(response);
+                      this.descontarProductosInventario(element, this.tipoActividadProcesar);
+                      this.cambiarEstadoActividad(this.tipoActividadProcesar);
+                      this.$emit("dialog", this.dialog);
+                      this.$emit("actualizar");
+                      this.mostrarNotificacion();
+                      //console.log(element)
+                    } else if (response.data.status == 404) {
+                      this.listadoErrores = response.data.errores
+                      this.alertaErrores = true
+                    }
+                    resolve(response)
+                  })
+                  .catch(error => {
+                    //console.log(error)
 
-                reject(error)
-              })
-        })
-      });
+                    reject(error)
+                  })
+            })
+          });
     },
 
     descontarProductosInventario(element, tipoActividadProcesar){
