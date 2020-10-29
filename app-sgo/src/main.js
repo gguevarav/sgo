@@ -16,7 +16,6 @@ import AgregarActividadCaldera from './components/ActividadesCaldera/AgregarActi
 import DetalleActividadCaldera from './components/ActividadesCaldera/DetalleActividadCaldera';
 import DetalleListadoProductosActividadCaldera from './components/ActividadesCaldera/DetalleListadoProductosActividadCaldera';
 import CambiarEstadoActividadCaldera from './components/ActividadesCaldera/CambiarEstadoActividadCaldera';
-import EditarActividadCaldera from './components/ActividadesCaldera/EditarActividadCaldera';
 import TablaActividadesCaldera from './components/ActividadesCaldera/TablaActividadesCaldera';
 
 ///////////////////////////////////////////////////////////////////////
@@ -27,7 +26,6 @@ import AgregarActividadPretratamiento from './components/ActividadesPretratamien
 import DetalleActividadPretratamiento from './components/ActividadesPretratamiento/DetalleActividadPretratamiento';
 import DetalleListadoProductosActividadPretratamiento from './components/ActividadesPretratamiento/DetalleListadoProductosActividadPretratamiento';
 import CambiarEstadoActividadPretratamiento from './components/ActividadesPretratamiento/CambiarEstadoActividadPretratamiento';
-import EditarActividadPretratamiento from "@/components/ActividadesPretratamiento/EditarActividadPretratamiento";
 import TablaActividadesPretratamiento from "@/components/ActividadesPretratamiento/TablaActividadesPretratamiento";
 
 ///////////////////////////////////////////////////////////////////////
@@ -43,18 +41,20 @@ import TablaActividadesTorreEnfriamiento from "@/components/ActividadesTorreEnfr
 // Nombres componentes
 // Barra de navegación
 Vue.component('BarraNavegacion', BarraNavegacion);
+
 // Componente principal para agregar materiales
 Vue.component('AgregarMaterialActividad', AgregarMaterialActividad);
+
 // Componente para exportar datos
 Vue.component('ExportarAExcel', ExportarAExcel);
 Vue.component('ExportarActividades', ExportarActividades);
+
 // Importe de componenetes de actividades de caldera
 Vue.component('ActividadesCaldera', ActividadesCaldera);
 Vue.component('AgregarActividadCaldera', AgregarActividadCaldera);
 Vue.component('DetalleActividadCaldera', DetalleActividadCaldera);
 Vue.component('DetalleListadoProductosActividadCaldera', DetalleListadoProductosActividadCaldera);
 Vue.component('CambiarEstadoActividadCaldera', CambiarEstadoActividadCaldera);
-Vue.component('EditarActividadCaldera', EditarActividadCaldera);
 Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
 
 // Importe de actividades de Pretratamiento
@@ -63,7 +63,6 @@ Vue.component('AgregarActividadPretratamiento', AgregarActividadPretratamiento);
 Vue.component('DetalleActividadPretratamiento', DetalleActividadPretratamiento);
 Vue.component('DetalleListadoProductosActividadPretratamiento', DetalleListadoProductosActividadPretratamiento);
 Vue.component('CambiarEstadoActividadPretratamiento', CambiarEstadoActividadPretratamiento);
-Vue.component('EditarActividadPretratamiento', EditarActividadPretratamiento);
 Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
 
 // Importe de actividades de Torre de enfriamiento
@@ -73,7 +72,6 @@ Vue.component('DetalleActividadTorreEnfriamiento', DetalleActividadTorreEnfriami
 Vue.component('DetalleListadoProductosActividadTorreEnfriamiento', DetalleListadoProductosActividadTorreEnfriamiento);
 Vue.component('CambiarEstadoActividadTorreEnfriamiento', CambiarEstadoActividadTorreEnfriamiento);
 Vue.component('TablaActividadesTorreEnfriamiento', TablaActividadesTorreEnfriamiento);
-
 
 Vue.config.productionTip = false
 
