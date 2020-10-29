@@ -1,10 +1,6 @@
 <template>
   <!-- Contenido principal -->
-  <v-row>
-    <v-col>
-      <TablaActividadesCaldera></TablaActividadesCaldera>
-    </v-col>
-  </v-row>
+  <TablaActividadesCaldera></TablaActividadesCaldera>
 </template>
 
 <script>

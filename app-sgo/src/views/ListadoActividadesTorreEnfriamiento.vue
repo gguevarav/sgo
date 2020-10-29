@@ -1,9 +1,6 @@
 <template>
-  <v-row>
-    <v-col>
-      <TablaActividadesTorreEnfriamiento></TablaActividadesTorreEnfriamiento>
-    </v-col>
-  </v-row>
+  <!-- Contenido principal -->
+  <TablaActividadesTorreEnfriamiento></TablaActividadesTorreEnfriamiento>
 </template>
 
 <script>

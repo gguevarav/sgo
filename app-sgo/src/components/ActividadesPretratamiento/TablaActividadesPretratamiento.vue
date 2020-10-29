@@ -1,60 +1,58 @@
 <template>
-  <div>
-    <v-app>
-      <div class="text-center">
-        <!-- Tabla de actividades de pretratamiento -->
-        <v-data-table
-            dense
-            :headers="encabezadosTabla"
-            :items="datosTabla"
-            :items-per-page="10"
-            sort-by="NombreActividad"
-            class="elevation-1">
-          <template
-              v-slot:top>
-            <v-toolbar
-                flat
-                color="white">
-              <v-toolbar-title>
-                Listado de actividades de pretratamiento
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <!-- Dialog de botones de agregar y recargar -->
-              <v-dialog>
-                <template
-                    v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      text
-                      class="mb-2"
-                      @click="inicializar">
-                    <v-icon>
-                      mdi-reload
-                    </v-icon>
-                  </v-btn>
-                  <ExportarActividades
-                      tipoActividad="pretratamiento">
-                  </ExportarActividades>
-                </template>
-              </v-dialog>
-              <!-- Termina dialog de botones de agregar y recargar -->
-            </v-toolbar>
-          </template>
-          <template
-              v-slot:item.actions="{ item }">
-            <!-- Formulario para cerrar actividad -->
-            <EditarActividadPretratamiento
-                :Actividad="item.idListadoActividadPretratamiento">
-            </EditarActividadPretratamiento>
-            <!-- Formulario para cerrar actividad -->
-            <!-- Formulario para listar los productos de una actividad de caldera -->
-            <DetalleListadoProductosActividadCaldera>
-            </DetalleListadoProductosActividadCaldera>
-            <!-- Formulario para listar los productos de una actividad de caldera -->
-          </template>
-        </v-data-table>
-        <!-- Termina la tabla de actividades de pretratamiento -->
-      </div>
-    </v-app>
+  <div class="text-center">
+    <!-- Tabla de actividades de pretratamiento -->
+    <v-data-table
+        dense
+        :headers="encabezadosTabla"
+        :items="datosTabla"
+        :items-per-page="10"
+        :search="search"
+        sort-by="NombreActividad"
+        class="elevation-1">
+      <template
+          v-slot:top>
+        <v-toolbar
+            flat
+            color="white">
+          <v-toolbar-title>
+            Listado de actividades de pretratamiento
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+                v-slot:activator="{ on, attrs }">
+              <v-btn
+                  text
+                  class="mb-2"
+                  @click="inicializar">
+                <v-icon>
+                  mdi-reload
+                </v-icon>
+              </v-btn>
+              <ExportarActividades
+                  tipoActividad="pretratamiento">
+              </ExportarActividades>
+            </template>
+          </v-dialog>
+          <!-- Termina dialog de botones de agregar y recargar -->
+        </v-toolbar>
+        <v-text-field
+            v-model="search"
+            label="Búsqueda"
+            class="mx-4">
+        </v-text-field>
+      </template>
+      <template
+          v-slot:item.actions="{ item }">
+        <!-- Formulario para listar los productos de una actividad de caldera -->
+        <DetalleListadoProductosActividadPretratamiento
+          :idActividadPretratamiento="item.idListadoActividadPretratamiento">
+        </DetalleListadoProductosActividadPretratamiento>
+        <!-- Formulario para listar los productos de una actividad de caldera -->
+      </template>
+    </v-data-table>
+    <!-- Termina la tabla de actividades de pretratamiento -->
   </div>
 </template>
 <script>
@@ -65,6 +63,7 @@ export default {
 name: "TablaActividadesPretratamiento",
   data: function () {
     return {
+      search: '',
       encabezadosTabla: [{
           text: 'Código de actividad',
           align: 'center',

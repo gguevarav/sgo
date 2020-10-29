@@ -1,61 +1,59 @@
 <template>
-  <div>
-    <v-app>
-      <div
-          class="text-center">
-        <!-- Tabla de actividades de caldera -->
-        <v-data-table
-            dense
-            :headers="encabezadosTabla"
-            :items="datosTabla"
-            :items-per-page="10"
-            sort-by="NombreActividad"
-            class="elevation-1">
-          <template
-              v-slot:top>
-            <v-toolbar
-                flat
-                color="white">
-              <v-toolbar-title>
-                Listado de actividades de caldera
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <!-- Dialog de botones de agregar y recargar -->
-              <v-dialog>
-                <template
-                    v-slot:activator="{ on, attrs }">
-                  <v-btn
-                      text
-                      class="mb-2"
-                      @click="inicializar">
-                    <v-icon>
-                      mdi-reload
-                    </v-icon>
-                  </v-btn>
-                  <ExportarActividades
-                      tipoActividad="caldera">
-                  </ExportarActividades>
-                </template>
-              </v-dialog>
-              <!-- Termina dialog de botones de agregar y recargar -->
-            </v-toolbar>
-          </template>
-          <template
-              v-slot:item.actions="{ item }">
-            <!-- Formulario para cerrar actividad
-            <EditarActividadCaldera
-                :Actividad="item.idListadoActividadCaldera">
-            </EditarActividadCaldera>
-            Formulario para cerrar actividad -->
-            <!-- Formulario para listar los productos de una actividad de caldera -->
-            <DetalleListadoProductosActividadCaldera>
-            </DetalleListadoProductosActividadCaldera>
-            <!-- Formulario para listar los productos de una actividad de caldera -->
-          </template>
-        </v-data-table>
-        <!-- Termina la tabla de actividades de caldera -->
-      </div>
-    </v-app>
+  <div
+      class="text-center">
+    <!-- Tabla de actividades de caldera -->
+    <v-data-table
+        dense
+        :headers="encabezadosTabla"
+        :items="datosTabla"
+        :items-per-page="10"
+        :search="search"
+        sort-by="NombreActividad"
+        class="elevation-1">
+      <template
+          v-slot:item.actions="{ item }">
+        <!-- Modal para listar los productos de una actividad de caldera -->
+        <DetalleListadoProductosActividadCaldera
+            :idActividadCaldera="item.idListadoActividadCaldera">
+        </DetalleListadoProductosActividadCaldera>
+        <!-- Modal para listar los productos de una actividad de caldera -->
+      </template>
+      <template
+          v-slot:top>
+        <v-toolbar
+            flat
+            color="white">
+          <v-toolbar-title>
+            Listado de actividades de caldera
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <!-- Dialog de botones de agregar y recargar -->
+          <v-dialog>
+            <template
+                v-slot:activator="{ on, attrs }">
+              <v-btn
+                  text
+                  class="mb-2"
+                  @click="inicializar">
+                <v-icon>
+                  mdi-reload
+                </v-icon>
+              </v-btn>
+              <ExportarActividades
+                  tipoActividad="caldera">
+              </ExportarActividades>
+            </template>
+          </v-dialog>
+        </v-toolbar>
+        <!-- Termina dialog de botones de agregar y recargar -->
+        <v-text-field
+            v-model="search"
+            label="Búsqueda"
+            class="mx-4">
+        </v-text-field>
+      </template>
+    </v-data-table>
+    <!-- Termina la tabla de actividades de caldera -->
   </div>
 </template>
 
@@ -66,6 +64,7 @@ export default {
 name: "TablaActividades",
   data: function () {
     return {
+      search: '',
       encabezadosTabla: [{
           text: 'Codigo de actividad',
           align: 'center',

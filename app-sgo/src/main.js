@@ -25,6 +25,7 @@ import TablaActividadesCaldera from './components/ActividadesCaldera/TablaActivi
 import ActividadesPretratamiento from './components/ActividadesPretratamiento/ActividadesPretratamiento';
 import AgregarActividadPretratamiento from './components/ActividadesPretratamiento/AgregarActividadPretratamiento';
 import DetalleActividadPretratamiento from './components/ActividadesPretratamiento/DetalleActividadPretratamiento';
+import DetalleListadoProductosActividadPretratamiento from './components/ActividadesPretratamiento/DetalleListadoProductosActividadPretratamiento';
 import CambiarEstadoActividadPretratamiento from './components/ActividadesPretratamiento/CambiarEstadoActividadPretratamiento';
 import EditarActividadPretratamiento from "@/components/ActividadesPretratamiento/EditarActividadPretratamiento";
 import TablaActividadesPretratamiento from "@/components/ActividadesPretratamiento/TablaActividadesPretratamiento";
@@ -35,6 +36,7 @@ import TablaActividadesPretratamiento from "@/components/ActividadesPretratamien
 import ActividadesTorreEnfriamiento from './components/ActividadesTorreEnfriamiento/ActividadesTorreEnfriamiento';
 import AgregarActividadTorreEnfriamiento from './components/ActividadesTorreEnfriamiento/AgregarActividadTorreEnfriamiento';
 import DetalleActividadTorreEnfriamiento from "@/components/ActividadesTorreEnfriamiento/DetalleActividadTorreEnfriamiento";
+import DetalleListadoProductosActividadTorreEnfriamiento from "@/components/ActividadesTorreEnfriamiento/DetalleListadoProductosActividadTorreEnfriamiento";
 import CambiarEstadoActividadTorreEnfriamiento from "@/components/ActividadesTorreEnfriamiento/CambiarEstadoActividadTorreEnfriamiento";
 import TablaActividadesTorreEnfriamiento from "@/components/ActividadesTorreEnfriamiento/TablaActividadesTorreEnfriamiento";
 
@@ -59,6 +61,7 @@ Vue.component('TablaActividadesCaldera', TablaActividadesCaldera);
 Vue.component('ActividadesPretratamiento', ActividadesPretratamiento);
 Vue.component('AgregarActividadPretratamiento', AgregarActividadPretratamiento);
 Vue.component('DetalleActividadPretratamiento', DetalleActividadPretratamiento);
+Vue.component('DetalleListadoProductosActividadPretratamiento', DetalleListadoProductosActividadPretratamiento);
 Vue.component('CambiarEstadoActividadPretratamiento', CambiarEstadoActividadPretratamiento);
 Vue.component('EditarActividadPretratamiento', EditarActividadPretratamiento);
 Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
@@ -67,6 +70,7 @@ Vue.component('TablaActividadesPretratamiento', TablaActividadesPretratamiento);
 Vue.component('ActividadesTorreEnfriamiento', ActividadesTorreEnfriamiento);
 Vue.component('AgregarActividadTorreEnfriamiento', AgregarActividadTorreEnfriamiento);
 Vue.component('DetalleActividadTorreEnfriamiento', DetalleActividadTorreEnfriamiento);
+Vue.component('DetalleListadoProductosActividadTorreEnfriamiento', DetalleListadoProductosActividadTorreEnfriamiento);
 Vue.component('CambiarEstadoActividadTorreEnfriamiento', CambiarEstadoActividadTorreEnfriamiento);
 Vue.component('TablaActividadesTorreEnfriamiento', TablaActividadesTorreEnfriamiento);
 

@@ -161,13 +161,13 @@ class ListadoMaterialActividadesTorreEnfriamientoController extends BaseControll
         $json = null;
         // Primero obtenemos todos los registros y los almacenamos en un array
         $ListadoMaterialActividadTorreEnfriamiento = DB::SELECT('SELECT LMATE.idListadoMaterialActividadTorreEnfriamiento,
-                                                                    P.CodigoProducto,
-                                                                    P.NombreProducto,
-                                                                    LMATE.CantidadProducto ' . '
-                                                             FROM ListadoMaterialActividadTorreEnfriamiento As LMATE
-                                                                      INNER JOIN Producto P
-                                                                                 ON LMATE.idProducto = P.idProducto
-                                                             WHERE idListadoActividadTorreEnfriamiento = ' . $id . ';');
+                                                                            P.CodigoProducto,
+                                                                            P.NombreProducto,
+                                                                            LMATE.CantidadProducto ' . '
+                                                                       FROM ListadoMaterialActividadTorreEnfriamiento As LMATE
+                                                                              INNER JOIN Producto P
+                                                                                         ON LMATE.idProducto = P.idProducto
+                                                                       WHERE idListadoActividadTorreEnfriamiento = ' . $id . ';');
         // Verificamos que el array no esté vacio
         if ($ListadoMaterialActividadTorreEnfriamiento != "[]" && !empty($ListadoMaterialActividadTorreEnfriamiento)) {
             $json = array(

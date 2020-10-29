@@ -6,6 +6,7 @@
         :headers="encabezadosTabla"
         :items="datosTabla"
         :items-per-page="10"
+        :search="search"
         sort-by="NombreActividad"
         class="elevation-1">
       <template
@@ -36,6 +37,19 @@
           </v-dialog>
           <!-- Termina dialog de botones de agregar y recargar -->
         </v-toolbar>
+        <v-text-field
+            v-model="search"
+            label="Búsqueda"
+            class="mx-4">
+        </v-text-field>
+      </template>
+      <template
+          v-slot:item.actions="{ item }">
+        <!-- Formulario para listar los productos de una actividad de caldera -->
+        <DetalleListadoProductosActividadTorreEnfriamiento
+            :idActividadTorreEnfriamiento="item.idListadoActividadTorreEnfriamiento">
+        </DetalleListadoProductosActividadTorreEnfriamiento>
+        <!-- Formulario para listar los productos de una actividad de caldera -->
       </template>
     </v-data-table>
     <!-- Termina la tabla de actividades de pretratamiento -->
@@ -49,6 +63,7 @@ export default {
   name: "TablaActividadesTorreEnfriamiento",
   data: function () {
     return {
+      search: '',
       encabezadosTabla: [{
           text: 'Codigo de actividad',
           align: 'center',
