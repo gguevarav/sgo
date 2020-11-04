@@ -187,7 +187,7 @@
                         sm="6"
                         md="6">
                         <v-text-field
-                          v-model="editedItem.idProducto"
+                          v-model="editedItem.CodigoProducto"
                           :disabled="editarProducto"
                           label="Producto"
                           :rules="[rules.required]">
@@ -198,7 +198,7 @@
                         sm="6"
                         md="6">
                         <v-text-field
-                          v-model="editedItem.CantidadExistencia"
+                          v-model="editedItem.TotalExistencia"
                           label="Cantidad en existencia"
                           :disabled="editarProducto"
                           :rules="[rules.required]">
@@ -359,6 +359,10 @@
           value: 'CodigoProducto',
         },
         {
+          text: 'idProducto',
+          value: 'idProducto'
+        },
+        {
           text: 'Producto',
           value: 'NombreProducto'
         },
@@ -397,15 +401,16 @@
       editedIndex: -1,
       editedItem: {
         idProducto: '',
-        //CodigoProducto: '',
-        CantidadExistencia: '',
+        CodigoProducto: '',
+        TotalExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
         RegistradoPor: localStorage.getItem('idUsuario'),
       },
       defaultItem: {
         idProducto: '',
-        CantidadExistencia: '',
+        CodigoProducto: '',
+        TotalExistencia: '',
         CantidadMinima: '',
         CantidadMaxima: '',
         RegistradoPor: localStorage.getItem('idUsuario'),
@@ -505,6 +510,8 @@
       },
 
       agregarCantidadProductoInventario() {
+        // Pasamos el usuario
+        this.cantidadProductoAgregar.RegistradoPor = localStorage.getItem('idUsuario');
         axios
           .post("/api/agregaracantidadinventario/", this.cantidadProductoAgregar)
           .then(response => {

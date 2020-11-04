@@ -16,7 +16,7 @@ class InventarioController extends BaseController
         $Datos = DB::table('Inventario')
             ->join('Producto', 'Inventario.idProducto', '=', 'Producto.idProducto')
             ->join('MinimosMaximos', 'Inventario.idProducto', '=', 'MinimosMaximos.idProducto')
-            ->select('Producto.CodigoProducto', 'Producto.NombreProducto',
+            ->select('Producto.idProducto', 'Producto.CodigoProducto', 'Producto.NombreProducto',
                 DB::raw('SUM(CantidadExistencia) as TotalExistencia'),
                 DB::raw('SUM(ProductoFlotante) as TotalFlotante'),
                 'MinimosMaximos.CantidadMinima', 'MinimosMaximos.CantidadMaxima')
@@ -62,7 +62,8 @@ class InventarioController extends BaseController
                 "CantidadExistencia" => 'required|numeric',
                 "CantidadMinima" => 'required|numeric',
                 "CantidadMaxima" => 'required|numeric',
-                "RegistradoPor" => 'required|integer'];
+                "RegistradoPor" => 'required|integer',
+                ""];
 
             $Mensajes = [
                 "idProducto.required" => 'Es necesario agregar un código de producto',
@@ -80,6 +81,15 @@ class InventarioController extends BaseController
                     "status" => 404,
                     "detalle" => "Los registros tienen errores",
                     "errores" => $validacion->errors()->all()
+                );
+            }else if($Datos["CantidadMaxima"] <= $Datos["CantidadMinima"]) {
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => [
+                        0 => "La cantidad máxima de producto no puede ser menor ni igual que la cantidad mínima"
+                    ]
                 );
             }else{
                 // Guardamos primero los minimos y maximos
@@ -246,6 +256,15 @@ class InventarioController extends BaseController
                     "detalle" => "Los registros tienen errores",
                     "errores" => $validacion->errors()->all()
                 );
+            }else if($Datos["CantidadMaxima"] <= $Datos["CantidadMinima"]) {
+                // Devolvemos el mensaje que falló la validación de Datos
+                $json = array(
+                    "status" => 404,
+                    "detalle" => "Los registros tienen errores",
+                    "errores" => [
+                        0 => "La cantidad máxima de producto no puede ser menor ni igual que la cantidad mínima"
+                    ]
+                );
             }else{
                 // Ejecutamos la acción de guardar el usuario
                 $ObtenerObjetoEditar = MinimosMaximos::where("idProducto", $id)->get();
@@ -381,7 +400,7 @@ class InventarioController extends BaseController
             $Mensajes = [
                 "idProducto.required" => 'Es necesario agregar un código de producto',
                 "cantidadAgregar.required" => 'Es necesario agregar una cantidad en existencia',
-                "RegistradoPor.required" => 'Es necesario agregar una usuario'];
+                "RegistradoPor.required" => 'Es necesario agregar un usuario'];
             // Validamos los Datos antes de insertarlos en la base de Datos
             $validacion = Validator::make($Datos,$Reglas,$Mensajes);
 

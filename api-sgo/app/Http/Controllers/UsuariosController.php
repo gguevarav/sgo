@@ -144,6 +144,31 @@ class UsuariosController extends BaseController
         return response()->json($json);
     }
 
+    public function rolUsuario($id, Request $request){
+    // Inicializamos una variable para almacenar un json nulo
+    $json = null;
+    // Primero obtenemos todos los registros y los almacenamos en un array
+    $Usuario = DB::Select('SELECT U.idRol, R.NombreRol FROM users AS U
+                                    INNER JOIN Rol R
+                                        ON U.idRol = R.idRol
+                                    WHERE idUsuario = ' . $id . ';');
+    // Verificamos que el array no esté vacio
+    if (!empty($Usuario[0])) {
+        $json = array(
+            'status' => 200,
+            'detalle' => $Usuario
+        );
+    } else {
+        $json = array(
+            'status' => 200,
+            'total' => 0,
+            'detalle' => "No hay registros"
+        );
+    }
+    // Devolvemos la respuesta en un Json
+    return response()->json($json);
+}
+
     public function update($id, Request $request){
         // Creamos un json nulo
         $json = null;

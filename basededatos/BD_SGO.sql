@@ -465,11 +465,12 @@ INSERT INTO Producto (idProducto, CodigoProducto, NombreProducto,
 
 -- Inventario
 INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        idListadoActividadPretratamiento, idListadoActividadTorreEnfriamiento,
                         CantidadExistencia, ProductoFlotante, RegistradoPor,
                         created_at, updated_at)
-                VALUES (NULL, 1, 0, 150, 0, 1, NULL, NULL),
-                       (NULL, 2, 0, 125, 0, 1, NULL, NULL),
-                       (NULL, 3, 0, 100, 0, 1, NULL, NULL);
+                VALUES (NULL, 1, 0, 0, 0, 150, 0, 1, NULL, NULL),
+                       (NULL, 2, 0, 0, 0, 125, 0, 1, NULL, NULL),
+                       (NULL, 3, 0, 0, 0, 100, 0, 1, NULL, NULL);
 
 -- MinimosMaximon
 INSERT INTO MinimosMaximos (idMinimosMaximos, idProducto, CantidadMinima,
@@ -548,15 +549,16 @@ INSERT INTO ListadoMaterialActividadCaldera (idListadoActividadCaldera, idProduc
 
 -- decontarInventario
 INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        idListadoActividadPretratamiento, idListadoActividadTorreEnfriamiento,
                         CantidadExistencia, ProductoFlotante, RegistradoPor,
                         created_at, updated_at)
-                VALUES (NULL, 2, 1, -12.5, -12.5, 1, NULL, NULL),
-                       (NULL, 1, 3, -20, -20, 1, NULL, NULL),
-                       (NULL, 3, 2, -4, -4, 1, NULL, NULL),
-                       (NULL, 1, 3, -16, -16, 1, NULL, NULL),
-                       (NULL, 3, 1, -9, -9, 1, NULL, NULL),
-                       (NULL, 2, 2, -2, -2, 1, NULL, NULL),
-                       (NULL, 3, 1, -10, -10, 1, NULL, NULL);
+                VALUES (NULL, 2, 1, 0, 0, -12.5, -12.5, 1, NULL, NULL),
+                       (NULL, 1, 3, 0, 0, -20, -20, 1, NULL, NULL),
+                       (NULL, 3, 2, 0, 0, -4, -4, 1, NULL, NULL),
+                       (NULL, 1, 3, 0, 0, -16, -16, 1, NULL, NULL),
+                       (NULL, 3, 1, 0, 0, -9, -9, 1, NULL, NULL),
+                       (NULL, 2, 2, 0, 0, -2, -2, 1, NULL, NULL),
+                       (NULL, 3, 1, 0, 0, -10, -10, 1, NULL, NULL);
 
 -- Inseción de listado de materiales de actividades de Pretratamiento
 INSERT INTO ListadoMaterialActividadPretratamiento (idListadoActividadPretratamiento, idProducto,
@@ -570,14 +572,15 @@ INSERT INTO ListadoMaterialActividadPretratamiento (idListadoActividadPretratami
 
 -- decontarInventario
 INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        idListadoActividadPretratamiento, idListadoActividadTorreEnfriamiento,
                         CantidadExistencia, ProductoFlotante, RegistradoPor,
                         created_at, updated_at)
-                VALUES (NULL, 2, 3, -16, -16, 1, NULL, NULL),
-                       (NULL, 3, 1, -3, -3, 1, NULL, NULL),
-                       (NULL, 1, 2, -5, -5, 1, NULL, NULL),
-                       (NULL, 2, 1, -3, -3, 1, NULL, NULL),
-                       (NULL, 1, 3, -13, -13, 1, NULL, NULL),
-                       (NULL, 3, 2, -28, -28, 1, NULL, NULL);
+                VALUES (NULL, 2, 0, 3, 0, -16, -16, 1, NULL, NULL),
+                       (NULL, 3, 0, 1, 0, -3, -3, 1, NULL, NULL),
+                       (NULL, 1, 0, 2, 0, -5, -5, 1, NULL, NULL),
+                       (NULL, 2, 0, 1, 0, -3, -3, 1, NULL, NULL),
+                       (NULL, 1, 0, 3, 0, -13, -13, 1, NULL, NULL),
+                       (NULL, 3, 0, 2, 0, -28, -28, 1, NULL, NULL);
 
 -- Inseción de listado de materiales de actividades de torre de enfriamiento
 INSERT INTO ListadoMaterialActividadTorreEnfriamiento (idListadoActividadTorreEnfriamiento, idProducto,
@@ -591,14 +594,15 @@ INSERT INTO ListadoMaterialActividadTorreEnfriamiento (idListadoActividadTorreEn
 
 -- decontarInventario
 INSERT INTO Inventario (idInventario, idProducto, idListadoActividadCaldera,
+                        idListadoActividadPretratamiento, idListadoActividadTorreEnfriamiento,
                         CantidadExistencia, ProductoFlotante, RegistradoPor,
                         created_at, updated_at)
-                VALUES (NULL, 3, 3, -4, -4, 1, NULL, NULL),
-                       (NULL, 2, 1, -2, -2, 1, NULL, NULL),
-                       (NULL, 1, 2, -7, -7, 1, NULL, NULL),
-                       (NULL, 2, 1, -8, -8, 1, NULL, NULL),
-                       (NULL, 1, 3, -12, -12, 1, NULL, NULL),
-                       (NULL, 3, 2, -9, -9, 1, NULL, NULL);
+                VALUES (NULL, 3, 0, 0, 3, -4, -4, 1, NULL, NULL),
+                       (NULL, 2, 0, 0, 1, -2, -2, 1, NULL, NULL),
+                       (NULL, 1, 0, 0, 2, -7, -7, 1, NULL, NULL),
+                       (NULL, 2, 0, 0, 1, -8, -8, 1, NULL, NULL),
+                       (NULL, 1, 0, 0, 3, -12, -12, 1, NULL, NULL),
+                       (NULL, 3, 0, 0, 2, -9, -9, 1, NULL, NULL);
 
 /*
     Selects

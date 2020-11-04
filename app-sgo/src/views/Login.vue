@@ -125,6 +125,7 @@ export default {
               localStorage.setItem('idUsuario', response.data.idUsuario);
               localStorage.setItem('NombreUsuario', response.data.NombreUsuario + ' ' + response.data.ApellidoUsuario);
               localStorage.setItem('CorreoUsuario', response.data.email);
+              this.buscarRol(response.data.idUsuario);
               bus.$emit('logged', 'User logged');
               resolve(response)
             })
@@ -134,6 +135,25 @@ export default {
               reject(error)
             })
       });
+    },
+
+    buscarRol($idUSuario){
+      return new Promise((resolve, reject) => {
+        axios.get('/api/rolusuario/' + $idUSuario, {
+          headers: { Authorization: localStorage.getItem('access_token') }
+        })
+            .then(response => {
+              //console.log(response.data);
+              localStorage.setItem('idRol', response.data.detalle[0].idRol);
+              localStorage.setItem('NombreRol', response.data.detalle[0].NombreRol);
+              resolve(response);
+            })
+            .catch(error => {
+              console.log(error);
+              console.log("error");
+              reject(error);
+            })
+      })
     },
 
     cerrarNotificacion(cerrarNotificacion){

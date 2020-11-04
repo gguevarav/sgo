@@ -72,6 +72,7 @@ Route::group([
     Route::delete('/usuarios/{id}', 'UsuariosController@destroy');
     Route::put('/usuarios/{id}', 'UsuariosController@update');
     Route::get('/usuarios/{id}', 'UsuariosController@show');
+    Route::get('/rolusuario/{id}', 'UsuariosController@rolUsuario');
 
     // CRUD Areas
     Route::get('/areas', 'AreasController@index');
