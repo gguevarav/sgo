@@ -5,7 +5,7 @@ import router from "@/router";
 import {bus} from "@/main";
 
 //axios.defaults.withCredentials = true;
-axios.defaults.baseURL ="http://localhost:8000"
+axios.defaults.baseURL ="http://ec2-3-139-1-150.us-east-2.compute.amazonaws.com/api-sgo"
 
 Vue.use(Vuex)
 
