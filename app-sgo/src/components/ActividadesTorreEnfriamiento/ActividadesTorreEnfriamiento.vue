@@ -10,7 +10,8 @@
         <template
             v-slot:activator="{ on, attrs }">
           <AgregarActividadTorreEnfriamiento
-              @inicializar="inicializar">
+              @inicializar="inicializar"
+              v-if="verificarPermisos('agregarActividad')">
           </AgregarActividadTorreEnfriamiento>
           <v-btn
               text
@@ -43,14 +44,14 @@
                 <DetalleActividadTorreEnfriamiento
                     :Actividad="item.idListadoActividadTorreEnfriamiento"
                     @inicializar="inicializar"
-                    v-if="item.NombreEstado == 'Creado' ? true : false">
+                    v-if="item.NombreEstado == 'Creado' ? verificarPermisos('agregarProductos') : false">
                 </DetalleActividadTorreEnfriamiento>
                 <!-- Formulario para agregar productos actividad -->
                 <!-- Formulario para cambiar estado actividad -->
                 <CambiarEstadoActividadTorreEnfriamiento
                     :ActividadCambiar="item.idListadoActividadTorreEnfriamiento"
                     @inicializar="inicializar"
-                    v-if="item.NombreEstado == 'Creado' ? false : true">
+                    v-if="item.NombreEstado == 'Creado' ? false : verificarPermisos('cambiarEstado')">
                 </CambiarEstadoActividadTorreEnfriamiento>
                 <!-- Formulario para cambiar estado actividad -->
                 <v-spacer></v-spacer>
@@ -100,6 +101,48 @@ name: "ActividadesTorreEnfriamiento",
         return 'enproceso';
       } else if (estado == 'Cerrado') {
         return 'cerrado';
+      }
+    },
+    verificarPermisos(nombreModulo){
+      // Obtendremos el nombre del rol
+      let nombreRol = localStorage.getItem('NombreRol');
+      // Verificaremos si puede visualizarlo o no
+      switch (nombreModulo){
+        case 'agregarActividad':
+        {
+          if(nombreRol === 'Administrador' ||
+              nombreRol === 'Gerente' ||
+              nombreRol === 'Supervisor'){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+        case 'agregarProductos':
+        {
+          if(nombreRol === 'Administrador' ||
+              nombreRol === 'Gerente' ||
+              nombreRol === 'Supervisor'){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+        case 'cambiarEstado':
+        {
+          if(nombreRol === 'Administrador' ||
+              nombreRol === 'Gerente' ||
+              nombreRol === 'Supervisor' ||
+              nombreRol === 'Auxiliar' ||
+              nombreRol === 'Operador'){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
       }
     },
   },

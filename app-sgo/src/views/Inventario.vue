@@ -513,7 +513,7 @@
         // Pasamos el usuario
         this.cantidadProductoAgregar.RegistradoPor = localStorage.getItem('idUsuario');
         axios
-          .post("/api/agregaracantidadinventario/", this.cantidadProductoAgregar)
+          .post("/api/agregaracantidadinventario", this.cantidadProductoAgregar)
           .then(response => {
             if (response.data.status == 200) {
               // Mostramos la confirmación

@@ -63,7 +63,8 @@
 
         <v-list-item
             :to="{name: 'productos'}"
-            link>
+            link
+            v-if="verificarPermisos('productos')">
           <v-list-item-icon>
             <v-icon>mdi-package-variant</v-icon>
           </v-list-item-icon>
@@ -75,7 +76,8 @@
 
         <v-list-item
             :to="{name: 'inventario'}"
-            link>
+            link
+            v-if="verificarPermisos('inventario')">
           <v-list-item-icon>
             <v-icon>mdi-factory</v-icon>
           </v-list-item-icon>
@@ -87,7 +89,8 @@
 
         <v-list-item
             :to="{name: 'usuarios'}"
-            link>
+            link
+            v-if="verificarPermisos('usuarios')">
           <v-list-item-icon>
             <v-icon>mdi-account-multiple</v-icon>
           </v-list-item-icon>
@@ -99,7 +102,8 @@
 
         <v-list-item
             :to="{name: 'actividades'}"
-            link>
+            link
+            v-if="verificarPermisos('actividades')">
           <v-list-item-icon>
             <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-icon>
@@ -111,7 +115,8 @@
 
         <v-list-item
             :to="{name: 'listadoactividadescaldera'}"
-            link>
+            link
+            v-if="verificarPermisos('listadoactividadescaldera')">
           <v-list-item-icon>
             <v-icon>mdi-format-list-bulleted</v-icon>
           </v-list-item-icon>
@@ -123,7 +128,8 @@
 
         <v-list-item
             :to="{name: 'listadoactividadespretratamiento'}"
-            link>
+            link
+            v-if="verificarPermisos('listadoactividadespretratamiento')">
           <v-list-item-icon>
             <v-icon>mdi-format-list-bulleted</v-icon>
           </v-list-item-icon>
@@ -135,7 +141,8 @@
 
         <v-list-item
             :to="{name: 'listadoactividadestorreenfriamiento'}"
-            link>
+            link
+            v-if="verificarPermisos('listadoactividadestorreenfriamiento')">
           <v-list-item-icon>
             <v-icon>mdi-format-list-bulleted</v-icon>
           </v-list-item-icon>
@@ -203,6 +210,89 @@ export default {
       }else if(this.barraNavegacion == false){
         this.barraNavegacion = true;
         this.iconoBarra = 'mdi-minus'
+      }
+    },
+    verificarPermisos(nombreRuta){
+      // Obtendremos el nombre del rol
+      let nombreRol = localStorage.getItem('NombreRol');
+      // Verificaremos si puede visualizarlo o no
+      switch (nombreRuta){
+        case 'productos':
+          {
+            if(nombreRol === 'Administrador' ||
+               nombreRol === 'Supervisor'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'inventario':
+          {
+            if(nombreRol === 'Administrador' ||
+               nombreRol === 'Gerente' ||
+               nombreRol === 'Supervisor'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'usuarios':
+          {
+            if(nombreRol === 'Administrador'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'actividades':
+          {
+            if(nombreRol === 'Administrador' ||
+               nombreRol === 'Gerente' ||
+               nombreRol === 'Supervisor' ||
+               nombreRol === 'Auxiliar' ||
+               nombreRol === 'Operador'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'listadoactividadescaldera':
+          {
+            if(nombreRol === 'Administrador' ||
+                nombreRol === 'Gerente' ||
+                nombreRol === 'Supervisor'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'listadoactividadespretratamiento':
+          {
+            if(nombreRol === 'Administrador' ||
+                nombreRol === 'Gerente' ||
+                nombreRol === 'Supervisor'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
+        case 'listadoactividadestorreenfriamiento':
+          {
+            if(nombreRol === 'Administrador' ||
+               nombreRol === 'Gerente' ||
+               nombreRol === 'Supervisor'){
+              return true;
+            }
+            else{
+              return false;
+            }
+          }
       }
     },
   },

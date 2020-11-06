@@ -438,7 +438,11 @@ INSERT INTO Puesto (idPuesto, NombrePuesto, EstadoPuesto,
 
 -- Rol
 INSERT INTO Rol (idRol, NombreRol, created_at, updated_at)
-         VALUES (NULL, 'Administrador', NULL, NULL);
+         VALUES (NULL, 'Administrador', NULL, NULL),
+                (NULL, 'Gerente', NULL, NULL),
+                (NULL, 'Supervisor', NULL, NULL),
+                (NULL, 'Auxiliar', NULL, NULL),
+                (NULL, 'Operador', NULL, NULL);
 
 -- Usuario
 INSERT INTO users (idUsuario, NombreUsuario, ApellidoUsuario,
