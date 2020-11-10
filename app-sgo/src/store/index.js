@@ -5,7 +5,7 @@ import router from "@/router";
 import {bus} from "@/main";
 
 //axios.defaults.withCredentials = true;
-axios.defaults.baseURL ="http://ec2-3-139-1-150.us-east-2.compute.amazonaws.com/api-sgo"
+axios.defaults.baseURL ="http://localhost:8000"
 
 Vue.use(Vuex)
 
@@ -98,6 +98,9 @@ export default new Vuex.Store({
               localStorage.removeItem('idUsuario')
               localStorage.removeItem('NombreUsuario')
               localStorage.removeItem('CorreoUsuario')
+              localStorage.removeItem('idRol')
+              localStorage.removeItem('NombreRol')
+              localStorage.clear();
               bus.$emit('logged', 'User logged');
               router.push({ name: "login" });
               context.commit('destroyToken')
@@ -110,6 +113,9 @@ export default new Vuex.Store({
               localStorage.removeItem('idUsuario')
               localStorage.removeItem('NombreUsuario')
               localStorage.removeItem('CorreoUsuario')
+              localStorage.removeItem('idRol')
+              localStorage.removeItem('NombreRol')
+              localStorage.clear();
               bus.$emit('logged', 'User logged');
               router.push({ name: "login" });
               context.commit('destroyToken')

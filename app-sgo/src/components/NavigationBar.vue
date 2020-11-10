@@ -50,117 +50,16 @@
           dense
       >
         <v-list-item
-            :to="{name: 'home'}"
-            link>
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Inicio</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'productos'}"
+            :to="{name: item.nombre}"
             link
-            v-if="verificarPermisos('productos')">
+            v-for="(item, index) in rutasMostrar"
+            v-bind:key="index">
           <v-list-item-icon>
-            <v-icon>mdi-package-variant</v-icon>
+            <v-icon>{{ item.icono }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Productos</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'inventario'}"
-            link
-            v-if="verificarPermisos('inventario')">
-          <v-list-item-icon>
-            <v-icon>mdi-factory</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Inventario</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'usuarios'}"
-            link
-            v-if="verificarPermisos('usuarios')">
-          <v-list-item-icon>
-            <v-icon>mdi-account-multiple</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Usuarios</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'actividades'}"
-            link
-            v-if="verificarPermisos('actividades')">
-          <v-list-item-icon>
-            <v-icon>mdi-view-dashboard</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Actividades</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'listadoactividadescaldera'}"
-            link
-            v-if="verificarPermisos('listadoactividadescaldera')">
-          <v-list-item-icon>
-            <v-icon>mdi-format-list-bulleted</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Caldera</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'listadoactividadespretratamiento'}"
-            link
-            v-if="verificarPermisos('listadoactividadespretratamiento')">
-          <v-list-item-icon>
-            <v-icon>mdi-format-list-bulleted</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Pretratamiento</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'listadoactividadestorreenfriamiento'}"
-            link
-            v-if="verificarPermisos('listadoactividadestorreenfriamiento')">
-          <v-list-item-icon>
-            <v-icon>mdi-format-list-bulleted</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Torre de enfriamiento</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item
-            :to="{name: 'about'}"
-            link>
-          <v-list-item-icon>
-            <v-icon>mdi-help</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>Acerca de</v-list-item-title>
+            <v-list-item-title> {{ item.nombreMostrar }} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -180,119 +79,223 @@ export default {
       NombreUsuario: localStorage.getItem('NombreUsuario'),
       CorreoUsuario: localStorage.getItem('CorreoUsuario'),
       isLogged: this.checkIfIsLogged(),
+      rutasMostrar: this.verificarPermisos(),
     }
   },
   created () {
     bus.$on('logged', () => {
-      this.isLogged = this.checkIfIsLogged()
-    })
+      this.isLogged = this.checkIfIsLogged();
+    });
+    bus.$on('menu', () => {
+      this.rutasMostrar = this.verificarPermisos();
+    });
   },
   methods: {
+    verificarPermisos(){
+      let nombreRol = localStorage.getItem('NombreRol');
+      if(nombreRol === 'Administrador'){
+        //this.rutasMostrar = this.rutasAdministrador;
+        var rutasAdmin = [
+          {
+            nombre: 'home',
+            icono: 'mdi-home',
+            nombreMostrar: 'Inicio',
+          },
+          {
+            nombre: 'productos',
+            icono: 'mdi-package-variant',
+            nombreMostrar: 'Productos',
+          },
+          {
+            nombre: 'inventario',
+            icono: 'mdi-factory',
+            nombreMostrar: 'Inventario',
+          },
+          {
+            nombre: 'usuarios',
+            icono: 'mdi-account-multiple',
+            nombreMostrar: 'Usuarios',
+          },
+          {
+            nombre: 'actividades',
+            icono: 'mdi-view-dashboard',
+            nombreMostrar: 'Actividades',
+          },
+          {
+            nombre: 'listadoactividadescaldera',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Caldera',
+          },
+          {
+            nombre: 'listadoactividadespretratamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Pretratamiento',
+          },
+          {
+            nombre: 'listadoactividadestorreenfriamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Torre de enfriamiento',
+          },
+          {
+            nombre: 'about',
+            icono: 'mdi-help',
+            nombreMostrar: 'Acerca de',
+          },
+        ];
+        return rutasAdmin;
+      }
+      else if(nombreRol === 'Gerente'){
+        //this.rutasMostrar = this.rutasGerente;
+        var rutasGerente = [
+          {
+            nombre: 'home',
+            icono: 'mdi-home',
+            nombreMostrar: 'Inicio',
+          },
+          {
+            nombre: 'inventario',
+            icono: 'mdi-factory',
+            nombreMostrar: 'Inventario',
+          },
+          {
+            nombre: 'actividades',
+            icono: 'mdi-view-dashboard',
+            nombreMostrar: 'Actividades',
+          },
+          {
+            nombre: 'listadoactividadescaldera',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Caldera',
+          },
+          {
+            nombre: 'listadoactividadespretratamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Pretratamiento',
+          },
+          {
+            nombre: 'listadoactividadestorreenfriamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Torre de enfriamiento',
+          },
+          {
+            nombre: 'about',
+            icono: 'mdi-help',
+            nombreMostrar: 'Acerca de',
+          },
+        ];
+        return rutasGerente;
+      }
+      else if(nombreRol === 'Supervisor'){
+        //this.rutasMostrar = this.rutasSupervisor;
+        var rutasSupervisor = [
+          {
+            nombre: 'home',
+            icono: 'mdi-home',
+            nombreMostrar: 'Inicio',
+          },
+          {
+            nombre: 'productos',
+            icono: 'mdi-package-variant',
+            nombreMostrar: 'Productos',
+          },
+          {
+            nombre: 'inventario',
+            icono: 'mdi-factory',
+            nombreMostrar: 'Inventario',
+          },
+          {
+            nombre: 'actividades',
+            icono: 'mdi-view-dashboard',
+            nombreMostrar: 'Actividades',
+          },
+          {
+            nombre: 'listadoactividadescaldera',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Caldera',
+          },
+          {
+            nombre: 'listadoactividadespretratamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Pretratamiento',
+          },
+          {
+            nombre: 'listadoactividadestorreenfriamiento',
+            icono: 'mdi-format-list-bulleted',
+            nombreMostrar: 'Torre de enfriamiento',
+          },
+          {
+            nombre: 'about',
+            icono: 'mdi-help',
+            nombreMostrar: 'Acerca de',
+          },
+        ];
+        return rutasSupervisor;
+      }
+      else if(nombreRol === 'Auxiliar'){
+        //this.rutasMostrar = this.rutasAuxiliar;
+        var rutasAuxiliar = [
+          {
+            nombre: 'home',
+            icono: 'mdi-home',
+            nombreMostrar: 'Inicio',
+          },
+          {
+            nombre: 'actividades',
+            icono: 'mdi-view-dashboard',
+            nombreMostrar: 'Actividades',
+          },
+          {
+            nombre: 'about',
+            icono: 'mdi-help',
+            nombreMostrar: 'Acerca de',
+          },
+        ];
+        return rutasAuxiliar;
+      }
+      else if(nombreRol === 'Operador'){
+        //this.rutasMostrar = this.rutasOperador;
+        var rutasOperador = [
+          {
+            nombre: 'home',
+            icono: 'mdi-home',
+            nombreMostrar: 'Inicio',
+          },
+          {
+            nombre: 'actividades',
+            icono: 'mdi-view-dashboard',
+            nombreMostrar: 'Actividades',
+          },
+          {
+            nombre: 'about',
+            icono: 'mdi-help',
+            nombreMostrar: 'Acerca de',
+          },
+        ];
+        return rutasOperador;
+      }
+    },
     singout() {
       //localStorage.remove('access_token')
       this.isLogged = this.checkIfIsLogged()
       //this.$router.push('/logout')
     },
     checkIfIsLogged() {
-      let token = localStorage.getItem('access_token')
+      let token = localStorage.getItem('access_token');
       if (token) {
         this.NombreUsuario = localStorage.getItem('NombreUsuario');
         this.CorreoUsuario = localStorage.getItem('CorreoUsuario');
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
     },
-    ocultarBarra(){
-      if(this.barraNavegacion == true){
+    ocultarBarra() {
+      if (this.barraNavegacion == true) {
         this.barraNavegacion = false;
         this.iconoBarra = 'mdi-plus'
-      }else if(this.barraNavegacion == false){
+      } else if (this.barraNavegacion == false) {
         this.barraNavegacion = true;
         this.iconoBarra = 'mdi-minus'
-      }
-    },
-    verificarPermisos(nombreRuta){
-      // Obtendremos el nombre del rol
-      let nombreRol = localStorage.getItem('NombreRol');
-      // Verificaremos si puede visualizarlo o no
-      switch (nombreRuta){
-        case 'productos':
-          {
-            if(nombreRol === 'Administrador' ||
-               nombreRol === 'Supervisor'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'inventario':
-          {
-            if(nombreRol === 'Administrador' ||
-               nombreRol === 'Gerente' ||
-               nombreRol === 'Supervisor'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'usuarios':
-          {
-            if(nombreRol === 'Administrador'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'actividades':
-          {
-            if(nombreRol === 'Administrador' ||
-               nombreRol === 'Gerente' ||
-               nombreRol === 'Supervisor' ||
-               nombreRol === 'Auxiliar' ||
-               nombreRol === 'Operador'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'listadoactividadescaldera':
-          {
-            if(nombreRol === 'Administrador' ||
-                nombreRol === 'Gerente' ||
-                nombreRol === 'Supervisor'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'listadoactividadespretratamiento':
-          {
-            if(nombreRol === 'Administrador' ||
-                nombreRol === 'Gerente' ||
-                nombreRol === 'Supervisor'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
-        case 'listadoactividadestorreenfriamiento':
-          {
-            if(nombreRol === 'Administrador' ||
-               nombreRol === 'Gerente' ||
-               nombreRol === 'Supervisor'){
-              return true;
-            }
-            else{
-              return false;
-            }
-          }
       }
     },
   },

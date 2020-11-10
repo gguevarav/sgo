@@ -127,6 +127,7 @@ export default {
               localStorage.setItem('CorreoUsuario', response.data.email);
               this.buscarRol(response.data.idUsuario);
               bus.$emit('logged', 'User logged');
+              bus.$emit('menu', 'Mostrar menu');
               resolve(response)
             })
             .catch(error => {
